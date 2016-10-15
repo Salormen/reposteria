@@ -100,14 +100,14 @@
                         </button> 
                         <div ng-repeat="grupo in grupos | orderBy: 'id'">
                             <button ng-click="mostrar_grupo(grupo.id)">
-                                Grupo {{grupo.id}}
+                                Grupo {{grupo.id + 1}}
                             </button> 
                         </div>                        
                     </div>
                     <div id="detalle_grupos" class="col-md-10">
                         <div data-ng-show="seSelecciono_todosLosGrupos">
                             <div ng-repeat="grupo in grupos | orderBy: 'id'">
-                                Grupo {{grupo.id}}: <br>
+                                Grupo {{grupo.id + 1}}: <br>
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
@@ -115,9 +115,9 @@
                                             <th>Jugador</th>
                                             <th>Club</th>
                                             <th ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">{{jugador.nombre}}</th>
-                                            <th>PG</th>
-                                            <th>SG</th>
-                                            <th>Dif</th>
+                                            <th>Ptds G/P</th>
+                                            <th>Sets G/P</th>
+                                            <th>Pts G/P</th>
                                             <th>Pos</th>
                                         </tr>
                                     </thead>
@@ -127,13 +127,13 @@
                                             <td align="left">{{jugador.nombre}}</td>
                                             <td align="left">{{jugador.club}}</td>
                                             <td align="left" ng-repeat="jOp in grupo.jugadores | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(grupo, jugador, jOp)}}</td>
-                                            <td align="left">{{partidosGanadosEnGrupo(grupo, jugador)}}</td>
-                                            <td align="left">{{setsGanadosEnGrupo(grupo, jugador)}}</td>
-                                            <td align="left">{{puntosGanadosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difPartidosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difSetsGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difPuntosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
                                             <td align="left">{{posicionEnGrupo(grupo, jugador)}}</td>
                                         </tr>
                                     </tbody>
-                                </table>                   
+                                </table>                  
                             </div>
                         </div>
                         <div ng-repeat="grupo in grupos">
@@ -146,9 +146,9 @@
                                             <th>Jugador</th>
                                             <th>Club</th>
                                             <th ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">{{jugador.nombre}}</th>
-                                            <th>PG</th>
-                                            <th>SG</th>
-                                            <th>Dif</th>
+                                            <th>Ptds G/P</th>
+                                            <th>Sets G/P</th>
+                                            <th>Pts G/P</th>
                                             <th>Pos</th>
                                         </tr>
                                     </thead>
@@ -158,11 +158,10 @@
                                             <td align="left">{{jugador.nombre}}</td>
                                             <td align="left">{{jugador.club}}</td>
                                             <td align="left" ng-repeat="jOp in grupo.jugadores | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(grupo, jugador, jOp)}}</td>
-                                            <td align="left">{{partidosGanadosEnGrupo(grupo, jugador)}}</td>
-                                            <td align="left">{{setsGanadosEnGrupo(grupo, jugador)}}</td>
-                                            <td align="left">{{puntosGanadosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difPartidosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difSetsGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
+                                            <td align="left">{{difPuntosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
                                             <td align="left">{{posicionEnGrupo(grupo, jugador)}}</td>
-                                            <td> {{coeficienteEnGrupoPara(grupo, jugador)}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

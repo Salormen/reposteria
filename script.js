@@ -239,6 +239,18 @@ angular.module('managerModule', [])
         return setsGanadosEnPartidoPor(partido, jugador) + " - " + setsGanadosEnPartidoPor(partido, jOp);
     }
     
+    $scope.difPartidosGanadosPerdidosEnGrupo = function (grupo, jugador){
+        return $scope.partidosGanadosEnGrupo(grupo, jugador) + "/" + $scope.partidosPerdidosEnGrupo(grupo, jugador)
+    }
+    
+    $scope.difSetsGanadosPerdidosEnGrupo = function (grupo, jugador){
+        return $scope.setsGanadosEnGrupo(grupo, jugador) + "/" + $scope.setsPerdidosEnGrupo(grupo, jugador)
+    }
+    
+    $scope.difPuntosGanadosPerdidosEnGrupo = function (grupo, jugador){
+        return $scope.puntosGanadosEnGrupo(grupo, jugador) + "/" + $scope.puntosPerdidosEnGrupo(grupo, jugador)
+    }
+    
     function jugadorParticipoDePartido(partido, jugador){
         return (partido.jugador1.nombre === jugador.nombre) || 
                (partido.jugador2.nombre === jugador.nombre)
@@ -247,8 +259,19 @@ angular.module('managerModule', [])
     function partidosJugadosEnGrupoPor(grupo, jugador){
         return grupo.partidos.filter(p => {return jugadorParticipoDePartido(p, jugador)});
     }
+    
+    function seDisputoPartido(partido){
+        return (parseInt(partido.final[partido.jugador1.id]) + parseInt(partido.final[partido.jugador2.id])) >= (Math.floor(cant_sets / 2) + 1);
+    }
       
+    function ganoPartido(partido, jugador){
+        return setsGanadosEnPartidoPor(partido, jugador) === Math.floor(cant_sets / 2) + 1;
+    }
       
+    function perdioPartido(partido, jugador){
+        return seDisputoPartido(partido) && !ganoPartido(partido, jugador);
+    }
+    
     function setsGanadosEnPartidoPor(partido, jugador){
         if (partido.jugador1.nombre === jugador.nombre){
             return parseInt(partido.final[partido.jugador1.id]);
@@ -282,14 +305,18 @@ angular.module('managerModule', [])
     }
           
       
-    function ganoPartido(partido, jugador){
-        return setsGanadosEnPartidoPor(partido, jugador) === Math.floor(cant_sets / 2) + 1;
-    }
+    
+      
+      
+    /////////////////////////////////////////////////////
       
     $scope.partidosGanadosEnGrupo = function (grupo, jugador){
         return partidosJugadosEnGrupoPor(grupo, jugador).reduce((r,p) => {if (ganoPartido(p, jugador)){return r + 1}else{return r}}, 0);
     }
     
+    $scope.partidosPerdidosEnGrupo = function (grupo, jugador){
+        return partidosJugadosEnGrupoPor(grupo, jugador).reduce((r,p) => {if (perdioPartido(p, jugador)){return r + 1}else{return r}}, 0);
+    }
     
     $scope.setsGanadosEnGrupo = function (grupo, jugador){
         return partidosJugadosEnGrupoPor(grupo, jugador).reduce((r,p) => {return r + setsGanadosEnPartidoPor(p, jugador);}, 0);
@@ -306,6 +333,8 @@ angular.module('managerModule', [])
     $scope.puntosPerdidosEnGrupo = function(grupo, jugador){
         return partidosJugadosEnGrupoPor(grupo, jugador).reduce((r,p) => {return r + puntosPerdidosEnPartidoPor(p, jugador);}, 0);
     }
+    
+    /////////////////////////////////////////////////////
     
     
     $scope.posicionEnGrupo = function(grupo, jugador){
