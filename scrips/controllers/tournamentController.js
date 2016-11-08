@@ -1,7 +1,4 @@
-(function(angular) {
-  'use strict';
-angular.module('managerModule', [])
-  .controller('Controller',  ['$scope',function($scope){
+angular.module('tournamentModule').controller('tournamentController',  ['$scope', 'seederGroups', 'seederEliminationBracket', function($scope, seederGroups, crearLlave){
     
     // Seleccion del frame
     var frames = ['inscripcion', 'sorteo', 'grupos', 'llave'];
@@ -60,97 +57,21 @@ angular.module('managerModule', [])
     // sorteador
     //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     
-    $scope.seed = (prefered_group_size, players) => {
-        var seeding_info = {sentido: true, next_group: 0};
-        var groups = [];
-        for (var i=0; i< Math.floor(players.length / prefered_group_size); i++){
-            groups.push({id: i, jugadores: [], partidos: []});
-        }
-        return players.reduce((prev, p, i)=>{
-            next_group_for_player(p, seeding_info, prev).jugadores.push(p);
-            seeding_info = next_group_asignation(seeding_info, prev);
-            return prev;
-        }, groups);
+    $scope.seed = function(prefered_group_size, players){
+        return seederGroups(prefered_group_size, players).map(g => {return {id: g.id, jugadores: g.players}});
     }
-
-    function next_group_for_player (player, seeding_info, groups){
-        if (all_groups_have_this_club(player.club, groups)){ // aca se deberia comprobar si es el ultimo jugador a asignar
-            return groups[seeding_info.next_group];
-        }else {
-            return first_fitting_group(player, seeding_info, groups);
-        }
-    }
-
-    function all_groups_have_this_club(club, groups){
-        return groups.reduce((r, g) => {return group_have_club(g, club) && r;}, true);
-    }
-
-    function group_have_club(group, club){
-        return group.jugadores.reduce((r, p) => {return (p.club == club) || r}, false);
-    }
-
-    function first_fitting_group(player, seeding_info, groups){
-        var local_seeding_info = seeding_info;
-        while (group_doesnt_fit_player(player, groups[local_seeding_info.next_group])){
-            local_seeding_info = next_group(local_seeding_info, groups);
-        }
-        return groups[local_seeding_info.next_group];
-    }
-
-    function next_group(seeding_info, groups){
-        var local_seeding_info = seeding_info;
-        if (is_border(seeding_info.next_group, seeding_info.sentido, groups)){
-            local_seeding_info.sentido = !local_seeding_info.sentido;
-        }else{
-            if (seeding_info.sentido){
-                local_seeding_info.next_group ++;
-            }else{
-                local_seeding_info.next_group --;
-            }
-        }	
-        return local_seeding_info;
-    }
-
-    function group_doesnt_fit_player(player, group){
-        return group_have_club(group, player.club);
-    }
-
-    function is_border(next_group, sentido, groups){
-        return ((next_group === 0) & (!sentido )) || (((next_group == (groups.length) - 1)) && sentido);
-    }
-
-    //------------------------------------------------
-
-    function next_group_asignation(seeding_info, groups){
-        var local_seeding_info = seeding_info;
-        if (!group_have_less_players_than_others(groups[local_seeding_info.next_group], groups)){
-            local_seeding_info = next_group(local_seeding_info, groups);
-            while (!is_next_group(groups[local_seeding_info.next_group], groups)){
-                local_seeding_info = next_group(local_seeding_info, groups);
-            }
-        }		
-        return local_seeding_info;
-    }
-
-    function group_have_less_players_than_others(group, groups){
-        return group.jugadores.length < groups.map( g => {return g.jugadores.length}).reduce((max, l) => {return (max > l ? max : l );});
-    }
-
-    function is_next_group(group, groups){
-        return group_have_less_players_than_others(group, groups)                              ||
-                groups.reduce((p,g)=>{return (g.jugadores.length == group.jugadores.length) && p},true);
-    };
-    
     //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  //
     
-    $scope.cant_por_grupo = 0;
-    $scope.sets_grupo = 0;
+    $scope.cant_por_grupo = 3;
+    $scope.sets_grupo = 5;
+    $scope.setsParaLaVictoria = Math.floor($scope.sets_grupo / 2) + 1;
       
     $scope.asignar_grupos = function(){
         $scope.jugadores_inscriptos.sort((j1,j2) => {return j2.rating - j1.rating});
         $scope.grupos = $scope.seed($scope.cant_por_grupo, $scope.jugadores_inscriptos);
         crearPartidosGrupos();
         reset_grupos_mostrados();
+        crearPartidosLlave();
     };
         
     function crearPartidosGrupos(){
@@ -175,9 +96,12 @@ angular.module('managerModule', [])
         }).reduce((r,e) => {return r.concat(e)}, []);   
     }
     
-      var cant_sets = 5;
     function crearSets(idj, ido, len){
-        return Array(cant_sets).fill(0).map(e => {return listFor(idj,ido, len)});
+        var sets = [];        
+        for (var i = 0; i < $scope.sets_grupo; i++) {
+            sets.push(listFor(idj,ido, len));
+        }
+        return sets;
     }
     
     function listFor(id,idO, len){
@@ -192,7 +116,11 @@ angular.module('managerModule', [])
         return arr.reduce((r,e) => {r.push(e); return r}, []); 
     }
       
-      
+    function crearPartidosLlave(){
+        $scope.llave = crearLlave($scope.jugadores_inscriptos.map(j => {return j.nombre}), 5);
+    }
+    
+    
     /////////////////////////////////////////////
     
     // Frame Grupos
@@ -261,11 +189,11 @@ angular.module('managerModule', [])
     }
     
     function seDisputoPartido(partido){
-        return (parseInt(partido.final[partido.jugador1.id]) + parseInt(partido.final[partido.jugador2.id])) >= (Math.floor(cant_sets / 2) + 1);
+        return (parseInt(partido.final[partido.jugador1.id]) + parseInt(partido.final[partido.jugador2.id])) >= $scope.setsParaLaVictoria;
     }
-      
+     
     function ganoPartido(partido, jugador){
-        return setsGanadosEnPartidoPor(partido, jugador) === Math.floor(cant_sets / 2) + 1;
+        return setsGanadosEnPartidoPor(partido, jugador) === $scope.setsParaLaVictoria;
     }
       
     function perdioPartido(partido, jugador){
@@ -387,6 +315,12 @@ angular.module('managerModule', [])
         );
     }
       
+    //////////////////////////
+    ///// frame llave ////////
+    //////////////////////////
+    
+    
+    
     ///////////////////////// Test
     
     $scope.jugadores_inscriptos = [
@@ -395,9 +329,10 @@ angular.module('managerModule', [])
         {nombre: "Cecil", club: "C", rating: 3000},
         {nombre: "Drone", club: "D", rating: 4000},
         {nombre: "Epsilon", club: "E", rating: 5000},
-        {nombre: "Felicia", club: "F", rating: 6000}
+        {nombre: "Felicia", club: "F", rating: 6000},
+        {nombre: "Gillermo", club: "G", rating: 7000},
+        {nombre: "Horacio", club: "H", rating: 8000}
     ];
     
     
   }]);
-})(window.angular);

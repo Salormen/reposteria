@@ -5,7 +5,14 @@
     <title>TDM Manager</title>
     <! Angular>
     <script type="text/javascript" src="node_modules/angular-1.5.8/angular.js"></script>
-    <script src="script.js"></script>
+    <! My app>
+    <script type="text/javascript" src="scrips/app.js"></script>
+    <script type="text/javascript" src="scrips/controllers/tournamentController.js"
+            ></script>
+    <script type="text/javascript" src="scrips/factories/seeder_groups.js"></script>
+    <script type="text/javascript" src="scrips/factories/elimination_tree.js"></script>
+    <script type="text/javascript" src="scrips/factories/partido_eliminacion.js"></script>
+    
     <! Boostrap>
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -15,19 +22,19 @@
     <!script src="node_modules/angular-aria/angular-aria.min.js"></script>
 </head>
 <body ng-app="managerModule">
-    <div ng-controller="Controller">
+    <div ng-controller="tournamentController">
         <div id="header">
         </div>
         <div id="contents">
             <div id="menu_frame" class="col-md-2">
-                <button type="button" ng-click="seleccionarFrame('inscripcion')"> Inscripcion </button><br>
+                <button type="button" ng-click="seleccionarFrame('inscripcion')"> Inscripción </button><br>
                 <button type="button" ng-click="seleccionarFrame('sorteo')"> Sorteo </button><br>
                 <button type="button" ng-click="seleccionarFrame('grupos')"> Grupos </button><br>
                 <button type="button" ng-click="seleccionarFrame('llave')"> Llave </button><br>
             </div>
             <div id="content_frame" class="col-md-10">
                 <div id="inscripcion_frame" data-ng-show="seSeleccionoFrame('inscripcion')">
-                    Inscripcion <br>
+                    Inscripción <br>
                     <div class="md-inline-form">
                         <md-content layout-gt-sm="row" layout-padding>
                             <div>
@@ -199,8 +206,7 @@
                     </div>                    
                 </div>
                 <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave')">
-                    llave final
-                    
+                    {{llave}}
                     
                 </div>
             </div>
