@@ -7,9 +7,10 @@ angular.module('tournamentModule').factory('matchesForBracket', [function(){
         function player_c(group, position){
             return {    
                         is_player: true,
+                        from_group: group,
                         get winner () {
                             return group.get_player_in_position(position);
-                        }
+                        }                
                     };
         }
 
@@ -23,10 +24,10 @@ angular.module('tournamentModule').factory('matchesForBracket', [function(){
                         sets: crearSets(sets_count),
                         final: [0,0],
                         get winner () {
-                            if (this.final[0] === sets_for_victory(sets_count)){
+                            if (this.final[0] == sets_for_victory(sets_count)){
                                 return this.players[0];
                             }
-                            if (this.final[1] === sets_for_victory(sets_count)){
+                            if (this.final[1] == sets_for_victory(sets_count)){
                                 return this.players[1];
                             }else{
                                 return null;

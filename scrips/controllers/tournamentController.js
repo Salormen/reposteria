@@ -56,6 +56,7 @@ angular.module('tournamentModule').controller('tournamentController',
     
     // Frame Sorteo
     
+    $scope.seeded = false;
     $scope.cant_por_grupo = 3;
     $scope.sets_grupo = 5;
     $scope.clasificados_por_grupo = 2;
@@ -69,6 +70,7 @@ angular.module('tournamentModule').controller('tournamentController',
         seed_references_in_bracket();                   // Se sortea la llave   
         create_bracket_matches();                       // Se crean los partidos de la llave final
         reset_grupos_mostrados();   
+        $scope.seeded = true;
     };
       
     function sort_players(){
@@ -354,8 +356,35 @@ angular.module('tournamentModule').controller('tournamentController',
     //////////////////////////
     
 
-   //$scope.bracket_funcs = bracket_functions;
+    $scope.bracket_funcs = {
+        count_rounds: (bracket)=>{if($scope.seeded){return bracket_functions.count_rounds(bracket)}},
+        round_n: (bracket, n)=>{if($scope.seeded){return bracket_functions.round_n(bracket, n)}},
+        list_per_round: (bracket)=>{if($scope.seeded){return bracket_functions.list_per_round(bracket)}}
+       
+    };
+        
+    $scope.rounds_numbers = function (){
+        var res = [];
+        for(var i = $scope.bracket_funcs.count_rounds($scope.llave) -1; i>=0; i--){
+            res.push(i);
+        }
+        return res;
+    }
     
+    $scope.selected_round = $scope.bracket_funcs.count_rounds($scope.llave) - 1;
+    
+    $scope.show_round = function(n){
+        $scope.selected_round = n;
+    }
+    
+    $scope.is_selected_round = function(n){
+        return n == $scope.selected_round;
+    }
+    
+    $scope.is_playable = function(match){
+        return match.players.reduce((r,e) => {return e!=null && r}, true);
+    }
+                                 
     ///////////////////////// Test
     
     $scope.jugadores_inscriptos = [

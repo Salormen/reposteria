@@ -210,9 +210,44 @@
                     </div>                    
                 </div>
                 <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave')">
-                    {{llave}} <br><br>
-                    Cantidad de rondas: {{bracket_funcs.count_rounds(llave)}} <br>
-                    Rondas: {{bracket_funcs.list_per_round(llave)}} <br>
+                    <div data-ng-show="seeded">
+                        Cantidad de rondas: {{bracket_funcs.count_rounds(llave)}} <br><br>
+                        <div data-ng-repeat="n in rounds_numbers()">
+                            <button ng-click="show_round(n)">
+                                    Ronda {{n}}
+                            </button>
+                        </div>    
+                        <div data-ng-repeat="n in rounds_numbers()">
+                            <div data-ng-show="is_selected_round(n)">
+                                <div data-ng-repeat="match in bracket_funcs.round_n(llave,n)">
+                                    <div data-ng-show="is_playable(match)">
+                                        <table class="table table-condensed">
+                                            Partido 
+                                            <thead>
+                                                <tr>
+                                                    <th> Jugadores </th>
+                                                    <th ng-repeat="set in match.sets"> Set {{match.sets.indexOf(set) + 1}} </th>
+                                                    <th> Resultado final </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td> {{match.players[0].nombre}} </td>
+                                                    <td ng-repeat="set in match.sets"> <input ng-model="set[0]" placeholder="0" size="4"> </td>
+                                                    <td> <input ng-model="match.final[0]" placeholder="0" size="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td> {{match.players[1].nombre}} </td>
+                                                    <td ng-repeat="set in match.sets"> <input ng-model="set[1]" placeholder="0" size="4"> </td>
+                                                    <td> <input ng-model="match.final[1]" placeholder="0" size="4"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table> <br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

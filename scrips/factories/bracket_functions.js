@@ -15,20 +15,21 @@ angular.module('tournamentModule').factory('bracketFunctions', [function(){
     }
     
     function round_n(bracket, n){
-        if(n == 0){
-            if(bracket.is_player){
-                return [];
-            }else{
-                return [bracket];   
-            }
+        if(bracket.is_player){
+            return [];
         }else{
-            return round_n(bracket.prevs_matches[0], n-1).concat(round_n(bracket.prevs_matches[1]), n-1);
+            if(n == 0){            
+                return [bracket];   
+            }else{
+                return round_n(bracket.prevs_matches[0], n-1).concat(
+                       round_n(bracket.prevs_matches[1], n-1));
+            }
         }
     }
     
     function list_per_round(bracket){
         var res = [];
-        for (var i = 1; i <= count_rounds(bracket); i++){
+        for (var i = 0; i <= count_rounds(bracket); i++){
             res.push(round_n(bracket, i));
         }
         return res;
