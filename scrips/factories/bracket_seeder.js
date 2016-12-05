@@ -1,11 +1,11 @@
-angular.module('tournamentModule').factory('seederEliminationBracket', [function(){
+angular.module('tournamentModule').factory('bracketSeeder', [function(){
     
     /*
         Bracket := Player(player) | Match (Bracket,Bracket)
     */
     
         function player_c(player){
-            return {    player: player,
+            return {    reference: player,
                         is_player: true
                     };
         }

@@ -7,19 +7,19 @@
     <script type="text/javascript" src="node_modules/angular-1.5.8/angular.js"></script>
     <! My app>
     <script type="text/javascript" src="scrips/app.js"></script>
-    <script type="text/javascript" src="scrips/controllers/tournamentController.js"
-            ></script>
-    <script type="text/javascript" src="scrips/factories/seeder_groups.js"></script>
-    <script type="text/javascript" src="scrips/factories/elimination_tree.js"></script>
-    <script type="text/javascript" src="scrips/factories/partido_eliminacion.js"></script>
+    <script type="text/javascript" src="scrips/controllers/tournamentController.js"></script>
+    <script type="text/javascript" src="scrips/factories/groups_seeder.js"></script>
+    <script type="text/javascript" src="scrips/factories/bracket_seeder.js"></script>
+    <script type="text/javascript" src="scrips/factories/matches_maker_bracket.js"></script>
+    <script type="text/javascript" src="scrips/factories/bracket_functions.js"></script>
     
     <! Boostrap>
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!script src="node_modules/angular-material/angular-material.js"></script>
-    <!script src="node_modules/angular-animate/angular-animate.min.js"></script>
-    <!script src="node_modules/angular-aria/angular-aria.min.js"></script>
+    <!script src="node_modules/angular-material/angular-material.js">
+    <!script src="node_modules/angular-animate/angular-animate.min.js">
+    <!script src="node_modules/angular-aria/angular-aria.min.js">
 </head>
 <body ng-app="managerModule">
     <div ng-controller="tournamentController">
@@ -92,7 +92,11 @@
                                 <label>Cantidad de sets por partido en fase de grupos</label>
                                 <input ng-model="sets_grupo">
                               </md-input-container> <br>
-                              <button type="button" ng-click="asignar_grupos()">
+                              <md-input-container>
+                                <label>Cantidad de clasificados a la llave final por grupo</label>
+                                <input ng-model="clasificados_por_grupo">
+                              </md-input-container> <br>
+                              <button type="button" ng-click="seed_tournament()">
                                   Sortear!
                               </button> 
                             </div>
@@ -206,8 +210,9 @@
                     </div>                    
                 </div>
                 <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave')">
-                    {{llave}}
-                    
+                    {{llave}} <br><br>
+                    Cantidad de rondas: {{bracket_funcs.count_rounds(llave)}} <br>
+                    Rondas: {{bracket_funcs.list_per_round(llave)}} <br>
                 </div>
             </div>
         </div>
