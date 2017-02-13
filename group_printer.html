@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="esp">
+<head>
+    <meta charset="UTF-8">
+    <title>TDM Manager</title>
+    
+    <! Boostrap>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    <! Angular>
+    <script type="text/javascript" src="node_modules/angular-1.5.8/angular.js"></script>
+    <! My app>
+    <script type="text/javascript" src="pages_for_print_scripts/group_printer_app.js"></script>
+    <script type="text/javascript" src="pages_for_print_scripts/group_print.js"></script>
+    <! Factories>
+    <script type="text/javascript" src="pages_for_print_scripts/page_parameters_parser.js"></script>
+    
+</head>
+<body ng-app="managerModule">
+    <div ng-controller="groupPrinterController">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            Grupo {{group.id}}: <br>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Jugador</th>
+                        <th>Club</th>
+                        <th ng-repeat="player in group.players | orderBy:'rating':true ">{{player.name}}</th>>
+                        <th>Pos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="player in group.players | orderBy:'rating':true ">
+                        <td align="left">{{player.rating}}</td>
+                        <td align="left">{{player.name}}</td>
+                        <td align="left">{{player.club}}</td>
+                        <td align="left" ng-repeat="jOp in group.players | orderBy:'rating':true "> {{noMatchSymbol(jOp,player) }}</td>
+                        <td align="left">      </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-repeat="match in group.matches">
+                <table class="table table-condensed">
+                    Partido {{group.matches.indexOf(match) + 1}}
+                    <thead>
+                        <tr>
+                            <th> Jugadores </th>
+                            <th ng-repeat="n in numberList(1,match.sets)"> Set {{n}} </th>
+                            <th> Resultado final </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> {{match.player1}} </td>
+                            <td ng-repeat="n in numberList(1,match.sets)"> <input size="4"> </td>
+                            <td> <input size="4"></td>
+                        </tr>
+                        <tr>
+                            <td> {{match.player2}} </td>
+                            <td ng-repeat="n in numberList(1,match.sets)"> <input size="4"> </td>
+                            <td> <input size="4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="printButton">
+                <button ng-click="print_page()">
+                    Imprimir
+                </button>
+            </div>            
+        </div>
+        <div class="col-md-3"></div>    
+    </div>    
+</body>

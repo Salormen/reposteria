@@ -1,13 +1,23 @@
 angular.module('tournamentModule').factory('matchesForBracket', [function(){
 
     /*
-        Bracket := Player(player) | Match (winner_match_1, winner_match_2)
+        Bracket := Player(player) | Bye | Match (winner_match_1, winner_match_2)
     */
-    
+        
+        function bye_c(){
+            return {
+                        is_bye: true,
+                        get winner () {
+                            return this;
+                        }  
+            };
+        }
+        
         function player_c(group, position){
             return {    
                         is_player: true,
                         from_group: group,
+                        group_position: position,
                         get winner () {
                             return group.get_player_in_position(position);
                         }                
@@ -24,14 +34,18 @@ angular.module('tournamentModule').factory('matchesForBracket', [function(){
                         sets: crearSets(sets_count),
                         final: [0,0],
                         get winner () {
-                            if (this.final[0] == sets_for_victory(sets_count)){
+                            if(any(this.players, p => {return p == null})){
+                                return null;
+                            }
+                            if (this.final[0] == sets_for_victory(sets_count) || this.players[1].is_bye){
                                 return this.players[0];
                             }
-                            if (this.final[1] == sets_for_victory(sets_count)){
+                            if (this.final[1] == sets_for_victory(sets_count) || this.players[0].is_bye){
                                 return this.players[1];
-                            }else{
-                                return null;
-                            }                            
+                            }                          
+                        },
+                        get is_playable(){
+                            return all(this.players, p => {return p!=null && !p.is_bye});
                         }
                     };
         }
@@ -49,9 +63,20 @@ angular.module('tournamentModule').factory('matchesForBracket', [function(){
         return Math.floor(sets_count / 2) + 1;
     }
 
+    function any(list, prop){
+        return list.reduce((r, e) => {return r || prop(e)}, false);
+    }
+        
+    function all(list, prop){
+        return list.reduce((r, e) => {return r && prop(e)}, true);
+    }
+    
     ////////////////////////////////////////////////////
 
     function matches_for_bracket(bracket, sets_per_round, groups){
+        if(bracket.is_bye){
+            return bye_c();
+        }
         if(bracket.is_player){
             return player_c(groups[bracket.reference.group_id], bracket.reference.player_pos);
         }else{

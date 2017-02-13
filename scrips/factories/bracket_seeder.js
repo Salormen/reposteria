@@ -1,8 +1,12 @@
 angular.module('tournamentModule').factory('bracketSeeder', [function(){
     
     /*
-        Bracket := Player(player) | Match (Bracket,Bracket)
+        Bracket := Bye | Player(player) | Match (Bracket,Bracket)
     */
+        
+        function bye_c(){
+            return {is_bye: true};
+        }
     
         function player_c(player){
             return {    reference: player,
@@ -16,17 +20,15 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
                         is_player: false
                     };
         }
+    
     ////////////////////////////////////////////////////
         
     
     function seed(players) {
-        var n = count_first_complete_round(players.length);
-        var first_round_players = players.slice(Math.pow(2, n+1) - players.length);
-        var first_complete_round_players = players.slice(0, players.length - first_round_players.length);
-        first_complete_round_players = first_complete_round_players.concat(decoys_for(first_round_players));
-        var bracket = seed_complete_round(first_complete_round_players);
-        var first_round_matches = seed_first_round_players(first_round_players);
-        return replace_decoys(bracket, first_round_matches);
+        var players_by_round = slice_players_by_round(players);
+        var fst_round_matches = players_by_round[1].map(match_with_bye).concat(seed_fst_round_players(players_by_round[0]));
+
+        return replace_decoys(seed_decoys(decoys_for(fst_round_matches)));
     }
     
     
@@ -39,16 +41,30 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
     }
     
     
+    function slice_players_by_round(players){
+        var n = count_first_complete_round(players.length);   
+        if (Math.pow(2,n) == players.length){
+            return [players, []];
+        }else{
+            var fst_round_players = players.slice(Math.pow(2, n+1) - players.length);
+            var snd_round_players = players.slice(0, players.length - fst_round_players.length);
+            return [fst_round_players, snd_round_players];
+        }
+    }
+    
+    function random(min,max){
+        return Math.floor(Math.random() * (max-min +1)) + min;
+    }
     
     ///////////////////////////////// First round seeding
     
     
-    /*  Pourpose:   Create decoys for first round matches.
-        Prec:       Players must have 2n elements.
+    /*  Pourpose:   Create decoys for n matches.
+        Prec:       Matches must have 2n elements.
         Ret:        Array with n decoys.
     */
-    function decoys_for(players){
-        return players.slice(players.length / 2).map((d,i) => {return {ref: 'decoy', id: i};});
+    function decoys_for(matches){
+        return matches.map((m,i) => {return {is_decoy: true, match: m, id: i};});
     }
     
     
@@ -56,71 +72,61 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
         Prec:       Players must have 2n elements.
         Ret:        Array with n matches. 
     */
-    function seed_first_round_players(first_round_players){
-        var group_a = first_round_players.slice(0, first_round_players.length / 2);
-        var group_b = first_round_players.slice(first_round_players.length / 2).reverse();
-        return group_a.map((p,i) => {return match_c(player_c(p), player_c(group_b[i]))});
+    function seed_fst_round_players(fst_round_players){
+        var res = [];
+        var fst_players = fst_round_players.slice(0, fst_round_players.length / 2);
+        var lst_players = fst_round_players.slice(fst_players.length);
+        for(var i = 0; i < fst_players.length; i++){
+            var rdm = random(0, lst_players.length -1);
+            res.push(match_c(player_c(fst_players[i]), player_c(lst_players[rdm])));
+            lst_players.splice(rdm, 1);
+        }
+        return res;
     }
     
     
+    function match_with_bye(player){
+        return match_c(player_c(player), bye_c());
+    }
     
     /////////////////////////////////       Bracket seeding 
     
-    /*  Pourpose:   Seeds players in bracket. 
-        Prec:       players must be in order.
-        Ret:        balanced bracket with all players seed
+    /*  Pourpose:   Seeds matches' decoys in bracket. 
+        Prec:       decoys must be in order. decoys.length == 2^n
+        Ret:        balanced bracket with all decoys seed
     */
-    function seed_complete_round(players){
-        return seed_bracket(player_c(players[0]), players.slice(1));
+    function seed_decoys(decoys){
+        var fst = decoys.shift();
+        return decoys.reduce(place_decoy_in_bracket, fst);
     }
+        
     
-    
-    /*  Pourpose:   Seeds players recursively in bracket. 
-        Prec:       none.
-        Ret:        balanced bracket with all players seed
-    */
-    function seed_bracket(bracket, players){
-        if (players.length == 0){
-            return bracket;
-        }else{
-            return seed_bracket(place_player_in_bracket(players[0], bracket), players.slice(1));
-        }
-    }
-    
-    
-    /*  Pourpose:   place the given player in bracket. 
+    /*  Pourpose:   place the given decoy in bracket. 
         Prec:       bracket is balanced
-        Ret:        balanced bracket with player seed
+        Ret:        balanced bracket with decoy seed
     */
-    function place_player_in_bracket(player, bracket){
-        if (bracket.is_player){
-            return match_c(bracket, player_c(player));
+    function place_decoy_in_bracket(bracket, decoy){
+        if (bracket.is_decoy){
+            return match_c(bracket, decoy);
         }else{
-            return place_in_lighter_branch(player, bracket);                   
+            return place_in_lighter_branch(bracket, decoy);                   
         }
     }
     
     
     /*  Pourpose:   makes recursion in the lighter bracket's branch. 
-                    Uses <place_player_in_bracket(player, bracket)> for recursion.
-        Prec:       bracket is balanced. Bracket isn't player.
-        Ret:        balanced bracket with player seed
+                    Uses <place_decoy_in_bracket(bracket, decoy)> for recursion.
+        Prec:       bracket is balanced. Bracket isn't decoy.
+        Ret:        balanced bracket with decoy seed
     */
-    function place_in_lighter_branch(player, bracket){
-        if (is_lighter(bracket.branch_1, bracket.branch_2)){
-            bracket.branch_1 = place_player_in_bracket(player, bracket.branch_1);
-            return bracket;
-        }
-        if (is_lighter(bracket.branch_2, bracket.branch_1)){
-            bracket.branch_2 = place_player_in_bracket(player, bracket.branch_2);
-            return bracket;
-        }
+    function place_in_lighter_branch(bracket, decoy){
         // If both branch have the same number of players, then choose one at random.
-        if (Math.floor(Math.random() * 2) == 0){
-            bracket.branch_1 = place_player_in_bracket(player, bracket.branch_1);
+        if (is_lighter(bracket.branch_1, bracket.branch_2) || random(0,1) == 0){
+            bracket.branch_1 = place_decoy_in_bracket(bracket.branch_1, decoy);
             return bracket;
-        }else{
-            bracket.branch_2 = place_player_in_bracket(player, bracket.branch_2);
+        }
+        else{
+            bracket.branch_2 = place_decoy_in_bracket(bracket.branch_2, decoy);
             return bracket;
         }
     } 
@@ -140,7 +146,7 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
         Ret:        bracket's weight.
     */
     function weight(bracket){
-        if(bracket.is_player){
+        if(bracket.is_decoy){
             return 1;
         }else{
             return weight(bracket.branch_1) + weight(bracket.branch_2);
@@ -149,31 +155,21 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
     
     
     /*  Pourpose:   Replace decoys with their respectives matches.
-        Prec:       Matches must be in order. matches.length == bracket.decoys.length
+        Prec:       Matches must be in order. matches.length == bracket.width. 
+                    For each fst_round_match, must be a decoy with id equal to the index of that match and it has to be unique.
         Ret:        Same bracket with decoys replaced.
     */    
-    function replace_decoys(bracket, first_round_matches){
-        return first_round_matches.reduce(replace_decoy_in_bracket, bracket);
-    }    
-    
-    
-    /*  Pourpose:   Replace decoy in bracket with match.
-        Prec:       Must be a decoy with id == decoyId in bracket and it has to be unique.
-        Ret:        Bracket with decoy replaced.
-    */ 
-    function replace_decoy_in_bracket(bracket, match, decoyId){
-        if(bracket.is_player){
-            if(bracket.player.ref == 'decoy' && bracket.player.id == decoyId){
-                return match;
-            }else{
-                return bracket;
-            }            
+    function replace_decoys(bracket){
+        if(bracket.is_decoy){
+            return bracket.match;
         }else{
-            bracket.branch_1 = replace_decoy_in_bracket(bracket.branch_1, match, decoyId);
-            bracket.branch_2 = replace_decoy_in_bracket(bracket.branch_2, match, decoyId);
+            bracket.branch_1 = replace_decoys(bracket.branch_1);
+            bracket.branch_2 = replace_decoys(bracket.branch_2);
             return bracket;
         }
     }
+
+    
     
     return seed;
     

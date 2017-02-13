@@ -1,0 +1,21 @@
+#header {
+    background-color: #bd253c;
+    z-index: 100000;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#contents{
+    margin-top: 157px;     
+    width: 100%;
+}
+
+
+.navBardemoBasicUsage md-content .ext-content {
+  padding: 50px;
+  margin: 20px;
+  background-color: #FFF2E0; }
+
