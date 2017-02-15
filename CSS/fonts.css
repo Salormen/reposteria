@@ -8,8 +8,24 @@
     width: 100%;
 }
 
-#contents{
-    margin-top: 157px;     
+#menu {
+    margin-top: 128px; 
+    background-color: #bd253c;
+}
+
+#inscripcion_frame, #configracion_frame {
+    margin-top: 162px;     
+    width: 100%;
+}
+
+
+#grupos_frame {
+    margin-top: 196px;     
+    width: 100%;
+}
+
+#llave_frame{
+    margin-top: 230px;     
     width: 100%;
 }
 

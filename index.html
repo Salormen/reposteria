@@ -31,13 +31,64 @@
 <body ng-app="managerModule">
     <div ng-controller="tournamentController">
         <div id="header">
-            <div class="col-md-3">
-                <img src="img/fetemba_header.ico"/>
+            <div id="headerSuperior">
+                <div class="col-md-3">
+                    <img src="img/fetemba_header2.ico"/>
+                </div>
+                <div class="col-md-6">
+                    Nombre del torneo
+                </div>
+                <div class="col-md-3">
+                    <a class="btn col-md-12" ng-click="seleccionarFrame('inscripcion')">Configuracion</a>
+                </div>
             </div>
-            <div class="col-md-6">
-                
-            </div>
-            <div class="col-md-3">
+            <div id="menu">
+                <div id="tabs">
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion')"> Inscripción </a>  
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('grupos')" data-toggle="collapse" href="#menu_grupos"> Grupos </a>
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('llave')" data-toggle="collapse" href="#menu_llave"> Llave </a>
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('configuracion')"> Configuración </a>
+                </div>
+                <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos')">
+                    <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
+                    <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
+                    <div id="groups_menu" class="collapse">
+                        <div ng-repeat="grupo in grupos | orderBy: 'id'">
+                            <div class="col-md-6"></div>
+                            <a class="btn col-md-6" ng-click="mostrar_grupo(grupo.id)">
+                                Grupo {{grupo.id + 1}}
+                            </a> 
+                        </div>
+                    </div> 
+                </div>
+                <div id="menu_llave" ng-show="seSeleccionoFrame('llave')">
+                    <div id="brackets_menu" ng-show="torneo.type.exist_bracket_b">
+                        <a class="btn col-md-6" 
+                           data-toggle="collapse" 
+                           href="#bracket_a_rounds" 
+                           aria-expanded="false"
+                           ng-click="collapse_bracket('b')"> Llave A </a> 
+                        <a class="btn col-md-6" 
+                           data-toggle="collapse" 
+                           href="#bracket_b_rounds" 
+                           aria-expanded="false"
+                           ng-click="collapse_bracket('a')"> Llave B </a> 
+                    </div>
+                    <div id="brackets_rounds_menu">
+                        <div id="bracket_a_rounds" class="collapse">
+                            <a class="btn col-md-2" 
+                               data-ng-repeat="n in rounds_numbers(bracket_a)" 
+                               ng-click="show_round(bracket_a, n)"> 
+                               {{round_name(n)}} </a> 
+                        </div>
+                        <div id="bracket_b_rounds" class="collapse">
+                            <a class="btn col-md-2" 
+                               data-ng-repeat="n in rounds_numbers(bracket_b)" 
+                               ng-click="show_round(bracket_b, n)"> 
+                               {{round_name(n)}} </a> 
+                        </div>                                
+                    </div>  
+                </div>
             </div>
         </div>
         <div id="contents">
@@ -52,15 +103,8 @@
             
             <! Realizacion del torneo>
             <div id="tournament" data-ng-show="isTournament">
-                <div id="tabs">
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion')"> Inscripción </a>  
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('grupos')"> Grupos </a>
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('llave')"> Llave </a>
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('configuracion')"> Configuración </a>
-                </div>
-                
                 <div id="content_frame">
-
+                    
                     <! Inscripcion>
                     <div id="inscripcion_frame" data-ng-show="seSeleccionoFrame('inscripcion')">
                         <div class="col-md-6">
@@ -163,18 +207,6 @@
                     
                     <! Grupos>
                     <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos')">
-                        <div id="menu_grupos">
-                            <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
-                            <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
-                            <div id="groups_menu" class="collapse">
-                                <div ng-repeat="grupo in grupos | orderBy: 'id'">
-                                    <div class="col-md-6"></div>
-                                    <a class="btn col-md-6" ng-click="mostrar_grupo(grupo.id)">
-                                        Grupo {{grupo.id + 1}}
-                                    </a> 
-                                </div>
-                            </div> 
-                        </div>
                         <div id="detalle_grupos" class="col-md-10">
                             <div data-ng-show="seSelecciono_todosLosGrupos">
                                 <div ng-repeat="grupo in grupos | orderBy: 'id'">
@@ -276,34 +308,6 @@
                     <! Llave>
                     <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave')">
                         <div data-ng-show="seeded">
-                            <div id="brackets_menu" ng-show="torneo.type.exist_bracket_b">
-                                <a class="btn col-md-6" 
-                                   data-toggle="collapse" 
-                                   href="#bracket_a_rounds" 
-                                   aria-expanded="false"
-                                   ng-click="collapse_bracket('b')"> Llave A </a> 
-                                <a class="btn col-md-6" 
-                                   data-toggle="collapse" 
-                                   href="#bracket_b_rounds" 
-                                   aria-expanded="false"
-                                   ng-click="collapse_bracket('a')"> Llave B </a> 
-                            </div>
-                            
-                            <div id="brackets_rounds_menu">
-                                <div id="bracket_a_rounds" class="collapse">
-                                    <a class="btn col-md-2" 
-                                       data-ng-repeat="n in rounds_numbers(bracket_a)" 
-                                       ng-click="show_round(bracket_a, n)"> 
-                                       {{round_name(n)}} </a> 
-                                </div>
-                                <div id="bracket_b_rounds" class="collapse">
-                                    <a class="btn col-md-2" 
-                                       data-ng-repeat="n in rounds_numbers(bracket_b)" 
-                                       ng-click="show_round(bracket_b, n)"> 
-                                       {{round_name(n)}} </a> 
-                                </div>                                
-                            </div>          
-                            
                             <div ng-show="any_bracket_is_selected">
                                 <div data-ng-repeat="match in bracket_funcs.round_n(selected_bracket,selected_round)">
                                     <div data-ng-show="is_playable(match)">
@@ -336,7 +340,7 @@
                     </div>
                     
                     <! Configuracion>
-                    <div id="sorteo_frame" data-ng-show="seSeleccionoFrame('configuracion')">
+                    <div id="configracion_frame" data-ng-show="seSeleccionoFrame('configuracion')">
                         sorteo
                         <div class="md-inline-form">
                             <md-content layout-gt-sm="row" layout-padding>

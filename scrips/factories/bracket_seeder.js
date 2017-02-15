@@ -22,12 +22,11 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
         }
     
     ////////////////////////////////////////////////////
-        
+    
     
     function seed(players) {
         var players_by_round = slice_players_by_round(players);
         var fst_round_matches = players_by_round[1].map(match_with_bye).concat(seed_fst_round_players(players_by_round[0]));
-
         return replace_decoys(seed_decoys(decoys_for(fst_round_matches)));
     }
     
@@ -121,7 +120,15 @@ angular.module('tournamentModule').factory('bracketSeeder', [function(){
     */
     function place_in_lighter_branch(bracket, decoy){
         // If both branch have the same number of players, then choose one at random.
-        if (is_lighter(bracket.branch_1, bracket.branch_2) || random(0,1) == 0){
+        if (is_lighter(bracket.branch_1, bracket.branch_2)){
+            bracket.branch_1 = place_decoy_in_bracket(bracket.branch_1, decoy);
+            return bracket;
+        }
+        if (is_lighter(bracket.branch_2, bracket.branch_1)){
+            bracket.branch_2 = place_decoy_in_bracket(bracket.branch_2, decoy);
+            return bracket;
+        }
+        if(random(0,1) == 0){
             bracket.branch_1 = place_decoy_in_bracket(bracket.branch_1, decoy);
             return bracket;
         }

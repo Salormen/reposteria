@@ -7,7 +7,7 @@ angular.module('tournamentModule').controller('tournamentController',
        
     //Configuracion
         
-    var directory_prefix = "file:///C:/Users/user/Documents/Proyectos/TDM_Manager/";
+    var directory_prefix = "/home/juancho-r/Documentos/Proyectos/tdm_manager/";
     var inputFileColumns = ["Nombre", "Club", "Rating"];
     var frames = ['inscripcion', 'grupos', 'llave', 'configuracion'];
     var start_frame = 'inscripcion';
@@ -477,7 +477,7 @@ angular.module('tournamentModule').controller('tournamentController',
         for(var i = $scope.torneo.type.clasified_per_group +1; i <= $scope.torneo.type.cant_per_group + 1; i++){
             for(var j = 0; j < local_groups.length; j++){
                 if(i <= local_groups[j].jugadores.length){
-                    res.push({ref: 'player reference', group_id: j, player_pos: i});
+                    res.push({ref: 'player reference', group_id: local_groups[j].id, player_pos: i});
                 }
             }
             local_groups.reverse();         // para sorteo en serpiente
