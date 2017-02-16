@@ -9,10 +9,19 @@
     <! My app>
     <script type="text/javascript" src="scrips/app.js"></script>
     <script type="text/javascript" src="scrips/controllers/tournamentController.js"></script>
-    <script type="text/javascript" src="scrips/factories/groups_seeder.js"></script>
-    <script type="text/javascript" src="scrips/factories/bracket_seeder.js"></script>
-    <script type="text/javascript" src="scrips/factories/matches_maker_bracket.js"></script>
+    
+    <script type="text/javascript" src="scrips/factories/brackets/bracket_functions.js"></script>
+    <script type="text/javascript" src="scrips/factories/brackets/bracket_matches_builder.js"></script>
+    <script type="text/javascript" src="scrips/factories/brackets/bracket_seeder.js"></script>
+    <script type="text/javascript" src="scrips/factories/brackets/brackets_builder.js"></script>
     <script type="text/javascript" src="scrips/factories/bracket_functions.js"></script>
+    
+    <script type="text/javascript" src="scrips/factories/groups/groups_builder.js"></script>
+    <script type="text/javascript" src="scrips/factories/groups/groups_matches_builder.js"></script>
+    <script type="text/javascript" src="scrips/factories/groups/groups_seeder.js"></script>
+    
+    <script type="text/javascript" src="scrips/factories/tournament_builder.js"></script>
+    <script type="text/javascript" src="scrips/factories/format_builders.js"></script>
     <script type="text/javascript" src="scrips/factories/xlsx_parser.js"></script>
     
     <! Boostrap>
@@ -53,7 +62,7 @@
                     <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
                     <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
                     <div id="groups_menu" class="collapse">
-                        <div ng-repeat="grupo in grupos | orderBy: 'id'">
+                        <div ng-repeat="grupo in torneo.groups | orderBy: 'id'">
                             <div class="col-md-6"></div>
                             <a class="btn col-md-6" ng-click="mostrar_grupo(grupo.id)">
                                 Grupo {{grupo.id + 1}}
@@ -62,7 +71,7 @@
                     </div> 
                 </div>
                 <div id="menu_llave" ng-show="seSeleccionoFrame('llave')">
-                    <div id="brackets_menu" ng-show="torneo.type.exist_bracket_b">
+                    <div id="brackets_menu" ng-show="torneo.format.bracket_b">
                         <a class="btn col-md-6" 
                            data-toggle="collapse" 
                            href="#bracket_a_rounds" 
@@ -77,14 +86,14 @@
                     <div id="brackets_rounds_menu">
                         <div id="bracket_a_rounds" class="collapse">
                             <a class="btn col-md-2" 
-                               data-ng-repeat="n in rounds_numbers(bracket_a)" 
-                               ng-click="show_round(bracket_a, n)"> 
+                               data-ng-repeat="n in rounds_numbers(torneo.brackets[0])" 
+                               ng-click="show_round(torneo.brackets[0], n)"> 
                                {{round_name(n)}} </a> 
                         </div>
                         <div id="bracket_b_rounds" class="collapse">
                             <a class="btn col-md-2" 
-                               data-ng-repeat="n in rounds_numbers(bracket_b)" 
-                               ng-click="show_round(bracket_b, n)"> 
+                               data-ng-repeat="n in rounds_numbers(torneo.brackets[1])" 
+                               ng-click="show_round(torneo.brackets[1], n)"> 
                                {{round_name(n)}} </a> 
                         </div>                                
                     </div>  
@@ -189,11 +198,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="jugador in jugadores_inscriptos | orderBy:'parseInt(rating)':true | filter:searchedInscriptedPlayer">
+                                        <tr ng-repeat="jugador in torneo.players | orderBy:'parseInt(rating)':true | filter:searchedInscriptedPlayer">
                                             <td> {{jugador.rating}}</td>
                                             <td> {{jugador.nombre}}</td>
                                             <td> {{jugador.club}}</td>
-                                            <td> <button type="button" ng-click="eliminarJugador(jugador, jugadores_inscriptos)"> X</button> </td>
+                                            <td> <button type="button" ng-click="eliminarJugador(jugador, torneo.players)"> X</button> </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -209,7 +218,7 @@
                     <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos')">
                         <div id="detalle_grupos" class="col-md-10">
                             <div data-ng-show="seSelecciono_todosLosGrupos">
-                                <div ng-repeat="grupo in grupos | orderBy: 'id'">
+                                <div ng-repeat="grupo in torneo.groups | orderBy: 'id'">
                                     Grupo {{grupo.id + 1}}: <br>
                                     <table class="table table-condensed">
                                         <thead>

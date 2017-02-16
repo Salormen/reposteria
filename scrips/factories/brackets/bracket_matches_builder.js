@@ -1,4 +1,4 @@
-angular.module('tournamentModule').factory('matchesForBracket', [function(){
+angular.module('tournamentModule').factory('bracket_matches_builder', [function(){
 
     /*
         Bracket := Player(player) | Bye | Match (winner_match_1, winner_match_2)
@@ -73,20 +73,20 @@ angular.module('tournamentModule').factory('matchesForBracket', [function(){
     
     ////////////////////////////////////////////////////
 
-    function matches_for_bracket(bracket, sets_per_round, groups){
+    function build_bracket_matches(bracket, sets_per_round, round, groups){
         if(bracket.is_bye){
             return bye_c();
         }
         if(bracket.is_player){
             return player_c(groups[bracket.reference.group_id], bracket.reference.player_pos);
         }else{
-            var match_1 = matches_for_bracket(bracket.branch_1, sets_per_round, groups);
-            var match_2 = matches_for_bracket(bracket.branch_2, sets_per_round, groups);
-            return match_c(match_1, match_2, sets_per_round);
+            var match_1 = build_bracket_matches(bracket.branch_1, sets_per_round, round+1, groups);
+            var match_2 = build_bracket_matches(bracket.branch_2, sets_per_round, round+1, groups);
+            return match_c(match_1, match_2, sets_per_round(round));
         }
     }
 
     
-    return matches_for_bracket;
+    return build_bracket_matches;
     
 }]);

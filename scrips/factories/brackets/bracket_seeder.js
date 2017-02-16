@@ -1,4 +1,4 @@
-angular.module('tournamentModule').factory('bracketSeeder', [function(){
+angular.module('tournamentModule').factory('bracket_seeder', [function(){
     
     /*
         Bracket := Bye | Player(player) | Match (Bracket,Bracket)

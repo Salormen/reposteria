@@ -1,6 +1,6 @@
-angular.module('tournamentModule').factory('tournament_factory', 
-                'groupsSeeder', [function(
-                seed_players_in_groups){
+angular.module('tournamentModule').factory('tournament_builder', 
+                            ['groups_builder', 'brackets_builder', 
+                    function( build_groups,     build_brackets){
 
     
     /*
@@ -34,38 +34,41 @@ angular.module('tournamentModule').factory('tournament_factory',
                     
     */
     
-    function create_tournament(name, format_builder){
+    function build_tournament(name, format_builder){
         return {
             name: name,
             players: [],
+            format: {},
+            groups: [],
+            brackets: [],
             seed: function(){
                 this.create_format();
                 this.sort_players();
                 this.create_groups();
                 this.create_brackets();
             },
+            
+            // Private  
             sort_players: function(){
                 this.players.sort((j1,j2) => {return j2.rating - j1.rating});  
             },
-            create_format: function(){
-                var coincident_formats = format_builder.limits.filter((f) => {return this.players.length <= f.max;});
-                this["format"] = coincident_formats[coincident_formats.length - 1].format; // last format
+            create_format: function(){                
+                this.format = format_builder.format_for_n_players(this.players.length);
             },
             create_groups: function(){
-                this["groups"] = seed_players_in_groups(this.format.count_groups(this.players.length),
+                this.groups = build_groups(this.format.count_groups(this.players.length),
                                                         this.format.sets_by_instance.groups,
                                                         this.players);
             },
             create_brackets: function(){
-                this["brackets"] = seed_brackets(this.players.length,
-                                                 this.groups.length,
-                                                 this.format.bracket_a_clasified,
-                                                 this.format.bracket_b,
-                                                 this.format.sets_by_instance.brackets)
+                this.brackets = build_brackets(this.groups,
+                                                  this.format.bracket_a_clasified,
+                                                  this.format.bracket_b,
+                                                  this.format.sets_by_instance.brackets);
             }
         };
     }
     
-    return create_tournament;
+    return build_tournament;
     
 }]);

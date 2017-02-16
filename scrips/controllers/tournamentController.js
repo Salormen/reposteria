@@ -1,6 +1,6 @@
 angular.module('tournamentModule').controller('tournamentController',  
-            ['$scope', 'groupsSeeder', 'bracketSeeder', 'matchesForBracket', 'bracketFunctions', 'xlsxParser',
-    function($scope, seed_groups, seed_bracket, matches_for_bracket, bracket_functions, xlsx_parser){
+            ['$scope', 'tournament_builder', 'format_builders', 'bracketFunctions', 'xlsxParser',
+    function($scope, build_tournament, format_builders, bracket_functions, xlsx_parser){
     
     /******************************************/
         
@@ -15,17 +15,28 @@ angular.module('tournamentModule').controller('tournamentController',
     $scope.isTournament = true;
         
     $scope.agregarTodos = function(){
-        $scope.jugadores_inscriptos = $scope.jugadores_previos;
+        $scope.torneo.players = $scope.jugadores_previos;
     }
     
     
     /******************************************/
         
-    // Inicio
+    // Inicio - Configuracion
         
     $scope.openNewTournament = function(){
         openInNewTab(directory_prefix + "index.html", "_blank");
     }
+    
+       
+    $scope.seeded = false;
+    
+    $scope.torneo = build_tournament("Torneo Interescuelas 1", format_builders.interescuelas);
+            
+    $scope.setsForVictory = function(sets){
+        return Math.floor($scope.sets / 2) + 1;
+    }
+    
+    
     
     ///////////////////////////////////////////////
     // Seleccion del frame
@@ -64,11 +75,11 @@ angular.module('tournamentModule').controller('tournamentController',
         );
     }
             
-    $scope.jugadores_inscriptos = [];
+    $scope.torneo.players = [];
     
     $scope.inscribirJugador = function(jugador){
-        if(!$scope.jugadores_inscriptos.includes(jugador)){
-            $scope.jugadores_inscriptos.push(jugador);                    
+        if(!$scope.torneo.players.includes(jugador)){
+            $scope.torneo.players.push(jugador);                    
         }
         document.getElementById(jugador.rating + jugador.nombre + jugador.club).className = "success";
     }
@@ -99,7 +110,7 @@ angular.module('tournamentModule').controller('tournamentController',
     };
     
     $scope.agregarNuevoJugador = function(){
-        $scope.jugadores_inscriptos.push($scope.nuevo_jugador);
+        $scope.torneo.players.push($scope.nuevo_jugador);
         $scope.reset_nuevo_jugador();
     };    
     
@@ -110,11 +121,7 @@ angular.module('tournamentModule').controller('tournamentController',
         
     
     $scope.seed_tournament = function(){
-                                                        // Se ordenan de mayor a menor rating
-        seed_players_in_groups(sort_players());         // Se sortean los grupos
-        create_groups_matches();                        // Se crean lo partidos para los grupos
-        
-        seed_brackets();                                // Se sortean las llaves a y, si hay, b
+        $scope.torneo.seed();
         
         reset_grupos_mostrados();   
         reset_showed_bracket();
@@ -122,23 +129,14 @@ angular.module('tournamentModule').controller('tournamentController',
         $scope.seeded = true;
     };
         
-    function seed_brackets(){
-        if($scope.torneo.type.exist_bracket_b){
-            $scope.bracket_b = create_bracket_matches(seed_references_in_bracket(bracket_b_references())); 
-                            // Se sortea la llave b
-        }
-        $scope.bracket_a = create_bracket_matches(seed_references_in_bracket(bracket_a_references()));   
-                            // Se sortea la llave a
-    }
     
     function reset_showed_bracket(){
-        $scope.selected_bracket = $scope.bracket_a;    
+        $scope.selected_bracket = $scope.torneo.brackets[0];    
     }
     /////////////////////////////////////////////
     
     // Frame Grupos
     
-    $scope.grupos = [];
     $scope.seSelecciono_todosLosGrupos = true;
     $scope.grupos_mostrados = [];
           
@@ -160,7 +158,7 @@ angular.module('tournamentModule').controller('tournamentController',
     }
         
     function reset_grupos_mostrados(){
-        $scope.grupos_mostrados = $scope.grupos.map(g => {return {mostrar:false, editar: false}});
+        $scope.grupos_mostrados = $scope.torneo.groups.map(g => {return {mostrar:false, editar: false}});
     };
       
     $scope.seSelecciono_grupo = function(id){
@@ -283,7 +281,7 @@ angular.module('tournamentModule').controller('tournamentController',
     
     
     $scope.posicionEnGrupo = function(grupo, jugador){
-        return grupo.jugadores.sort((j1,j2) => {return coeficienteEnGrupoPara(grupo,j2) - coeficienteEnGrupoPara(grupo,j1)})
+        return grupo.players.sort((j1,j2) => {return coeficienteEnGrupoPara(grupo,j2) - coeficienteEnGrupoPara(grupo,j1)})
                     .indexOf(jugador) + 1;
     }
       
@@ -358,8 +356,6 @@ angular.module('tournamentModule').controller('tournamentController',
     ///// frame llave ////////
     //////////////////////////
     
-    $scope.bracket_a;
-    $scope.bracket_b;
     $scope.selected_bracket;    
     $scope.selected_round = 0;
     $scope.any_bracket_is_selected = false;
@@ -409,124 +405,7 @@ angular.module('tournamentModule').controller('tournamentController',
     
     ///////////////////////////////////
     
-    // Frame configuracion
-    
-    $scope.seeded = false;
-    
-    $scope.torneo = {
-        nombre: "",
-        type: {
-            cant_per_group: 3,
-            max: false,
-            clasified_per_group: 2,
-            exist_bracket_b: true,
-            sets_groups_match: 5,
-        },
-        categoria: ""
-    }
-            
-    $scope.setsForVictory = function(sets){
-        return Math.floor($scope.sets / 2) + 1;
-    }
-
-        
-    function sort_players(){
-        $scope.jugadores_inscriptos.sort((j1,j2) => {return j2.rating - j1.rating});  
-        return $scope.jugadores_inscriptos;
-    }
-
-    function seed_players_in_groups(players){
-        $scope.grupos = seed_groups($scope.torneo.type.cant_per_group, players).map(
-                (g,i) => {
-                    return {
-                        id: i, 
-                        jugadores: g.players, 
-                        get_player_in_position: function(position){
-                            return this.jugadores.sort((j1,j2) => 
-                                {return coeficienteEnGrupoPara(this,j2) - coeficienteEnGrupoPara(this,j1)})
-                                    [position-1];
-                        }
-                    }
-                }
-            );
-    }
-
-    function create_groups_matches(){
-        $scope.grupos = $scope.grupos.map(crearPartidosDeGrupoPara);
-    };
-
-    function seed_references_in_bracket(players_references){
-        return seed_bracket(players_references);
-    }
-    
-    function bracket_a_references(){
-        var res = [];
-        var local_groups = copy($scope.grupos);
-        for(var i = 1; i <= $scope.torneo.type.clasified_per_group; i++){
-            res = res.concat(local_groups.map(g => {
-                return {ref: 'player reference', group_id: g.id, player_pos: i};
-            }));
-            local_groups.reverse();   // para sorteo en serpiente
-        }
-        return res;
-    }
-    
-    function bracket_b_references(){
-        var res = [];
-        var local_groups = copy($scope.grupos);
-        for(var i = $scope.torneo.type.clasified_per_group +1; i <= $scope.torneo.type.cant_per_group + 1; i++){
-            for(var j = 0; j < local_groups.length; j++){
-                if(i <= local_groups[j].jugadores.length){
-                    res.push({ref: 'player reference', group_id: local_groups[j].id, player_pos: i});
-                }
-            }
-            local_groups.reverse();         // para sorteo en serpiente
-        }
-        return res;
-    }
-
-    function create_bracket_matches(bracket){  
-        return matches_for_bracket(bracket, 5, $scope.grupos);
-    }
-          
-    function crearPartidosDeGrupoPara(grupo){
-        grupo.partidos = grupo.jugadores.map((j,id) => {
-            var local_jds = copy(grupo.jugadores);
-            return local_jds.splice(id+1, grupo.jugadores.length-id+1).reduce((r, jo, idO)=>{
-                r.push({jugador1: {id: id,       nombre: j.nombre},
-                        jugador2: {id: idO+id+1, nombre:jo.nombre},
-                        sets: crearSets(id, idO+id+1, grupo.jugadores.length),
-                        final: listFor(id, idO+id+1, grupo.jugadores.length)
-                       });                
-                return r;
-            }, []);
-        }).reduce((r,e) => {return r.concat(e)}, []);
-        return grupo;   
-    }
-    
-    function crearSets(idj, ido, len){
-        var sets = [];        
-        for (var i = 0; i < $scope.torneo.type.sets_groups_match; i++) {
-            sets.push(listFor(idj,ido, len));
-        }
-        return sets;
-    }
-    
-    function listFor(id,idO, len){
-        var r = Array(len);
-        r[id] = 0;
-        r[idO] = 0;
-        return r;
-    }
-        
-        
-    function copy(arr){
-        return arr.reduce((r,e) => {r.push(e); return r}, []); 
-    }
-      
-    function crearPartidosLlave(){
-        $scope.llave = crearLlave($scope.jugadores_inscriptos.map(j => {return j.nombre}), 5);
-    }
-    
+    // Frame Resultados
+ 
     
   }]);

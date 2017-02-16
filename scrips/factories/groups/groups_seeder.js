@@ -1,9 +1,9 @@
- angular.module('tournamentModule').factory('groupsSeeder', [function(){
+ angular.module('tournamentModule').factory('groups_seeder', [function(){
 
-    function seed(prefered_group_size, players) {
+    function seed(count_groups, players) {
         var seeding_info = {sentido: true, next_group: 0};
         var groups = [];
-        for (i=0; i< Math.floor(players.length / prefered_group_size); i++){
+        for (i=0; i< count_groups; i++){
             groups.push({players: []});
         }
         return players.reduce((prev, p, i)=>{
