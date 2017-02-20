@@ -19,6 +19,7 @@
     <script type="text/javascript" src="scrips/factories/groups/groups_builder.js"></script>
     <script type="text/javascript" src="scrips/factories/groups/groups_matches_builder.js"></script>
     <script type="text/javascript" src="scrips/factories/groups/groups_seeder.js"></script>
+    <script type="text/javascript" src="scrips/factories/groups/groups_functions.js"></script>
     
     <script type="text/javascript" src="scrips/factories/tournament_builder.js"></script>
     <script type="text/javascript" src="scrips/factories/format_builders.js"></script>
@@ -218,15 +219,15 @@
                     <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos')">
                         <div id="detalle_grupos" class="col-md-10">
                             <div data-ng-show="seSelecciono_todosLosGrupos">
-                                <div ng-repeat="grupo in torneo.groups | orderBy: 'id'">
-                                    Grupo {{grupo.id + 1}}: <br>
+                                <div ng-repeat="group in torneo.groups | orderBy: 'id'">
+                                    Grupo {{group.id + 1}}: <br>
                                     <table class="table table-condensed">
                                         <thead>
                                             <tr>
                                                 <th>Rating</th>
                                                 <th>Jugador</th>
                                                 <th>Club</th>
-                                                <th ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">{{jugador.nombre}}</th>
+                                                <th ng-repeat="jugador in group.players | orderBy:'rating':true ">{{jugador.nombre}}</th>
                                                 <th>Ptds G/P</th>
                                                 <th>Sets G/P</th>
                                                 <th>Pts G/P</th>
@@ -234,30 +235,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">
+                                            <tr ng-repeat="jugador in group.players | orderBy:'rating':true ">
                                                 <td align="left">{{jugador.rating}}</td>
                                                 <td align="left">{{jugador.nombre}}</td>
                                                 <td align="left">{{jugador.club}}</td>
-                                                <td align="left" ng-repeat="jOp in grupo.jugadores | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(grupo, jugador, jOp)}}</td>
-                                                <td align="left">{{difPartidosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{difSetsGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{difPuntosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{posicionEnGrupo(grupo, jugador)}}</td>
+                                                <td align="left" ng-repeat="jOp in group.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(group, jugador, jOp)}}</td>
+                                                <td align="left">{{difPartidosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{difSetsGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{difPuntosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{posicionEnGrupo(group, jugador)}}</td>
                                             </tr>
                                         </tbody>
                                     </table>                  
                                 </div>
                             </div>
-                            <div ng-repeat="grupo in grupos">
-                                <div data-ng-show="seSelecciono_grupo(grupo.id)">
-                                    Grupo {{grupo.id}}: <br>
+                            <div ng-repeat="group in torneo.groups">
+                                <div data-ng-show="seSelecciono_grupo(group.id)">
+                                    Grupo {{group.id + 1}}: <br>
                                     <table class="table table-condensed">
                                         <thead>
                                             <tr>
                                                 <th>Rating</th>
                                                 <th>Jugador</th>
                                                 <th>Club</th>
-                                                <th ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">{{jugador.nombre}}</th>
+                                                <th ng-repeat="jugador in group.players | orderBy:'rating':true ">{{jugador.nombre}}</th>
                                                 <th>Ptds G/P</th>
                                                 <th>Sets G/P</th>
                                                 <th>Pts G/P</th>
@@ -265,15 +266,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="jugador in grupo.jugadores | orderBy:'rating':true ">
+                                            <tr ng-repeat="jugador in group.players | orderBy:'rating':true ">
                                                 <td align="left">{{jugador.rating}}</td>
                                                 <td align="left">{{jugador.nombre}}</td>
                                                 <td align="left">{{jugador.club}}</td>
-                                                <td align="left" ng-repeat="jOp in grupo.jugadores | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(grupo, jugador, jOp)}}</td>
-                                                <td align="left">{{difPartidosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{difSetsGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{difPuntosGanadosPerdidosEnGrupo(grupo, jugador)}}</td>
-                                                <td align="left">{{posicionEnGrupo(grupo, jugador)}}</td>
+                                                <td align="left" ng-repeat="jOp in group.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(group, jugador, jOp)}}</td>
+                                                <td align="left">{{difPartidosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{difSetsGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{difPuntosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                                                <td align="left">{{posicionEnGrupo(group, jugador)}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -283,7 +284,7 @@
                                     <button ng-click="openGroupPrintPage(grupo)">
                                         Imprimir
                                     </button>
-                                    <div data-ng-show="editando_grupo(grupo.id)">
+                                    <div data-ng-show="editando_grupo(group.id)">
                                         <div ng-repeat="partido in grupo.partidos">
                                             <table class="table table-condensed">
                                                 Partido {{partidos.indexOf(partido) + 1}}

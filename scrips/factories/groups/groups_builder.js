@@ -1,15 +1,13 @@
 angular.module('tournamentModule').factory('groups_builder', 
-                    ['groups_seeder', 'groups_matches_builder', 
-            function( seed_players,    build_groups_matches){
+                    ['groups_seeder', 'groups_matches_builder', 'groups_functions',
+            function( seed_players,    build_groups_matches,     groups_functions){
     
     function adapt(groups){
         return groups.map(
                 (g,i) => { 
                     g["id"] = i;
                     g["get_player_in_position"] = function(position){
-                            return this.jugadores.sort((j1,j2) => 
-                                {return coeficienteEnGrupoPara(this,j2) - coeficienteEnGrupoPara(this,j1)})
-                                    [position-1];
+                            return  groups_functions.get_player_in_position(g, position);
                         };
                     return g;
                 }
