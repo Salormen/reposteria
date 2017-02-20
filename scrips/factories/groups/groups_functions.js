@@ -139,7 +139,7 @@ angular.module('tournamentModule').factory('groups_functions',
     }
               
     function get_player_in_position(group, position){
-        group.players.sort((j1,j2) => 
+        return group.players.sort((j1,j2) => 
                         {return coeficienteEnGrupoPara(group,j2) - coeficienteEnGrupoPara(group,j1)})
                             [position-1];
     }

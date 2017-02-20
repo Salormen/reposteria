@@ -1,4 +1,6 @@
-angular.module('tournamentModule').factory('bracket_matches_builder', [function(){
+angular.module('tournamentModule').factory('bracket_matches_builder', [
+            'groups_functions',
+    function(groups_functions){
 
     /*
         Bracket := Player(player) | Bye | Match (winner_match_1, winner_match_2)
@@ -19,7 +21,7 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [function(
                         from_group: group,
                         group_position: position,
                         get winner () {
-                            return group.get_player_in_position(position);
+                            return groups_functions.get_player_in_position(group, position);
                         }                
                     };
         }

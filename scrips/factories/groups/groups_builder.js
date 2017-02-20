@@ -6,9 +6,6 @@ angular.module('tournamentModule').factory('groups_builder',
         return groups.map(
                 (g,i) => { 
                     g["id"] = i;
-                    g["get_player_in_position"] = function(position){
-                            return  groups_functions.get_player_in_position(g, position);
-                        };
                     return g;
                 }
             );
