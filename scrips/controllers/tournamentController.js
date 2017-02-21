@@ -219,10 +219,10 @@ angular.module('tournamentModule').controller('tournamentController',
     $scope.posicionEnGrupo = groups_functions.posicionEnGrupo;
       
     $scope.openGroupPrintPage = function(group){
-        var players_names = group.jugadores.map(j => {return j.nombre;}).reduce((r,n) => {return r+","+n});
+        var players_names = group.players.map(j => {return j.nombre;}).reduce((r,n) => {return r+","+n});
         var params = "id="+group.id+"&players="+players_names   + 
-                create_info_players_params(group.jugadores)     +
-                create_info_matches_params(group.partidos) ;
+                create_info_players_params(group.players)     +
+                create_info_matches_params(group.matches) ;
         
         openInNewTab(directory_prefix + "group_printer.html?" + params, "_blank");
     }

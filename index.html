@@ -91,12 +91,14 @@
                                ng-click="show_round(torneo.brackets[0], n)"> 
                                {{round_name(n)}} </a> 
                         </div>
-                        <div id="bracket_b_rounds" class="collapse">
-                            <a class="btn col-md-2" 
-                               data-ng-repeat="n in rounds_numbers(torneo.brackets[1])" 
-                               ng-click="show_round(torneo.brackets[1], n)"> 
-                               {{round_name(n)}} </a> 
-                        </div>                                
+                        <div ng-show="torneo.format.bracket_b">
+                            <div id="bracket_b_rounds" class="collapse">
+                                <a class="btn col-md-2" 
+                                   data-ng-repeat="n in rounds_numbers(torneo.brackets[1])" 
+                                   ng-click="show_round(torneo.brackets[1], n)"> 
+                                   {{round_name(n)}} </a> 
+                            </div>                                
+                        </div>
                     </div>  
                 </div>
             </div>
@@ -278,10 +280,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <button ng-click="editar_grupo(grupo.id)">
+                                    <button ng-click="editar_grupo(group.id)">
                                         Editar
                                     </button> 
-                                    <button ng-click="openGroupPrintPage(grupo)">
+                                    <button ng-click="openGroupPrintPage(group)">
                                         Imprimir
                                     </button>
                                     <div data-ng-show="editando_grupo(group.id)">

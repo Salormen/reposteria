@@ -22,7 +22,7 @@ angular.module('tournamentModule').factory('format_builders',
              
                         
     var interescuelas_format_5 = {
-        count_groups:  (p) => {return 1},
+        count_groups:  function(p){return 1},
         bracket_a_clasified:  0,
         bracket_b: false,
         sets_by_instance: {
@@ -32,10 +32,32 @@ angular.module('tournamentModule').factory('format_builders',
     };
                         
                         
-    var interescuelas_format_11 = {};
+    var interescuelas_format_11 = {
+        count_groups:  function(p){return min(3, p)},
+        bracket_a_clasified:  3,
+        bracket_b: false,
+        sets_by_instance: {
+            groups: 3,
+            brackets: {
+                /*
+                    Round id:                Round
+                    -1                      Never
+                    0                       Final
+                    1                       Semifinal
+                    2                       4tos de final
+                                ...
+                    100                     First round
+                */
+                bracket_a: function(round){
+                    var a = [{round:-1, sets: 1}, {round:100, sets: 3}, {round:0, sets: 5}, {round:100, sets: 7}];
+                    return a.filter(c => {return round <= c.round})[0].sets;
+                }
+            }
+        }
+    };
                         
     var interescuelas_format_65 = {
-        count_groups:  (p) => {return min(3, p)},
+        count_groups:  function(p){return min(3, p)},
         bracket_a_clasified:  2,
         bracket_b: true,
         sets_by_instance: {
