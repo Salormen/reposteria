@@ -30,7 +30,7 @@
     }
 
     function first_fitting_group(player, seeding_info, groups){
-        var local_seeding_info = seeding_info;
+        var local_seeding_info = {sentido: seeding_info.sentido, next_group: seeding_info.next_group};;
         while (group_doesnt_fit_player(player, groups[local_seeding_info.next_group])){
             local_seeding_info = next_group(local_seeding_info, groups);
         }

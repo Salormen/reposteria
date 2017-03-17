@@ -6,15 +6,15 @@ angular.module('tournamentModule').factory('tournament_builder',
     /*
         Torneo:
             -nombre
+            -fecha
             -Formato:
                 -\jugadores.length => count_zonas
                 -cantidad de clasificados a llave A por zona
                 -llave B?
                 -cantidad de sets por instancia (o inicio del aumento de la cantidad de sets)
             -jugadores
-            -Instancias:
-                -grupos
-                -llaves
+            -grupos
+            -llaves
     */
     
     /*
@@ -34,9 +34,11 @@ angular.module('tournamentModule').factory('tournament_builder',
                     
     */
     
-    function build_tournament(name, format_builder){
+    function build_tournament(name, date, category, format_builder){
         return {
             name: name,
+            date: date,
+            category: category, 
             players: [],
             format: {},
             groups: [],

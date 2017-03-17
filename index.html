@@ -21,8 +21,12 @@
     <script type="text/javascript" src="scrips/factories/groups/groups_seeder.js"></script>
     <script type="text/javascript" src="scrips/factories/groups/groups_functions.js"></script>
     
+    <script type="text/javascript" src="scrips/factories/printer/printer.js"></script>
+    <script type="text/javascript" src="scrips/factories/printer/components.js"></script>
+    
     <script type="text/javascript" src="scrips/factories/tournament_builder.js"></script>
     <script type="text/javascript" src="scrips/factories/format_builders.js"></script>
+    <script type="text/javascript" src="scrips/factories/other_functions.js"></script>    
     <script type="text/javascript" src="scrips/factories/xlsx_parser.js"></script>
     
     <! Boostrap>
@@ -33,6 +37,9 @@
     <! XLSX parser>
     <script type="text/javascript" src="node_modules/xlsx/jszip.js"></script>
     <script type="text/javascript" src="node_modules/xlsx/xlsx.js"></script>
+    <! jsPDF>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script type="text/javascript" src="scrips/factories/printer.js"></script>
     
     <! My fonts >
     <link rel="stylesheet" type="text/css" href="CSS/fonts.css">
@@ -46,20 +53,22 @@
                     <img src="img/fetemba_header2.ico"/>
                 </div>
                 <div class="col-md-6">
-                    Nombre del torneo
+                    {{torneo.name}}
                 </div>
                 <div class="col-md-3">
-                    <a class="btn col-md-12" ng-click="seleccionarFrame('inscripcion')">Configuracion</a>
+                    <a class="btn col-md-12" data-toggle="collapse" href="#start_and_config">Configuracion</a>
                 </div>
+            </div>
+            <div id="start_and-config" class="collapse"> 
             </div>
             <div id="menu">
                 <div id="tabs">
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion')"> Inscripción </a>  
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('grupos')" data-toggle="collapse" href="#menu_grupos"> Grupos </a>
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('llave')" data-toggle="collapse" href="#menu_llave"> Llave </a>
-                    <a class="btn col-md-3" ng-click="seleccionarFrame('configuracion')"> Configuración </a>
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion', frames)"> Inscripción </a>  
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('grupos', frames)" data-toggle="collapse" href="#menu_grupos"> Grupos </a>
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('llave', frames)" data-toggle="collapse" href="#menu_llave"> Llave </a>
+                    <a class="btn col-md-3" ng-click="seleccionarFrame('resultados', frames)" data-toggle="collapse" href="#menu_resultados"> Resultados </a>
                 </div>
-                <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos')">
+                <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos', frames)">
                     <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
                     <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
                     <div id="groups_menu" class="collapse">
@@ -71,7 +80,7 @@
                         </div>
                     </div> 
                 </div>
-                <div id="menu_llave" ng-show="seSeleccionoFrame('llave')">
+                <div id="menu_llave" ng-show="seSeleccionoFrame('llave', frames)">
                     <div id="brackets_menu" ng-show="torneo.format.bracket_b">
                         <a class="btn col-md-6" 
                            data-toggle="collapse" 
@@ -100,7 +109,22 @@
                             </div>                                
                         </div>
                     </div>  
-                </div>
+                </div> <!fin menu_llave>
+                <div id="menu_resultados" class="collapse" ng-show="seSeleccionoFrame('resultados', frames)">
+                    <div id="results_menu_brackets" ng-show="torneo.format.bracket_a_clasified != 0">
+                        <div id="results_menu_bracket_b" ng-show="torneo.format.bracket_b">
+                            <a class="btn col-md-3" ng-click="showResults('groups')"> Grupos </a> 
+                            <a class="btn col-md-3" ng-click="showResults('bracket_a')"> Llave A </a> 
+                            <a class="btn col-md-3" ng-click="showResults('bracket_b')"> Llave B </a> 
+                            <a class="btn col-md-3" ng-click="showResults('export')"> Exportar </a> 
+                        </div>
+                        <div id="results_menu_bracket_b" ng-show="!torneo.format.bracket_b">
+                            <a class="btn col-md-4" ng-click="showResults('groups')"> Grupos </a> 
+                            <a class="btn col-md-4" ng-click="showResults('bracket_a')"> Llave </a> 
+                            <a class="btn col-md-4" ng-click="showResults('export')"> Exportar </a> 
+                        </div>
+                    </div>
+                </div> <! fin menu_resultados>
             </div>
         </div>
         <div id="contents">
@@ -118,7 +142,7 @@
                 <div id="content_frame">
                     
                     <! Inscripcion>
-                    <div id="inscripcion_frame" data-ng-show="seSeleccionoFrame('inscripcion')">
+                    <div id="inscripcion_frame" data-ng-show="seSeleccionoFrame('inscripcion', frames)">
                         <div class="col-md-6">
                             <div class="col-md-6"> 
                                 <input type="file" id="excel_file"> 
@@ -218,7 +242,7 @@
 
                     
                     <! Grupos>
-                    <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos')">
+                    <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos', frames)">
                         <div id="detalle_grupos" class="col-md-10">
                             <div data-ng-show="seSelecciono_todosLosGrupos">
                                 <div ng-repeat="group in torneo.groups | orderBy: 'id'">
@@ -318,7 +342,7 @@
                     </div>
 
                     <! Llave>
-                    <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave')">
+                    <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave', frames)">
                         <div data-ng-show="seeded">
                             <div ng-show="any_bracket_is_selected">
                                 <div data-ng-repeat="match in bracket_funcs.round_n(selected_bracket,selected_round)">
@@ -351,27 +375,9 @@
                         </div>
                     </div>
                     
-                    <! Configuracion>
-                    <div id="configracion_frame" data-ng-show="seSeleccionoFrame('configuracion')">
-                        sorteo
-                        <div class="md-inline-form">
-                            <md-content layout-gt-sm="row" layout-padding>
-                                <div>
-                                  <md-input-container>
-                                    <label>Cantidad de jugadores por grupo</label>
-                                    <input ng-model="cant_por_grupo">
-                                  </md-input-container> <br>
-                                  <md-input-container>
-                                    <label>Cantidad de sets por partido en fase de grupos</label>
-                                    <input ng-model="sets_grupo">
-                                  </md-input-container> <br>
-                                  <md-input-container>
-                                    <label>Cantidad de clasificados a la llave final por grupo</label>
-                                    <input ng-model="clasificados_por_grupo">
-                                  </md-input-container> <br>
-                                </div>
-                            </md-content>
-                        </div>
+                    <! Resultados>
+                    <div id="resultados_frame" data-ng-show="seSeleccionoFrame('resultados', frames)">
+                        
                     </div>
                     
                 </div>

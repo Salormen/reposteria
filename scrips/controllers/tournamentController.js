@@ -1,18 +1,26 @@
 angular.module('tournamentModule').controller('tournamentController',  
-            ['$scope', 'tournament_builder', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser',
-    function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser){
+            ['$scope', 'tournament_builder', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer',
+    function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser, printer){
     
     /******************************************/
-        
-       
+     
     //Configuracion
         
     var directory_prefix = "/home/juancho-r/Documentos/Proyectos/tdm_manager/";
     var inputFileColumns = ["Nombre", "Club", "Rating"];
-    var frames = ['inscripcion', 'grupos', 'llave', 'configuracion'];
+    var app_frames = ['inscripcion', 'grupos', 'llave', 'resultados'];
     var start_frame = 'inscripcion';
+    var results = ['groups', 'bracket_a', 'bracket_b', 'results'];
+        
+    var today = new Date(2017, 2, 2, 0, 0, 0, 0);
+    var category = {str: "Sub 15"};
+    
+    /* Para pagina de inicio @TODO*/
     $scope.isStart = false;
     $scope.isTournament = true;
+        
+    
+    
         
     $scope.agregarTodos = function(){
         $scope.torneo.players = $scope.jugadores_previos;
@@ -30,7 +38,7 @@ angular.module('tournamentModule').controller('tournamentController',
        
     $scope.seeded = false;
     
-    $scope.torneo = build_tournament("Torneo Interescuelas 1", format_builders.interescuelas);
+    $scope.torneo = build_tournament("Torneo Interescuelas 1", today, category, format_builders.interescuelas);
             
     $scope.setsForVictory = function(sets){
         return Math.floor($scope.sets / 2) + 1;
@@ -39,25 +47,19 @@ angular.module('tournamentModule').controller('tournamentController',
     
     
     ///////////////////////////////////////////////
+    
+    $scope.frames = app_frames.map( f => {return {type: f, value: false}} )
+        
+    $scope.seleccionarFrame = (type, frames) => {
+        frames = frames.map(f => {f.value = f.type == type; return f});
+    };
+            
+    $scope.seSeleccionoFrame = (type, frames) => {
+        return frames.filter( f => {return type == f.type})[0].value;
+    };
+        
     // Seleccion del frame
-    $scope.seleccionarFrame = frame => {
-        $scope.seSeleccionoFrameList = frames.map( f => {return {type: f, value: f == frame}} );
-    };
-    
-    $scope.seleccionarFrame(start_frame);
-    
-    
-    
-    $scope.getSeSeleccionoFrame = function(type){
-        for(var i = 0; i < $scope.seSeleccionoFrameList.length; i++) {
-            if($scope.seSeleccionoFrameList[i].type == type)
-                return $scope.seSeleccionoFrameList[i];
-        }
-    };
-    
-    $scope.seSeleccionoFrame = function(type){
-        return $scope.getSeSeleccionoFrame(type).value;
-    };
+    $scope.seleccionarFrame(start_frame, $scope.frames);
     
     /////////////////////////////////////////////
     
@@ -127,6 +129,7 @@ angular.module('tournamentModule').controller('tournamentController',
         reset_showed_bracket();
         
         $scope.seeded = true;
+        alert("Sorteo concluido!");
     };
         
     
@@ -219,26 +222,9 @@ angular.module('tournamentModule').controller('tournamentController',
     $scope.posicionEnGrupo = groups_functions.posicionEnGrupo;
       
     $scope.openGroupPrintPage = function(group){
-        var players_names = group.players.map(j => {return j.nombre;}).reduce((r,n) => {return r+","+n});
-        var params = "id="+group.id+"&players="+players_names   + 
-                create_info_players_params(group.players)     +
-                create_info_matches_params(group.matches) ;
-        
-        openInNewTab(directory_prefix + "group_printer.html?" + params, "_blank");
+        printer.print_group($scope.torneo, group);
     }
-        
-    function openInNewTab(url) {
-      var win = window.open(url, '_blank');
-      win.focus();
-    }
-        
-    function create_info_players_params(players){
-        return players.reduce((r, j) => {return r+"&"+j.nombre+"="+j.club+","+j.rating}, "");
-    }
-        
-    function create_info_matches_params(matches){
-        return matches.reduce((r,m) => {return r+"&match="+m.jugador1.nombre+","+m.jugador2.nombre+","+m.sets.length}, "");
-    }
+       
         
     //////////////////////////
     ///// frame llave ////////
@@ -295,5 +281,6 @@ angular.module('tournamentModule').controller('tournamentController',
     
     // Frame Resultados
  
+    $scope.restuls = results.map( f => {return {type: f, value: false}} )
     
   }]);
