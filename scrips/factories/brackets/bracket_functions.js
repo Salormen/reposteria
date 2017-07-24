@@ -15,7 +15,7 @@ angular.module('tournamentModule').factory('bracketFunctions', [function(){
     }
     
     function round_n(bracket, n){
-        if(bracket.is_player || bracket.is_bye){
+        if(bracket == undefined || bracket.is_player || bracket.is_bye){
             return [];
         }else{
             if(n == 0){            

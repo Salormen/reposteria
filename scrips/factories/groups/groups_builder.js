@@ -5,7 +5,8 @@ angular.module('tournamentModule').factory('groups_builder',
     function adapt(groups){
         return groups.map(
                 (g,i) => { 
-                    g["id"] = i;
+                    g.id = i;
+                    g.finished = false;
                     return g;
                 }
             );

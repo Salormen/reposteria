@@ -1,6 +1,6 @@
 angular.module('tournamentModule').factory('tournament_builder', 
-                            ['groups_builder', 'brackets_builder', 
-                    function( build_groups,     build_brackets){
+                            ['groups_builder', 'brackets_builder', 'bracketFunctions', 
+                    function( build_groups,     build_brackets,     bracketFunctions){
 
     
     /*
@@ -33,7 +33,12 @@ angular.module('tournamentModule').factory('tournament_builder',
                         -1(bracket)                     semis:  1 ... etc
                     
     */
-    
+                        
+    function create_matches_id(bracket){
+        var id = 1;
+        bracketFunctions.list_per_round(bracket).reverse().forEach(l => l.forEach(m => { m.id = id; id++;}))
+    }
+                        
     function build_tournament(name, date, category, format_builder){
         return {
             name: name,
@@ -67,6 +72,7 @@ angular.module('tournamentModule').factory('tournament_builder',
                                                   this.format.bracket_a_clasified,
                                                   this.format.bracket_b,
                                                   this.format.sets_by_instance.brackets);
+                this.brackets.forEach(create_matches_id);
             }
         };
     }

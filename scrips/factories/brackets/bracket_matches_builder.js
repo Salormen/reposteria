@@ -1,6 +1,6 @@
 angular.module('tournamentModule').factory('bracket_matches_builder', [
-            'groups_functions',
-    function(groups_functions){
+            'groups_functions', 'other_functions',
+    function(groups_functions,   other_functions){
 
     /*
         Bracket := Player(player) | Bye | Match (winner_match_1, winner_match_2)
@@ -9,25 +9,40 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
         function bye_c(){
             return {
                         is_bye: true,
+                        is_player: false,
                         get winner () {
                             return this;
-                        }  
+                        },
+                        getWinnerDescription: function(){
+                            return " - Bye - ";
+                        },
+                        get finished(){
+                            return false
+                        }
             };
         }
         
         function player_c(group, position){
             return {    
+                        is_bye: false,
                         is_player: true,
                         from_group: group,
                         group_position: position,
                         get winner () {
-                            return groups_functions.get_player_in_position(group, position);
-                        }                
+                            return groups_functions.get_player_in_position(group, position);                                
+                        },
+                        getWinnerDescription: function(){
+                            return "Jugador en la posición " + this.group_position + " del grupo " + other_functions.format_group_id(this.from_group.id);
+                        },
+                        get finished(){
+                            return this.from_group.finished
+                        }
                     };
         }
 
         function match_c(prev_match_1, prev_match_2, sets_count){
             return {    
+                        is_bye: false,
                         is_player: false,
                         prevs_matches: [prev_match_1, prev_match_2],
                         get players () {
@@ -46,8 +61,25 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
                                 return this.players[1];
                             }                          
                         },
-                        get is_playable(){
-                            return all(this.players, p => {return p!=null && !p.is_bye});
+                        player: function(id){
+                            if (this.prevs_matches[id].finished){
+                                return this.players[id]
+                            }else{
+                                return {nombre: this.prevs_matches[id].getWinnerDescription()}
+                            }
+                        },
+                        getWinnerDescription: function(){
+                            return "Ganador partido " + this.id;
+                        },
+                        get is_bye_match () {
+                            return this.prevs_matches.reduce((r,p) => r || p.is_bye, false);
+                        },
+                        get finished(){
+                            return  (this.is_bye_match && any(this.prevs_matches, m => m.finished)) ||
+                                    (!this.is_bye_match && this.winner != null);
+                        },
+                        get readyToPlay () {
+                            return this.prevs_matches.reduce((r,m) => r && m.finished, true);
                         }
                     };
         }
@@ -72,6 +104,7 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
     function all(list, prop){
         return list.reduce((r, e) => {return r && prop(e)}, true);
     }
+ 
     
     ////////////////////////////////////////////////////
 

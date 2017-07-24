@@ -1,36 +1,82 @@
 angular.module('tournamentModule').controller('tournamentController',  
-            ['$scope', 'tournament_builder', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer',
-    function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser, printer){
+            ['$scope', 'tournament_builder', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
+    function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
     
     /******************************************/
      
     //Configuracion
         
-    var directory_prefix = "/home/juancho-r/Documentos/Proyectos/tdm_manager/";
     var inputFileColumns = ["Nombre", "Club", "Rating"];
     var app_frames = ['inscripcion', 'grupos', 'llave', 'resultados'];
     var start_frame = 'inscripcion';
     var results = ['groups', 'bracket_a', 'bracket_b', 'results'];
         
-    var today = new Date(2017, 2, 2, 0, 0, 0, 0);
-    var category = {str: "Sub 15"};
+    var today = new Date(2017, 3, 29, 0, 0, 0, 0);
+        
+    $scope.other_functions = other_functions;
     
     /* Para pagina de inicio @TODO*/
-    $scope.isStart = false;
-    $scope.isTournament = true;
-        
-    
+    $scope.configurando = true;
     
         
     $scope.agregarTodos = function(){
-        $scope.torneo.players = $scope.jugadores_previos;
+        $scope.torneo.players = $scope.jugadores_previos.slice(0,16);
+        $scope.seed_tournament();
     }
     
     
     /******************************************/
         
     // Inicio - Configuracion
+    
+    $scope.cat_sex = "";
+    $scope.tournament = {
+        name: "",
+        cat: {}
+    };
         
+    
+    $scope.categorias_damas = [
+        {
+            name: "dam_sub11",
+            str_l: "Damas sub 11",
+            str_s: "Dam. sub 11"
+        },
+        {
+            name: "dam_sub13",
+            str_l: "Damas sub 13",
+            str_s: "Dam. sub 13"
+        },
+        {
+            name: "dam_sub15",
+            str_l: "Damas sub 15",
+            str_s: "Dam. sub 15"
+        }
+    ];
+        
+    $scope.categorias_caballeros = [
+        {
+            name: "cab_sub10",
+            str_l: "Caballeros sub 10",
+            str_s: "Cab. sub 10"
+        },
+        {
+            name: "cab_sub12",
+            str_l: "Caballeros sub 12",
+            str_s: "Cab. sub 12"
+        },
+        {
+            name: "cab_sub15",
+            str_l: "Caballeros sub 15",
+            str_s: "Cab. sub 15"
+        }
+    ];
+        
+    $scope.start_tournament = function(){
+        $scope.torneo = build_tournament($scope.tournament.name, today, $scope.tournament.cat, format_builders.interescuelas);
+        $scope.configurando = false;
+    }
+    
     $scope.openNewTournament = function(){
         openInNewTab(directory_prefix + "index.html", "_blank");
     }
@@ -38,7 +84,7 @@ angular.module('tournamentModule').controller('tournamentController',
        
     $scope.seeded = false;
     
-    $scope.torneo = build_tournament("Torneo Interescuelas 1", today, category, format_builders.interescuelas);
+    
             
     $scope.setsForVictory = function(sets){
         return Math.floor($scope.sets / 2) + 1;
@@ -66,9 +112,10 @@ angular.module('tournamentModule').controller('tournamentController',
     // Frame Inscripcion
     
     $scope.jugadores_previos = [];
-    xlsx_parser.createListener('excel_file');
-                
+    xlsx_parser.createListener('excel_file', "");      
+    
     $scope.load_previous_players = function(){
+        //xlsx_parser.createListener('excel_file', $scope.tournament_category.str_s);
         $scope.jugadores_previos = xlsx_parser.getValue().map(
             p => {return {
                         nombre: p[inputFileColumns[0]],
@@ -76,9 +123,7 @@ angular.module('tournamentModule').controller('tournamentController',
                         rating: p[inputFileColumns[2]] };}
         );
     }
-            
-    $scope.torneo.players = [];
-    
+                
     $scope.inscribirJugador = function(jugador){
         if(!$scope.torneo.players.includes(jugador)){
             $scope.torneo.players.push(jugador);                    
@@ -221,7 +266,7 @@ angular.module('tournamentModule').controller('tournamentController',
     
     $scope.posicionEnGrupo = groups_functions.posicionEnGrupo;
       
-    $scope.openGroupPrintPage = function(group){
+    $scope.print_group = function(group){
         printer.print_group($scope.torneo, group);
     }
        
@@ -251,6 +296,13 @@ angular.module('tournamentModule').controller('tournamentController',
         }
     }
         
+    $scope.bracket_name = bracket_n => {
+        switch(bracket_n){
+            case 0: return "Llave A";
+            case 1: return "Llave B";
+        }   
+    }
+    
     $scope.bracket_funcs = {
         count_rounds: (bracket)=>{if($scope.seeded){return bracket_functions.count_rounds(bracket)}},
         round_n: (bracket, n)=>{if($scope.seeded){return bracket_functions.round_n(bracket, n)}},
@@ -276,6 +328,90 @@ angular.module('tournamentModule').controller('tournamentController',
     $scope.is_playable = function(match){
         return match.is_playable;
     }
+    
+    
+    $scope.matches_for_print = [];
+    
+    $scope.print_match = function (match){
+        if($scope.matches_for_print.length == 4){
+            alert('Solo se permiten imprimir 4 partidos por vez.\nPor favor, imprima los partidos seleccionados \npara poder seguir agregando partidos a la impresión.');
+        }else{
+            match.round = $scope.round_name($scope.selected_round);
+            match.bracket = $scope.bracket_name($scope.selected_bracket);
+            $scope.matches_for_print.push(match);
+        }
+    }
+    
+    $scope.print_matches =function(){
+        printer.print_bracket_matches($scope.torneo, $scope.matches_for_print);     
+        $scope.matches_for_print = [];
+    }
+    
+    
+    $scope.matchesReadyToPlayAllBrackets = function(){
+        if($scope.seeded){
+            var mrtp = $scope.torneo.brackets.reduce((r,b) =>
+                r+$scope.bracket_funcs.list_per_round(b).reduce((r,l) => 
+                    r+l.reduce((rc,m) => 
+                        rc+m.readyToPlay,0)
+                    ,0)
+                ,0);
+            if (mrtp == 0){
+                return "";
+            }else{
+                return "("+ mrtp +")";
+            }
+        }else{
+            return "";
+        }
+    }
+    
+    $scope.matchesReadyToPlayBracketA = function(){
+        if($scope.seeded){
+            var mrtp = $scope.bracket_funcs.list_per_round($scope.torneo.brackets[0]).reduce((r,l) => 
+                    r+l.reduce((rc,m) => 
+                        rc+m.readyToPlay,0)
+                    ,0);
+            if (mrtp == 0){
+                return "";
+            }else{
+                return "("+ mrtp +")";
+            }
+        }else{
+            return "";
+        }
+    }
+    
+    $scope.matchesReadyToPlayBracketB = function(){
+        if($scope.seeded){
+            var mrtp = $scope.bracket_funcs.list_per_round($scope.torneo.brackets[1]).reduce((r,l) => 
+                    r+l.reduce((rc,m) => 
+                        rc+m.readyToPlay,0)
+                    ,0);
+            if (mrtp == 0){
+                return "";
+            }else{
+                return "("+ mrtp +")";
+            }
+        }else{
+            return "";
+        }
+    }
+    
+    $scope.matchesReadyToPlayRound = function(bracket, round){
+        if($scope.seeded){
+            var mrtp = $scope.bracket_funcs.round_n($scope.torneo.brackets[bracket], round).reduce((rc,m) => 
+                        rc+m.readyToPlay,0);
+            if (mrtp == 0){
+                return "";
+            }else{
+                return "("+ mrtp +")";
+            }
+        }else{
+            return "";
+        }
+    }
+    
     
     ///////////////////////////////////
     

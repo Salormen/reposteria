@@ -23,6 +23,7 @@ angular.module('tournamentModule').factory('format_builders',
                         
     var interescuelas_format_5 = {
         count_groups:  function(p){return 1},
+        matches_in_groups: matches_in_groups,
         bracket_a_clasified:  0,
         bracket_b: false,
         sets_by_instance: {
@@ -34,6 +35,7 @@ angular.module('tournamentModule').factory('format_builders',
                         
     var interescuelas_format_11 = {
         count_groups:  function(p){return min(3, p)},
+        matches_in_groups: matches_in_groups,
         bracket_a_clasified:  3,
         bracket_b: false,
         sets_by_instance: {
@@ -58,6 +60,7 @@ angular.module('tournamentModule').factory('format_builders',
                         
     var interescuelas_format_65 = {
         count_groups:  function(p){return min(3, p)},
+        matches_in_groups: matches_in_groups,
         bracket_a_clasified:  2,
         bracket_b: true,
         sets_by_instance: {
@@ -110,7 +113,15 @@ angular.module('tournamentModule').factory('format_builders',
         var coincident_formats = limits.filter((f) => {return count_players <= f.max_players_alowed;});
         return coincident_formats[0].format; // first format    
     }
-                                  
+            
+    function matches_in_groups(p){
+        switch(p){
+            case 3: return [[1,3,2], [1,2,3], [2,3,1]];
+            case 4: return [[1,3,2], [2,4,3], [1,2,4], [3,4,1], [1,4,3], [2,3,4]];
+            case 5: return [[1,4,1], [3,5,2], [1,2,3], [2,3,4], [1,5,5], [2,4,1], [1,3,2], [2,5,3], [1,2,3], [3,4,5]];
+        }
+    }
+                        
     return {
         interescuelas:{  
                 format_for_n_players: format_for_n_players.bind(null, interescuelas_limits)
