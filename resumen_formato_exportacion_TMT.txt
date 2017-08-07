@@ -1,0 +1,35 @@
+Formato resumen torneo TMT:
+
+Cada categoria es una tabla donde cada fila tiene las siguientes columnas:
+
+id	categoria	ronda	j1_tmt_id	j1_nombre	j1_sets		j2_tmt_id	j2_nombre	j2_sets 
+
+Donde:
+
+id :: String
+
+caegoria :: String; Son 3 letras en mayuscula que significan:	
+							0 -> División (A 1ra, ..., F 6ta)
+							1 -> Edad: 	
+										A ----- Libre
+										B -----	Sub 15
+										C ----- Sub 13
+										D ----- Sub 11
+										E ----- Sub 18
+										R ----- Super 60
+										S ----- Super 50
+										T ----- Super 40
+							2 -> Sexo:	
+										A ----- Libre
+										B ----- Damas
+										C ----- Caballeros
+										
+ronda :: String; 		Zonas:
+								11 ----- A
+								12 ----- B
+								...
+						Llave: 	
+								60 ----- Final
+								59 ----- Semis
+								58 ----- 4tos
+								...

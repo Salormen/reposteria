@@ -1,0 +1,56 @@
+<div class="modal_window">
+    <div class="modal-header">
+        <h3>Nuevo torneo</h3>
+    </div>
+    <form name="form.userForm" ng-submit="submitForm()" novalidate>
+        <div class="modal-body">
+            <!-- Nombre -->
+            <div class="form-group">
+                <label>Nombre del torneo</label>
+                <input type="text" name="name" class="form-control" ng-model="tournament.name" required>
+                <p ng-show="form.userForm.name.$invalid && !form.userForm.name.$pristine" class="help-block">Es necesario un nombre de torneo</p>
+            </div>
+
+            <!-- Tipo de torneo -->
+            <div class="form-group">
+                <label>Tipo de torneo</label>
+                <md-radio-group ng-model="tournament.type">
+                    <md-radio-button ng-repeat="tipoTorneo in tiposDeTorneos" ng-value="tipoTorneo.value">
+                             {{ tipoTorneo.label }}
+                    </md-radio-button>
+                </md-radio-group>
+            </div>
+            
+            <!-- Categoria-->
+            <div>
+                <label>Categoria</label>
+                <md-grid-list md-cols="2"  md-row-height="200px">
+                    <md-grid-tile md-colspan="1" md-rowspan="1">
+                        <md-radio-group ng-model="form.category">
+                            <md-radio-button ng-repeat="cat in categorias" ng-value="cat.value">
+                                     {{ cat.label }}
+                            </md-radio-button>
+                        </md-radio-group>
+                    </md-grid-tile>
+                        
+                    <md-grid-tile md-colspan="1" md-rowspan="1">
+                        <md-radio-group ng-model="tournament.category">
+                            <md-radio-button ng-repeat="categoria in categorias_damas" ng-value="categoria" ng-show="form.category == 'Damas'">
+                                     {{ categoria.str_l }}
+                            </md-radio-button>
+                            
+                            <md-radio-button ng-repeat="categoria in categorias_caballeros" ng-value="categoria" ng-show="form.category == 'Caballeros'">
+                                     {{ categoria.str_l }}
+                            </md-radio-button>
+                        </md-radio-group>
+                    </md-grid-tile>
+                </md-grid-list>            
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" ng-disabled="form.userForm.$invalid">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

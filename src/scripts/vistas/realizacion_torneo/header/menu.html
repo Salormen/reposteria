@@ -1,0 +1,65 @@
+<div id="menu"> 
+    <div id="tabs">
+        <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion', frames)"> Inscripción </a>  
+        <a class="btn col-md-3" ng-click="seleccionarFrame('grupos', frames)" data-toggle="collapse" href="#menu_grupos"> Grupos </a>
+        <a class="btn col-md-3" ng-click="seleccionarFrame('llave', frames)" data-toggle="collapse" href="#menu_llave"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
+        <a class="btn col-md-3" ng-click="seleccionarFrame('resultados', frames)" data-toggle="collapse" href="#menu_resultados"> Resultados </a>
+    </div>
+    <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos', frames)">
+        <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
+        <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
+        <div id="groups_menu" class="collapse">
+            <div ng-repeat="group in torneo.groups | orderBy: 'id'">
+                <div class="col-md-6"></div>
+                <a class="btn col-md-6" ng-click="mostrar_grupo(group.id)">
+                    Grupo {{other_functions.format_group_id(group.id)}}
+                </a> 
+            </div>
+        </div> 
+    </div>
+    <div id="menu_llave" ng-show="seSeleccionoFrame('llave', frames)">
+        <div id="brackets_menu" ng-show="torneo.format.bracket_b">
+            <a class="btn col-md-6" 
+               data-toggle="collapse" 
+               href="#bracket_a_rounds" 
+               aria-expanded="false"
+               ng-click="collapse_bracket('b')"> Llave A {{matchesReadyToPlayBracketA()}}</a> 
+            <a class="btn col-md-6" 
+               data-toggle="collapse" 
+               href="#bracket_b_rounds" 
+               aria-expanded="false"
+               ng-click="collapse_bracket('a')"> Llave B {{matchesReadyToPlayBracketB()}}</a> 
+        </div>
+        <div id="brackets_rounds_menu">
+            <div id="bracket_a_rounds" class="collapse">
+                <a class="btn col-md-2" 
+                   data-ng-repeat="n in rounds_numbers(torneo.brackets[0])" 
+                   ng-click="show_round(0, n)"> 
+                   {{round_name(n)}} {{matchesReadyToPlayRound(0, n)}}</a> 
+            </div>
+            <div ng-show="torneo.format.bracket_b">
+                <div id="bracket_b_rounds" class="collapse">
+                    <a class="btn col-md-2" 
+                       data-ng-repeat="n in rounds_numbers(torneo.brackets[1])" 
+                       ng-click="show_round(1, n)"> 
+                       {{round_name(n)}} {{matchesReadyToPlayRound(1, n)}} </a> 
+                </div>                                
+            </div>
+        </div>  
+    </div> <!-- fin menu_llave -->
+    <div id="menu_resultados" class="collapse" ng-show="seSeleccionoFrame('resultados', frames)">
+        <div id="results_menu_brackets" ng-show="torneo.format.bracket_a_clasified != 0">
+            <div id="results_menu_bracket_b" ng-show="torneo.format.bracket_b">
+                <a class="btn col-md-3" ng-click="showResults('groups')"> Grupos </a> 
+                <a class="btn col-md-3" ng-click="showResults('bracket_a')"> Llave A </a> 
+                <a class="btn col-md-3" ng-click="showResults('bracket_b')"> Llave B </a> 
+                <a class="btn col-md-3" ng-click="showResults('export')"> Exportar </a> 
+            </div>
+            <div id="results_menu_bracket_b" ng-show="!torneo.format.bracket_b">
+                <a class="btn col-md-4" ng-click="showResults('groups')"> Grupos </a> 
+                <a class="btn col-md-4" ng-click="showResults('bracket_a')"> Llave </a> 
+                <a class="btn col-md-4" ng-click="showResults('export')"> Exportar </a> 
+            </div>
+        </div>
+    </div> <!-- fin menu_resultados-->
+</div>
