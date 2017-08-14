@@ -5,15 +5,15 @@
     </div>
     
     <div id="contents" ng-show="!configurando">        
-            <! Realizacion del torneo>
+            <!-- Realizacion del torneo-->
             <div id="tournament" >
                 <div id="content_frame">
                     
-                    <! Inscripcion>
+                    <!-- Inscripcion -->
                     <div id="inscripcion_frame" data-ng-show="seSeleccionoFrame('inscripcion', frames)">
                         <div class="col-md-6">
                             <div class="col-md-6"> 
-                                <input type="file" id="excel_file"> 
+                                <input type="file" id="excel_file"> </input>
                             </div>
                             <div class="col-md-6">
                                 <button type="button" ng-click="load_previous_players()">Cargar jugadores</button>
@@ -23,9 +23,9 @@
                                 <div>
                                     <div class="col-md-3">Filtrar:</div>
                                     <div class="col-md-6">
-                                        <input type="text" ng-model="searchedPlayer.nombre" placeholder="Nombre"></div>
+                                        <input type="text" ng-model="searchedPlayer.nombre" placeholder="Nombre"></input></div>
                                     <div class="col-md-3">
-                                        <input type="text" ng-model="searchedPlayer.club" placeholder="Club"></div>
+                                        <input type="text" ng-model="searchedPlayer.club" placeholder="Club"></input></div>
                                 </div>
                                 <table class="table table-condensed">
                                     <thead>
@@ -109,7 +109,7 @@
                     </div>
 
                     
-                    <! Grupos>
+                    <!-- Grupos-->
                     <div id="grupos_frame" data-ng-show="seSeleccionoFrame('grupos', frames)">
                         <div id="detalle_grupos" class="col-md-10">
                             <div data-ng-show="seSelecciono_todosLosGrupos">
@@ -213,7 +213,7 @@
                         </div>                    
                     </div>
 
-                    <! Llave>
+                    <!-- Llave-->
                     <div id="llave_frame" data-ng-show="seSeleccionoFrame('llave', frames)">
                         <div data-ng-show="seeded">
                             <div ng-show="any_bracket_is_selected">
@@ -269,7 +269,7 @@
                         
                     </div>
                     
-                    <! Resultados>
+                    <!-- Resultados -->
                     <div id="resultados_frame" data-ng-show="seSeleccionoFrame('resultados', frames)">
                         
                     </div>

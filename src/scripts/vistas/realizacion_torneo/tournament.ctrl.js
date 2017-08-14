@@ -5,7 +5,7 @@
     angular
         .module('tournamentModule')
         .controller('TournamentController',  
-                ['$scope', 'tournament_builder', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
+                ['$scope', 'build_tournament', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
         function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
 
         /******************************************/
@@ -80,7 +80,6 @@
 
         $scope.start_tournament = function(){
             $scope.torneo = build_tournament($scope.tournament.name, today, $scope.tournament.cat, format_builders.interescuelas);
-            $scope.configurando = false;
         }
 
         $scope.openNewTournament = function(){

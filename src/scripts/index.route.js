@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('chasqui')
+    .module('managerModule')
     .config(routerConfig);
 
   /** @ngInject */
@@ -10,15 +10,13 @@
     $stateProvider
       .state('principal', {
         url: '/',
-        templateUrl: 'scripts/vistas/managing_torneos/template.html',
-        controller: 'SeleccionTorneoController',
-        controllerAs: 'seleccionTorneoController'
+        templateUrl: 'scripts/vistas/managing_torneos/managing_tournaments.tmp.html',
+        controller: 'SeleccionTorneoController'
       }) 
       .state('torneo', {
         url: '/torneo',
-        templateUrl: 'scripts/vistas/realizacion_torneo/template.html',
-        controller: 'TournamentController',
-        controllerAs: 'tournamentController'
+        templateUrl: 'scripts/vistas/realizacion_torneo/tournament.tmp.html',
+        controller: 'TournamentController'
       })
 
       ;

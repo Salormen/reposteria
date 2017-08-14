@@ -1,4 +1,4 @@
-angular.module('tournamentModule').factory('tournament_builder', 
+angular.module('tournamentModule').factory('build_tournament', 
                             ['groups_builder', 'brackets_builder', 'bracketFunctions', 
                     function( build_groups,     build_brackets,     bracketFunctions){
 
@@ -39,11 +39,12 @@ angular.module('tournamentModule').factory('tournament_builder',
         bracketFunctions.list_per_round(bracket).reverse().forEach(l => l.forEach(m => { m.id = id; id++;}))
     }
                         
-    function build_tournament(name, date, category, format_builder){
+    function build_tournament(name, date, category, type){
         return {
             name: name,
             date: date,
             category: category, 
+            type: type,
             players: [],
             format: {},
             groups: [],
@@ -60,7 +61,7 @@ angular.module('tournamentModule').factory('tournament_builder',
                 this.players.sort((j1,j2) => {return j2.rating - j1.rating});  
             },
             create_format: function(){                
-                this.format = format_builder.format_for_n_players(this.players.length);
+                this.format = type.format.format_for_n_players(this.players.length);
             },
             create_groups: function(){
                 this.groups = build_groups(this.format.count_groups(this.players.length),

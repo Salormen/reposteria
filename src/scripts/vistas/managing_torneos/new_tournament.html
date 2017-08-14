@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label>Tipo de torneo</label>
                 <md-radio-group ng-model="tournament.type">
-                    <md-radio-button ng-repeat="tipoTorneo in tiposDeTorneos" ng-value="tipoTorneo.value">
+                    <md-radio-button ng-repeat="tipoTorneo in tiposDeTorneos" ng-value="tipoTorneo">
                              {{ tipoTorneo.label }}
                     </md-radio-button>
                 </md-radio-group>

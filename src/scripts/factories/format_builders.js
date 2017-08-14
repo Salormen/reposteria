@@ -123,10 +123,11 @@ angular.module('tournamentModule').factory('format_builders',
     }
                         
     return {
-        interescuelas:{  
-                format_for_n_players: format_for_n_players.bind(null, interescuelas_limits)
-            } 
+        getFormat: function(name){
+            return {
+                interescuelas: {format_for_n_players: format_for_n_players.bind(null, interescuelas_limits)}
+            }[name];
         }
-    
+    }
     
 }]);

@@ -8,7 +8,7 @@
         
         <div class="subtitulo">Torneos: </div>
         
-            <md-grid-list md-cols="3"  md-row-height="230px">
+            <md-grid-list md-cols="3"  md-row-height="260px">
                 <md-grid-tile md-colspan="1" md-rowspan="1">
 
                     <md-card md-theme="dark-blue">
@@ -25,12 +25,13 @@
                         <md-card-title> 
                           <md-card-title-text>
                             <span class="md-headline">{{tournament.name}}</span>
+                            <span class="md-subhead">{{tournament.format.label}}</span>
                             <span class="md-subhead">{{tournament.category.str_l}}</span>
                             <span class="md-subhead">{{tournament.date | date : "dd/MM/yyyy"}}</span>
                           </md-card-title-text>
                         </md-card-title>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button>Editar</md-button>
+                            <md-button ng-click="loadTournament(tournament)">Editar</md-button>
                             <md-button>Descargar</md-button>
                             <md-button ng-click="deleteTournament(tournament)">Eliminar</md-button>
                         </md-card-actions>
