@@ -15,6 +15,9 @@
       }) 
       .state('torneo', {
         url: '/torneo',
+        params: {
+            tournament: ""
+        },
         templateUrl: 'scripts/vistas/realizacion_torneo/tournament.tmp.html',
         controller: 'TournamentController'
       })

@@ -3,39 +3,26 @@
 
     angular
         .module('tournamentModule')
-        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'format_builders', SeleccionTorneoController]);
+        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'format_builders', 'tournament_dao', SeleccionTorneoController]);
 
     /** @ngInject */
-    function SeleccionTorneoController($scope, $modal, $state, format_builders){
-
-        $scope.tournaments = [{
-            name: "Torneo 1",
-            date: new Date(2017, 9, 29, 0, 0, 0, 0),
-            category: {str_l: "Caballeros sub 10"},
-            type: {
-                format: format_builders.getFormat("interescuelas"),
-                label: "Interescuelas"
-            }
-        },{
-            name: "Torneo 2",
-            date: new Date(2017, 8, 29, 0, 0, 0, 0),
-            type: {label: "TMT"}, 
-            category: {str_l: "Caballeros sub 10"}
-            
-        },{
-            name: "Torneo 3",
-            date: new Date(2017, 7, 29, 0, 0, 0, 0),
-            type: {label: "TMT"}, 
-            category: {str_l: "Caballeros sub 10"}
-            
-        },{
-            name: "Torneo 4",
-            date: new Date(2017, 6, 29, 0, 0, 0, 0),
-            type: {label: "TMT"}, 
-            category: {str_l: "Caballeros sub 10"}
-            
+    function SeleccionTorneoController($scope, $modal, $state, build_tournament, format_builders, tournament_dao){
+        
+        $scope.load = function(){
+            tournament_dao.save_new(build_tournament("Torneo 2", new Date(2017, 9, 29, 0, 0, 0, 0), {
+                    name: "dam_sub15",
+                    str_l: "Damas sub 15",
+                    str_s: "Dam. sub 15"
+                }, {
+                    format: format_builders.getFormat("interescuelas"),
+                    label: "Interescuelas"
+                })
+            );
+            $scope.tournaments = tournament_dao.all();    
         }
-                             ];
+        
+        
+        
         
         $scope.newTournament = function(){
 
@@ -61,7 +48,8 @@
         }
         
         $scope.deleteTournament = function(tournament){
-            $scope.tournaments.splice($scope.tournaments.indexOf(tournament), 1);
+            tournament_dao.remove(tournament);
+            $scope.tournaments = tournament_dao.all();
         }
         
         $scope.loadTournament = function(tournament){

@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('TournamentController',  
-                ['$scope', 'build_tournament', 'format_builders', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
-        function($scope, build_tournament, format_builders, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
+                ['$scope', '$state', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
+        function($scope, $state, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
 
         /******************************************/
 
@@ -16,76 +16,21 @@
         var app_frames = ['inscripcion', 'grupos', 'llave', 'resultados'];
         var start_frame = 'inscripcion';
         var results = ['groups', 'bracket_a', 'bracket_b', 'results'];
-
-        var today = new Date(2017, 3, 29, 0, 0, 0, 0);
-
+            
+        $scope.torneo = $state.params.tournament;
+            
+        console.log("Torneo recibido: ", $state.params.tournament);
+            
         $scope.other_functions = other_functions;
 
         /* Para pagina de inicio @TODO*/
         $scope.configurando = false;
-
-
+            
+            
         $scope.agregarTodos = function(){
             $scope.torneo.players = $scope.jugadores_previos.slice(0,16);
             $scope.seed_tournament();
         }
-
-
-        /******************************************/
-
-        // Inicio - Configuracion
-
-        $scope.cat_sex = "";
-        $scope.tournament = {
-            name: "",
-            cat: {}
-        };
-
-
-        $scope.categorias_damas = [
-            {
-                name: "dam_sub11",
-                str_l: "Damas sub 11",
-                str_s: "Dam. sub 11"
-            },
-            {
-                name: "dam_sub13",
-                str_l: "Damas sub 13",
-                str_s: "Dam. sub 13"
-            },
-            {
-                name: "dam_sub15",
-                str_l: "Damas sub 15",
-                str_s: "Dam. sub 15"
-            }
-        ];
-
-        $scope.categorias_caballeros = [
-            {
-                name: "cab_sub10",
-                str_l: "Caballeros sub 10",
-                str_s: "Cab. sub 10"
-            },
-            {
-                name: "cab_sub12",
-                str_l: "Caballeros sub 12",
-                str_s: "Cab. sub 12"
-            },
-            {
-                name: "cab_sub15",
-                str_l: "Caballeros sub 15",
-                str_s: "Cab. sub 15"
-            }
-        ];
-
-        $scope.start_tournament = function(){
-            $scope.torneo = build_tournament($scope.tournament.name, today, $scope.tournament.cat, format_builders.interescuelas);
-        }
-
-        $scope.openNewTournament = function(){
-            openInNewTab(directory_prefix + "index.html", "_blank");
-        }
-
 
         $scope.seeded = false;
 
