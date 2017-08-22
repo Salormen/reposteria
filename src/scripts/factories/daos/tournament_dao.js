@@ -53,6 +53,7 @@ angular.module('tournamentModule').factory('tournament_dao',
             save("id", "0");
             save("ids", []);
         }
+        console.log(localStorage);
     }
                         
     function restart_bd(){
@@ -62,12 +63,11 @@ angular.module('tournamentModule').factory('tournament_dao',
             for(var i = 0; i<100; i++){
                 localStorage.removeItem(i.toString());
             }
-            console.log(localStorage);
             start_bd();
         }
     }
                         
-    restart_bd();
+    start_bd();
                         
                         
     /* Public */
@@ -85,7 +85,7 @@ angular.module('tournamentModule').factory('tournament_dao',
     }
                         
     function save_tournament(tournament){
-        save(get(tournament.name), tournament);
+        save(tournament.id, tournament);
     }
                         
     function get_tournament_by_id(id){

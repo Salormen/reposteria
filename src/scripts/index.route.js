@@ -14,10 +14,7 @@
         controller: 'SeleccionTorneoController'
       }) 
       .state('torneo', {
-        url: '/torneo',
-        params: {
-            tournament: ""
-        },
+        url: '/torneo/:id',
         templateUrl: 'scripts/vistas/realizacion_torneo/tournament.tmp.html',
         controller: 'TournamentController'
       })

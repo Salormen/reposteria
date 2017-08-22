@@ -14,7 +14,7 @@
                     <md-card md-theme="dark-blue">
                         <md-card-actions layout="row" layout-align="end center">
                             <md-button ng-click="newTournament()">Nuevo</md-button>
-                            <md-button ng-click="load()">Cargar</md-button>
+                            <md-button ng-click="load()">Cargar muestra</md-button>
                         </md-card-actions>
                     </md-card>
                 
@@ -31,7 +31,7 @@
                           </md-card-title-text>
                         </md-card-title>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-click="loadTournament(tournament)">Editar</md-button>
+                            <md-button ui-sref="torneo({id: tournament.id})">Editar</md-button>
                             <md-button>Descargar</md-button>
                             <md-button ng-click="deleteTournament(tournament)">Eliminar</md-button>
                         </md-card-actions>

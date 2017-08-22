@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('TournamentController',  
-                ['$scope', '$state', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
-        function($scope, $state, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'groups_functions', 'bracketFunctions', 'xlsxParser', 'printer', 'other_functions',
+        function($scope, $state, $stateParams, tournament_dao, groups_functions, bracket_functions, xlsx_parser, printer, other_functions){
 
         /******************************************/
 
@@ -17,10 +17,18 @@
         var start_frame = 'inscripcion';
         var results = ['groups', 'bracket_a', 'bracket_b', 'results'];
             
-        $scope.torneo = $state.params.tournament;
+        console.log($stateParams);
             
-        console.log("Torneo recibido: ", $state.params.tournament);
+        $scope.torneo = tournament_dao.get_by_id($stateParams.id);
             
+        console.log("Torneo recibido: ", $scope.torneo);
+            
+            
+        $scope.go_main_menu = function(){
+            $state.go("principal", {});
+        }
+        
+        
         $scope.other_functions = other_functions;
 
         /* Para pagina de inicio @TODO*/

@@ -8,8 +8,9 @@
     /** @ngInject */
     function SeleccionTorneoController($scope, $modal, $state, build_tournament, format_builders, tournament_dao){
         
+        
         $scope.load = function(){
-            tournament_dao.save_new(build_tournament("Torneo 2", new Date(2017, 9, 29, 0, 0, 0, 0), {
+            var id = tournament_dao.save_new(build_tournament("Torneo ", new Date(2017, 9, 29, 0, 0, 0, 0), {
                     name: "dam_sub15",
                     str_l: "Damas sub 15",
                     str_s: "Dam. sub 15"
@@ -18,9 +19,16 @@
                     label: "Interescuelas"
                 })
             );
+            
+            var tournament = tournament_dao.get_by_id(id);
+            tournament.name += id;
+            
+            tournament_dao.save(tournament);
             $scope.tournaments = tournament_dao.all();    
         }
         
+        
+        $scope.tournaments = tournament_dao.all();    
         
         
         
@@ -50,11 +58,6 @@
         $scope.deleteTournament = function(tournament){
             tournament_dao.remove(tournament);
             $scope.tournaments = tournament_dao.all();
-        }
-        
-        $scope.loadTournament = function(tournament){
-            console.log("Cargando torneo ", tournament.name, " ", tournament);
-            $state.go("torneo", {tournament: tournament});
         }
         
     }
