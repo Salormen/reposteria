@@ -1,10 +1,26 @@
 <div id="menu"> 
-    <div id="tabs">
-        <a class="btn col-md-3" ng-click="seleccionarFrame('inscripcion', frames)"> Inscripción </a>  
-        <a class="btn col-md-3" ng-click="seleccionarFrame('grupos', frames)" data-toggle="collapse" href="#menu_grupos"> Grupos </a>
-        <a class="btn col-md-3" ng-click="seleccionarFrame('llave', frames)" data-toggle="collapse" href="#menu_llave"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
-        <a class="btn col-md-3" ng-click="seleccionarFrame('resultados', frames)" data-toggle="collapse" href="#menu_resultados"> Resultados </a>
-    </div>
+    <md-grid-list md-cols="6"  md-row-height="34px" id="tabs">
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".inscripcion"> Inscripción </a>  
+        </md-grid-tile>
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".grupos"> Grupos </a>
+        </md-grid-tile>
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".llave"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
+        </md-grid-tile>
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".modo_rapido"> Modo rápido </a>
+        </md-grid-tile>
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".impresiones"> Impresiones </a>
+        </md-grid-tile>
+        <md-grid-tile md-colspan="1" md-rowspan="1">
+            <a ui-sref=".descargas"> Descargas </a>
+        </md-grid-tile>
+    </md-grid-list>
+    
+    
     <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos', frames)">
         <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
         <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 

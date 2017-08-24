@@ -69,18 +69,18 @@
 
         // Frame Inscripcion
 
-        $scope.jugadores_previos = [];
-        xlsx_parser.createListener('excel_file', "");      
-
-        $scope.load_previous_players = function(){
-            //xlsx_parser.createListener('excel_file', $scope.tournament_category.str_s);
-            $scope.jugadores_previos = xlsx_parser.getValue().map(
-                p => {return {
-                            nombre: p[inputFileColumns[0]],
-                            club:   p[inputFileColumns[1]], 
-                            rating: p[inputFileColumns[2]] };}
-            );
-        }
+//        $scope.jugadores_previos = [];
+//        xlsx_parser.createListener('excel_file', "");      
+//
+//        $scope.load_previous_players = function(){
+//            //xlsx_parser.createListener('excel_file', $scope.tournament_category.str_s);
+//            $scope.jugadores_previos = xlsx_parser.getValue().map(
+//                p => {return {
+//                            nombre: p[inputFileColumns[0]],
+//                            club:   p[inputFileColumns[1]], 
+//                            rating: p[inputFileColumns[2]] };}
+//            );
+//        }
 
         $scope.inscribirJugador = function(jugador){
             if(!$scope.torneo.players.includes(jugador)){

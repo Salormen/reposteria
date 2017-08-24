@@ -1,0 +1,97 @@
+<div id="inscripcion_frame">
+    <div class="col-md-6">
+        <div class="col-md-6"> 
+            <input type="file" id="input_file">
+        </div>
+        <div class="col-md-6">
+            <button type="button" ng-click="load_previous_players()">Cargar jugadores</button>
+        </div>
+        <div>
+            <a class="btn" ng-click="agregarTodos()">All</a>
+            <div>
+                <div class="col-md-3">Filtrar:</div>
+                <div class="col-md-6">
+                    <input type="text" ng-model="searchedPlayer.nombre" placeholder="Nombre"></div>
+                <div class="col-md-3">
+                    <input type="text" ng-model="searchedPlayer.club" placeholder="Club"></div>
+            </div>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th> Rating </th>
+                        <th> Nombre del jugador </th>
+                        <th> Club </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="jugador in jugadores_previos | orderBy:'parseInt(rating)':true | filter:searchedPlayer"
+                        id="{{jugador.rating + jugador.nombre + jugador.club}}">
+                        <td> {{jugador.rating}}</td>
+                        <td> {{jugador.nombre}}</td>
+                        <td> {{jugador.club}}</td>
+                        <td> <button type="button" ng-click="inscribirJugador(jugador)">+</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <a class="btn" data-toggle="collapse" href="#newPlayer" aria-expanded="false" > Agregar nuevo jugador </a>  
+
+                <div class="md-inline-form collapse" id="newPlayer">
+                    <md-content layout-gt-sm="row" layout-padding>
+                        <div>
+                          <md-input-container>
+                            <label>Nombre</label>
+                            <input ng-model="nuevo_jugador.nombre" placeholder="Nombre del jugador">
+                          </md-input-container>
+
+                          <md-input-container>
+                            <label>Club</label>
+                            <input ng-model="nuevo_jugador.club" placeholder="Club del jugador">
+                          </md-input-container>
+
+                          <md-input-container>
+                            <label>Rating</label>
+                            <input ng-model="nuevo_jugador.rating" placeholder="Rating del jugador">
+                          </md-input-container>
+                          <button type="button" ng-click="agregarNuevoJugador()">
+                              Agregar jugador
+                          </button> 
+                        </div>
+                  </md-content>
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div>
+            Jugadores inscriptos:   <br>
+            <div>
+                <div class="col-md-3">Filtrar:</div>
+                <div class="col-md-6">
+                    <input type="text" ng-model="searchedInscriptedPlayer.nombre" placeholder="Nombre"></div>
+                <div class="col-md-3">
+                    <input type="text" ng-model="searchedInscriptedPlayer.club" placeholder="Club"></div>
+            </div>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th> Rating </th>
+                        <th> Nombre del jugador </th>
+                        <th> Club </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="jugador in torneo.players | orderBy:'parseInt(rating)':true | filter:searchedInscriptedPlayer">
+                        <td> {{jugador.rating}}</td>
+                        <td> {{jugador.nombre}}</td>
+                        <td> {{jugador.club}}</td>
+                        <td> <button type="button" ng-click="eliminarJugador(jugador, torneo.players)"> X </button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" ng-click="seed_tournament()">
+                  Sortear!
+              </button> 
+        </div>
+    </div>                    
+</div>

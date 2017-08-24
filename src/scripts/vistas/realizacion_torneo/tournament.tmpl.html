@@ -1,0 +1,23 @@
+<div ng-controller="TournamentController">
+    <div id="header">
+        <section ng-include="'scripts/vistas/realizacion_torneo/header/title.html'"></section>  
+        <section ng-include="'scripts/vistas/realizacion_torneo/header/menu.html'"></section>  
+    </div>
+    
+    <div id="contents" ng-show="!configurando">        
+        <!-- Realizacion del torneo-->
+        <div id="tournament" >
+            <div id="content_frame">
+
+                <!-- Inscripcion -->
+                <!-- Grupos-->
+                <!-- Llave-->
+                <!-- Modo rapido -->
+                <!-- Impresiones -->
+                <!-- Descargas -->
+                <div ui-view> </div>
+
+            </div>
+        </div>
+    </div>
+</div>
