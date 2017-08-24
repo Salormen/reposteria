@@ -1,4 +1,4 @@
-angular.module('tournamentModule').factory('xlsxParser', [function(){
+angular.module('tournamentModule').factory('tmtParser', [function(){
          
     
     /**** Configuracion de columnas del archivo TMT ****/
@@ -34,7 +34,7 @@ angular.module('tournamentModule').factory('xlsxParser', [function(){
                     apellido: line[apellido],
                     nombre: line[nombre],
                     tmt_id: line[tmt_id],
-                    rating: line[rating],
+                    rating: parseInt(line[rating]),
                     club_corto: line[club_corto],
                     club_largo: line[club_largo],
                     fecha_nacimiento: line[fecNac]
@@ -42,12 +42,8 @@ angular.module('tournamentModule').factory('xlsxParser', [function(){
             }
             
             reader.onload = function(elem){
-                var data = elem.target.result;
-                
-                var players = data.split('\n').map(l => createPlayer(l.split('\t')));
-                for(var i = 0; i < players.length; i++){
-                    console.log(players[i]);
-                }
+                var data = elem.target.result;                
+                players = data.split('\n').map(l => createPlayer(l.split('\t')));                
             };
             reader.readAsText(file);
 

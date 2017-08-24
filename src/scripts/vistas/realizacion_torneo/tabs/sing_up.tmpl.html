@@ -8,27 +8,28 @@
         </div>
         <div>
             <a class="btn" ng-click="agregarTodos()">All</a>
-            <div>
+            <!-- div>
                 <div class="col-md-3">Filtrar:</div>
                 <div class="col-md-6">
                     <input type="text" ng-model="searchedPlayer.nombre" placeholder="Nombre"></div>
                 <div class="col-md-3">
                     <input type="text" ng-model="searchedPlayer.club" placeholder="Club"></div>
-            </div>
+            </div -->
             <table class="table table-condensed">
                 <thead>
                     <tr>
                         <th> Rating </th>
-                        <th> Nombre del jugador </th>
+                        <th> Apellido </th>
+                        <th> Nombre </th>
                         <th> Club </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="jugador in jugadores_previos | orderBy:'parseInt(rating)':true | filter:searchedPlayer"
-                        id="{{jugador.rating + jugador.nombre + jugador.club}}">
+                    <tr ng-repeat="jugador in jugadores_previos | orderBy:'-rating' | limitTo:10:0" >
                         <td> {{jugador.rating}}</td>
+                        <td> {{jugador.apellido}}</td>
                         <td> {{jugador.nombre}}</td>
-                        <td> {{jugador.club}}</td>
+                        <td> {{jugador.club_corto}}</td>
                         <td> <button type="button" ng-click="inscribirJugador(jugador)">+</button> </td>
                     </tr>
                 </tbody>

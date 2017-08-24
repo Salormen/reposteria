@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('SingUpController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'xlsxParser',
-        function($scope, $state, $stateParams, tournament_dao, xlsx_parser){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmtParser',
+        function($scope, $state, $stateParams, tournament_dao, tmtParser){
 
         /******************************************/
 
@@ -32,16 +32,10 @@
         // Frame Inscripcion
 
         $scope.jugadores_previos = [];
-        xlsx_parser.createListener('input_file');      
+        tmtParser.createListener('input_file');      
 
         $scope.load_previous_players = function(){
-            //xlsx_parser.createListener('excel_file', $scope.tournament_category.str_s);
-            $scope.jugadores_previos = xlsx_parser.getValue().map(
-                p => {return {
-                            nombre: p[inputFileColumns[0]],
-                            club:   p[inputFileColumns[1]], 
-                            rating: p[inputFileColumns[2]] };}
-            );
+            $scope.jugadores_previos = tmtParser.getValue();
         }
 
         $scope.inscribirJugador = function(jugador){
