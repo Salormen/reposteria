@@ -1,4 +1,4 @@
-angular.module('tournamentModule').factory('tmtParser', [function(){
+angular.module('tournamentModule').factory('tmt_parser', [function(){
          
     
     /**** Configuracion de columnas del archivo TMT ****/

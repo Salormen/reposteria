@@ -1,73 +1,33 @@
 angular.module('tournamentModule').factory('tournament_dao', 
-                            [
-                    function(){
+                            ['db_connection',
+                    function(db_connection){
    
                         
-    /* 
-        Funciones de acceso y guardado a la bd, con el parseo correspondiente    
-        
-        TODO: en cuanto se guarden mas clases en la bd habria que extraerlo a otro modulo
-    */
-                        
-                        
-    function save(key, obj){
-        localStorage.setItem(key, JSON.stringify(obj));
-    }
-                        
-    
-    function get(key){
-        return JSON.parse(localStorage.getItem(key));
-    }
-                        
-    function remove(id){
-        localStorage.removeItem(id);
-    }
-    
     function remove_id(id){
-        save("ids", get("ids").filter(id_i => {return id_i != id}));
+        db_connection.save("ids", db_connection.get("ids").filter(id_i => {return id_i != id}));
     }
                         
     function next_id(){
-        return get("id");
+        return db_connection.get("id");
     }
                         
     function gen_next_id(){
-        save("id", (parseInt(next_id()) + 1).toString() );
+        db_connection.save("id", (parseInt(next_id()) + 1).toString() );
     }
            
     function ids(){
-        return get("ids");
+        return db_connection.get("ids");
     }
                         
     function push_id(id){
-        var ids = get("ids");
+        var ids = db_connection.get("ids");
         ids.push(id);
-        save("ids", ids);
+        db_connection.save("ids", ids);
         
-        console.log("Ids: ", get("ids"));
+        console.log("Ids: ", db_connection.get("ids"));
         
     }
-                        
-    function start_bd(){
-        if(get("id") == null){
-            save("id", "0");
-            save("ids", []);
-        }
-        console.log(localStorage);
-    }
-                        
-    function restart_bd(){
-        if(get("id") != null){
-            localStorage.removeItem("id");
-            localStorage.removeItem("ids");
-            for(var i = 0; i<100; i++){
-                localStorage.removeItem(i.toString());
-            }
-            start_bd();
-        }
-    }
-                        
-    start_bd();
+    
                         
                         
     /* Public */
@@ -75,7 +35,7 @@ angular.module('tournamentModule').factory('tournament_dao',
     function save_newTournament(tournament){
         tournament.id = next_id();
         
-        save(tournament.id, tournament);
+        db_connection.save(tournament.id, tournament);
         push_id(tournament.id)
         gen_next_id();
         
@@ -85,11 +45,11 @@ angular.module('tournamentModule').factory('tournament_dao',
     }
                         
     function save_tournament(tournament){
-        save(tournament.id, tournament);
+        db_connection.save(tournament.id, tournament);
     }
                         
     function get_tournament_by_id(id){
-        return get(id);
+        return db_connection.get(id);
     }
                     
     function get_all(){
@@ -99,7 +59,7 @@ angular.module('tournamentModule').factory('tournament_dao',
           
     function remove_tournament(tournament){
         console.log("Torneo a eliminar: ", tournament);
-        remove(tournament.id);
+        db_connection.remove(tournament.id);
         remove_id(tournament.id);
     }
                         

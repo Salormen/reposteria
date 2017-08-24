@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('TournamentController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'groups_functions', 'bracketFunctions', 'tmtParser', 'printer', 'other_functions',
-        function($scope, $state, $stateParams, tournament_dao, groups_functions, bracket_functions, tmtParser, printer, other_functions){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'groups_functions', 'bracketFunctions', 'printer', 'other_functions',
+        function($scope, $state, $stateParams, tournament_dao, groups_functions, bracket_functions, printer, other_functions){
 
         /******************************************/
 

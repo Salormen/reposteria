@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('SingUpController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmtParser',
-        function($scope, $state, $stateParams, tournament_dao, tmtParser){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmt_parser', 'list_players_dao',
+        function($scope, $state, $stateParams, tournament_dao, tmt_parser, list_players_dao){
 
         /******************************************/
 
@@ -30,12 +30,18 @@
         /////////////////////////////////////////////
 
         // Frame Inscripcion
-
-        $scope.jugadores_previos = [];
-        tmtParser.createListener('input_file');      
+        
+        function init_previous_players(){
+            $scope.jugadores_previos = list_players_dao.get();   
+        }
+        
+        init_previous_players();
+        
+        tmt_parser.createListener('input_file');      
 
         $scope.load_previous_players = function(){
-            $scope.jugadores_previos = tmtParser.getValue();
+            list_players_dao.save(tmt_parser.getValue());
+            init_previous_players();
         }
 
         $scope.inscribirJugador = function(jugador){
