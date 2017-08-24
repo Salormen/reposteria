@@ -3,14 +3,14 @@
 
     angular
         .module('tournamentModule')
-        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'format_builders', 'tournament_dao', SeleccionTorneoController]);
+        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'format_builders', 'tournament_dao', 'tmt_parser', SeleccionTorneoController]);
 
     /** @ngInject */
-    function SeleccionTorneoController($scope, $modal, $state, build_tournament, format_builders, tournament_dao){
+    function SeleccionTorneoController($scope, $modal, $state, build_tournament, format_builders, tournament_dao, tmt_parser){
         
         
         $scope.load = function(){
-            var id = tournament_dao.save_new(build_tournament("Torneo ", new Date(2017, 9, 29, 0, 0, 0, 0), {
+            var id = tournament_dao.save_new(build_tournament("Torneo de muestra ", new Date(2017, 9, 29, 0, 0, 0, 0), {
                     name: "dam_sub15",
                     str_l: "Damas sub 15",
                     str_s: "Dam. sub 15"
@@ -30,6 +30,14 @@
         
         $scope.tournaments = tournament_dao.all();    
         
+                
+        tmt_parser.createListener('input_file');      
+
+        $scope.load_previous_players = function(){
+            list_players_dao.save(tmt_parser.getValue());
+            init_previous_players();
+        }
+
         
         
         $scope.newTournament = function(){

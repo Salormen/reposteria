@@ -16,19 +16,10 @@
         var app_frames = ['inscripcion', 'grupos', 'llave', 'resultados'];
         var start_frame = 'inscripcion';
         var results = ['groups', 'bracket_a', 'bracket_b', 'results'];
-            
-        console.log($stateParams);
-            
+                        
         $scope.torneo = tournament_dao.get_by_id($stateParams.id);
             
-        console.log("Torneo recibido: ", $scope.torneo);
-            
-            
-        $scope.go_main_menu = function(){
-            $state.go("principal", {});
-        }
-        
-        
+                    
         $scope.other_functions = other_functions;
 
         /* Para pagina de inicio @TODO*/

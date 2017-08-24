@@ -17,9 +17,6 @@
         console.log("Torneo recibido: ", $scope.torneo.name);
             
             
-        $scope.go_main_menu = function(){
-            $state.go("principal", {});
-        }
             
         $scope.agregarTodos = function(){
             $scope.torneo.players = $scope.jugadores_previos.slice(0,16);
@@ -36,20 +33,28 @@
         }
         
         init_previous_players();
-        
-        tmt_parser.createListener('input_file');      
 
-        $scope.load_previous_players = function(){
-            list_players_dao.save(tmt_parser.getValue());
-            init_previous_players();
+        function noEstaInscriptoATorneo(torneo, jugador){
+            var inscripto = torneo.players.reduce((r,p) => r || (p.rating == jugador.rating 
+                                                    && p.apellido == jugador.apellido
+                                                    && p.nombre == jugador.nombre 
+                                                    && p.club_largo == jugador.club_largo), false);
+            console.log("inscripto ", inscripto);
+            return !inscripto;
         }
-
+            
         $scope.inscribirJugador = function(jugador){
-            if(!$scope.torneo.players.includes(jugador)){
-                $scope.torneo.players.push(jugador);                    
+            console.log("Inscribir jugador ", jugador, " al torneo ", $scope.torneo);
+            if(noEstaInscriptoATorneo($scope.torneo, jugador)){
+                $scope.torneo.players.push(jugador);     
+                tournament_dao.save($scope.torneo);
             }
-            document.getElementById(jugador.rating + jugador.nombre + jugador.club).className = "success";
         }
+
+        $scope.eliminarJugador = (jugador, jugadores) => {
+            jugadores.splice(jugadores.indexOf(jugador), 1);    
+            tournament_dao.save($scope.torneo);
+        };
 
         $scope.searchedPlayer = {
             nombre: "",
@@ -80,11 +85,6 @@
             $scope.torneo.players.push($scope.nuevo_jugador);
             $scope.reset_nuevo_jugador();
         };    
-
-        $scope.eliminarJugador = (jugador, jugadores) => {
-            jugadores.splice(jugadores.indexOf(jugador), 1);
-            document.getElementById(jugador.rating + jugador.nombre + jugador.club).classList.remove("success");
-        };
 
 
         $scope.seed_tournament = function(){
