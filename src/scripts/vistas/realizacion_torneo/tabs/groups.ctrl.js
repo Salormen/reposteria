@@ -25,7 +25,7 @@
         $scope.show_group_selection_b = false;
          
         $scope.show_group_selection = function(){
-            $scope.show_group_selection_b = true;
+            $scope.show_group_selection_b = !$scope.show_group_selection_b;
         }        
     
         $scope.hide_group_selection = function(){

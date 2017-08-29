@@ -1,20 +1,18 @@
-<div id="grupos_frame">
-    <div id="menu_grupos" class="menu">
-        <a class="btn col-md-6" ng-click="hide_group_selection()" ui-sref=".all"> Todos los grupos </a> 
-        <a class="btn col-md-6" ng-click="show_group_selection()"> Grupo </a> 
-        
-        <div id="menu_grupos_seleccion" class="menu" ng-show="show_group_selection_b">
-            <div ng-repeat="group in torneo.groups | orderBy: 'id'">
-                <div class="col-md-6"></div>
-                <a class="btn col-md-6" ui-sref=".grupo({group_id: group.id})">
-                    Grupo {{other_functions.format_group_id(group.id)}}
-                </a> 
-            </div>
-        </div> 
-    </div>
-    <div id="detalle_grupos" class="col-md-10">
-        <!-- Todos -->
-        <!-- Grupo X -->
-        <div ui-view> </div>                          
-    </div>                    
+<div id="menu_grupos" class="menu">
+    <a class="btn col-md-6" ng-click="hide_group_selection()" ui-sref=".all"> Todos los grupos </a> 
+    <a class="btn col-md-6" ng-click="show_group_selection()"> Grupo </a> 
+
+    <div id="menu_grupos_seleccion" class="menu" ng-show="show_group_selection_b">
+        <div ng-repeat="group in torneo.groups | orderBy: 'id'">
+            <div class="col-md-6"></div>
+            <a class="btn col-md-6 menu" ui-sref=".grupo({group_id: group.id})">
+                Grupo {{other_functions.format_group_id(group.id)}}
+            </a> 
+        </div>
+    </div> 
 </div>
+<div id="detalle_grupos" class="col-md-10">
+    <!-- Todos -->
+    <!-- Grupo X -->
+    <div ui-view> </div>                          
+</div>  
