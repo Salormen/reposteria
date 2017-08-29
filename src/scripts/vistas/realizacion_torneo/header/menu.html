@@ -1,10 +1,10 @@
-<div id="menu"> 
+<div id="menu" class="menu"> 
     <md-grid-list md-cols="6"  md-row-height="34px" id="tabs">
         <md-grid-tile md-colspan="1" md-rowspan="1">
             <a ui-sref=".inscripcion"> Inscripción </a>  
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a ui-sref=".grupos"> Grupos </a>
+            <a ui-sref=".grupos.all"> Grupos </a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
             <a ui-sref=".llave"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
@@ -21,18 +21,7 @@
     </md-grid-list>
     
     
-    <div id="menu_grupos" ng-show="seSeleccionoFrame('grupos', frames)">
-        <a class="btn col-md-6" ng-click="mostrar_todos_grupos()"> Todos los grupos </a> 
-        <a class="btn col-md-6" data-toggle="collapse" href="#groups_menu"> Grupo </a> 
-        <div id="groups_menu" class="collapse">
-            <div ng-repeat="group in torneo.groups | orderBy: 'id'">
-                <div class="col-md-6"></div>
-                <a class="btn col-md-6" ng-click="mostrar_grupo(group.id)">
-                    Grupo {{other_functions.format_group_id(group.id)}}
-                </a> 
-            </div>
-        </div> 
-    </div>
+    
     <div id="menu_llave" ng-show="seSeleccionoFrame('llave', frames)">
         <div id="brackets_menu" ng-show="torneo.format.bracket_b">
             <a class="btn col-md-6" 

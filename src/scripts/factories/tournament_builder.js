@@ -7,32 +7,13 @@ angular.module('tournamentModule').factory('build_tournament',
         Torneo:
             -nombre
             -fecha
-            -Formato:
-                -\jugadores.length => count_zonas
-                -cantidad de clasificados a llave A por zona
-                -llave B?
-                -cantidad de sets por instancia (o inicio del aumento de la cantidad de sets)
+            -categoria
+            -tipo de torneo
             -jugadores
             -grupos
             -llaves
     */
-    
-    /*
-        Format builder:
-            -limites de formatos:
-                -max jugadores (limite)
-                -Formato:
-                    -\jugadores.length => count_zonas
-                    -cantidad de clasificados a llave A por zona
-                    -llave B?
-                    -cantidad de sets por instancia (o inicio del aumento de la cantidad de sets):
-                        -groups
-                        -7(bracket)             <= las rondas se cuentan dsd la final, empezando por 0:
-                        -5(bracket)                     never: -1
-                        -3(bracket)                     final:  0
-                        -1(bracket)                     semis:  1 ... etc
-                    
-    */
+   
         
                         
     function build_tournament(name, date, category, type){

@@ -2,22 +2,9 @@ angular.module('tournamentModule').factory('tournament_seeder',
                             ['format_builders', 'groups_builder', 'brackets_builder', 'bracketFunctions', 
                     function( format_builders,   build_groups,     build_brackets,     bracketFunctions){
 
-    
+        
     /*
-        Torneo:
-            -nombre
-            -fecha
-            -Formato:
-                -\jugadores.length => count_zonas
-                -cantidad de clasificados a llave A por zona
-                -llave B?
-                -cantidad de sets por instancia (o inicio del aumento de la cantidad de sets)
-            -jugadores
-            -grupos
-            -llaves
-    */
-    
-    /*
+         
         Format builder:
             -limites de formatos:
                 -max jugadores (limite)
@@ -65,8 +52,9 @@ angular.module('tournamentModule').factory('tournament_seeder',
         var format = format_builders.getFormat(tournament.type.format).format_for_n_players(tournament.players.length);
         sort_players(tournament);
         create_groups(tournament, format);
-        create_brackets(tournament, format);        
+        //create_brackets(tournament, format);        
         console.log(tournament);
+        return tournament;
     }
     
     return {

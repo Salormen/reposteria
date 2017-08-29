@@ -19,36 +19,47 @@
         controller: 'TournamentController'
       })
       
-      .state('torneo.inscripcion', {
-        url: '/inscripcion',
-        templateUrl: 'scripts/vistas/realizacion_torneo/tabs/sing_up.tmpl.html',
-        controller: 'SingUpController'
-      })
-      .state('torneo.grupos', {
-        url: '/grupos',
-        templateUrl: 'scripts/vistas/realizacion_torneo/tabs/groups.tmpl.html',
-        controller: 'TournamentController'
-      })
-      .state('torneo.llave', {
-        url: '/llave',
-        templateUrl: 'scripts/vistas/realizacion_torneo/tabs/brackets.tmpl.html',
-        controller: 'TournamentController'
-      })
-      .state('torneo.modo_rapido', {
-        url: '/rapido',
-        templateUrl: 'scripts/vistas/realizacion_torneo/tabs/fast_mode.tmpl.html',
-        controller: 'TournamentController'
-      })
-      .state('torneo.impresiones', {
-        url: '/impresiones',
-        templateUrl: 'scripts/vistas/realizacion_torneo/tabs/printer.tmpl.html',
-        controller: 'TournamentController'
-      })
-      .state('torneo.descargas', {
-        url: '/descargas',
-        templateUrl: 'scripts/vistas/realizacion_torneo/downloads.tmpl.html',
-        controller: 'TournamentController'
-      })
+          .state('torneo.inscripcion', {
+            url: '/inscripcion',
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/sing_up.tmpl.html',
+            controller: 'SingUpController'
+          })
+          .state('torneo.grupos', {
+            url: '/grupos',
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/groups.tmpl.html',
+            controller: 'GroupsController'
+          })
+              .state('torneo.grupos.all', {
+                url: '/todos',
+                templateUrl: 'scripts/vistas/realizacion_torneo/tabs/groups.all.tmpl.html',
+                controller: 'GroupsController'
+              })
+              .state('torneo.grupos.grupo', {
+                url: '/grupo/:group_id',
+                templateUrl: 'scripts/vistas/realizacion_torneo/tabs/groups.one.tmpl.html',
+                controller: 'GroupsController'
+              })
+
+          .state('torneo.llave', {
+            url: '/llave',
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/brackets.tmpl.html',
+            controller: 'TournamentController'
+          })
+          .state('torneo.modo_rapido', {
+            url: '/rapido',
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/fast_mode.tmpl.html',
+            controller: 'TournamentController'
+          })
+          .state('torneo.impresiones', {
+            url: '/impresiones',
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/printer.tmpl.html',
+            controller: 'TournamentController'
+          })
+          .state('torneo.descargas', {
+            url: '/descargas',
+            templateUrl: 'scripts/vistas/realizacion_torneo/downloads.tmpl.html',
+            controller: 'TournamentController'
+          })
       ;
 
     $urlRouterProvider.otherwise('/');

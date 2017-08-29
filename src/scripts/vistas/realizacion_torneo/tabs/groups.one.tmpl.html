@@ -1,0 +1,69 @@
+<div>
+    <div>
+        Grupo {{other_functions.format_group_id(group.id)}}: <br>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Rating</th>
+                    <th>Jugador</th>
+                    <th>Club</th>
+                    <th ng-repeat="jugador in group.players | orderBy:'rating':true ">{{jugador.nombre}}</th>
+                    <th>Ptds G/P</th>
+                    <th>Sets G/P</th>
+                    <th>Pts G/P</th>
+                    <th>Pos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="jugador in group.players | orderBy:'rating':true ">
+                    <td align="left">{{jugador.rating}}</td>
+                    <td align="left">{{jugador.nombre}}</td>
+                    <td align="left">{{jugador.club}}</td>
+                    <td align="left" ng-repeat="jOp in group.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(group, jugador, jOp)}}</td>
+                    <td align="left">{{difPartidosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                    <td align="left">{{difSetsGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                    <td align="left">{{difPuntosGanadosPerdidosEnGrupo(group, jugador)}}</td>
+                    <td align="left">{{posicionEnGrupo(group, jugador)}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--
+        <button ng-click="editar_grupo(group.id)">
+            Editar
+        </button> 
+        <button ng-click="print_group(group)">
+            Imprimir
+        </button>
+        <button ng-click="group.finished = true">
+            Cerrar grupo
+        </button>
+        <div ng-show="group.finished"> Grupo cerrado </div>
+        <div data-ng-show="editando_grupo(group.id)">
+            <div ng-repeat="partido in grupo.partidos">
+                <table class="table table-condensed">
+                    Partido {{partidos.indexOf(partido) + 1}}
+                    <thead>
+                        <tr>
+                            <th> Jugadores </th>
+                            <th ng-repeat="set in partido.sets"> Set {{partido.sets.indexOf(set) + 1}} </th>
+                            <th> Resultado final </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> {{partido.jugador1.nombre}} </td>
+                            <td ng-repeat="set in partido.sets"> <input ng-model="set[partido.jugador1.id]" placeholder="0" size="4"> </td>
+                            <td> <input ng-model="partido.final[partido.jugador1.id]" placeholder="0" size="4"></td>
+                        </tr>
+                        <tr>
+                            <td> {{partido.jugador2.nombre}} </td>
+                            <td ng-repeat="set in partido.sets"> <input ng-model="set[partido.jugador2.id]" placeholder="0" size="4"> </td>
+                            <td> <input ng-model="partido.final[partido.jugador2.id]" placeholder="0" size="4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        -->
+    </div>
+</div>   

@@ -88,7 +88,8 @@
 
 
         $scope.seed_tournament = function(){
-            tournament_seeder.seed($scope.torneo);
+            $scope.torneo = tournament_seeder.seed($scope.torneo);
+            tournament_dao.save($scope.torneo);
             alert("Sorteo realizado!");
         };
 
