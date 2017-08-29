@@ -33,48 +33,17 @@ angular.module('tournamentModule').factory('build_tournament',
                         -1(bracket)                     semis:  1 ... etc
                     
     */
-                        
-    function create_matches_id(bracket){
-        var id = 1;
-        bracketFunctions.list_per_round(bracket).reverse().forEach(l => l.forEach(m => { m.id = id; id++;}))
-    }
+        
                         
     function build_tournament(name, date, category, type){
         return {
             name: name,
             date: date,
             category: category, 
-            type: type,
+            type: type,                 
             players: [],
-            format: {},
             groups: [],
-            brackets: [],
-            seed: function(){
-                this.create_format();
-                this.sort_players();
-                this.create_groups();
-                this.create_brackets();
-            },
-            
-            // Private  
-            sort_players: function(){
-                this.players.sort((j1,j2) => {return j2.rating - j1.rating});  
-            },
-            create_format: function(){                
-                this.format = type.format.format_for_n_players(this.players.length);
-            },
-            create_groups: function(){
-                this.groups = build_groups(this.format.count_groups(this.players.length),
-                                                        this.format.sets_by_instance.groups,
-                                                        this.players);
-            },
-            create_brackets: function(){
-                this.brackets = build_brackets(this.groups,
-                                                  this.format.bracket_a_clasified,
-                                                  this.format.bracket_b,
-                                                  this.format.sets_by_instance.brackets);
-                this.brackets.forEach(create_matches_id);
-            }
+            brackets: []
         };
     }
     

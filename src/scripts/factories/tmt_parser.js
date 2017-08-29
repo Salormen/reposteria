@@ -33,7 +33,7 @@ angular.module('tournamentModule').factory('tmt_parser', [function(){
                 return {
                     apellido: line[apellido],
                     nombre: line[nombre],
-                    tmt_id: line[tmt_id],
+                    id: line[tmt_id],
                     rating: parseInt(line[rating]),
                     club_corto: line[club_corto],
                     club_largo: line[club_largo],

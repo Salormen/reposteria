@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('SingUpController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmt_parser', 'list_players_dao',
-        function($scope, $state, $stateParams, tournament_dao, tmt_parser, list_players_dao){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmt_parser', 'list_players_dao', 'tournament_seeder',
+        function($scope, $state, $stateParams, tournament_dao, tmt_parser, list_players_dao, tournament_seeder){
 
         /******************************************/
 
@@ -14,7 +14,7 @@
             
         $scope.torneo = tournament_dao.get_by_id($stateParams.id);
             
-        console.log("Torneo recibido: ", $scope.torneo.name);
+        console.log("Torneo recibido: ", $scope.torneo);
             
             
             
@@ -88,13 +88,8 @@
 
 
         $scope.seed_tournament = function(){
-            $scope.torneo.seed();
-
-            reset_grupos_mostrados();   
-            reset_showed_bracket();
-
-            $scope.seeded = true;
-            alert("Sorteo concluido!");
+            tournament_seeder.seed($scope.torneo);
+            alert("Sorteo realizado!");
         };
 
 

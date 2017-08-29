@@ -3,10 +3,10 @@
 
     angular
         .module('tournamentModule')
-        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'format_builders', 'tournament_dao', 'tmt_parser', SeleccionTorneoController]);
+        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'tournament_dao', 'tmt_parser', SeleccionTorneoController]);
 
     /** @ngInject */
-    function SeleccionTorneoController($scope, $modal, $state, build_tournament, format_builders, tournament_dao, tmt_parser){
+    function SeleccionTorneoController($scope, $modal, $state, build_tournament, tournament_dao, tmt_parser){
         
         
         $scope.load = function(){
@@ -15,7 +15,7 @@
                     str_l: "Damas sub 15",
                     str_s: "Dam. sub 15"
                 }, {
-                    format: format_builders.getFormat("interescuelas"),
+                    format: "interescuelas",
                     label: "Interescuelas"
                 })
             );
