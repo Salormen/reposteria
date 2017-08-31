@@ -1,12 +1,12 @@
 <div id="llave_frame">
-    <div data-ng-show="seeded">
-        <div ng-show="any_bracket_is_selected">
+    <div>
+        <div>
             <div>
-                <a class="btn" ng-click="print_matches()"> Imprimir partidos ({{matches_for_print.length}}/4) </a> 
+                <a class="btn menu" ng-click="print_matches()"> Imprimir partidos ({{matches_for_print.length}}/4) </a> 
             </div>
-            <div data-ng-repeat="match in bracket_funcs.round_n(torneo.brackets[selected_bracket],selected_round)">
+            <div data-ng-repeat="match in round_matches">
                 Partido {{match.id}}
-                <div ng-show="!match.is_bye_match">
+                <div ng-show="!is_bye_match(match)">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -16,20 +16,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr id='{{selected_bracket + selected_round + match.players[0].rating + match.players[0].nombre + match.players[0].club}}'>
-                                <td> {{match.player(0).nombre}} </td>
+                            <tr>
+                                <td> {{getPlayerName(match, 0, torneo)}} </td>
                                 <td ng-repeat="set in match.sets"> <input ng-model="set[0]" placeholder="0" size="4"> </td>
                                 <td> <input ng-model="match.final[0]" placeholder="0" size="4"></td>
                             </tr>
-                            <tr id='{{selected_bracket + selected_round + match.players[1].rating + match.players[1].nombre + match.players[1].club}}'>
-                                <td> {{match.player(1).nombre}} </td>
+                            <tr>
+                                <td> {{getPlayerName(match, 1, torneo)}} </td>
                                 <td ng-repeat="set in match.sets"> <input ng-model="set[1]" placeholder="0" size="4"> </td>
                                 <td> <input ng-model="match.final[1]" placeholder="0" size="4"></td>
                             </tr>
                         </tbody>
                     </table> 
                 </div>
-                <div ng-show="match.is_bye_match">
+                <div ng-show="is_bye_match(match)">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -38,10 +38,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td> {{match.player(0).nombre}} </td>
+                                <td> {{getPlayerName(match, 0, torneo)}} </td>
                             </tr>
                             <tr>
-                                <td> {{match.player(1).nombre}} </td>
+                                <td> {{getPlayerName(match, 1, torneo)}} </td>
                             </tr>
                         </tbody>
                     </table> 

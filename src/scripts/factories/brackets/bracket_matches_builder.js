@@ -26,7 +26,7 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
             return {    
                         is_bye: false,
                         is_player: true,
-                        from_group: group_id,
+                        group_id: group_id,
                         group_position: position/*,
                         get winner () {
                             return groups_functions.get_player_in_position(group, position);                                

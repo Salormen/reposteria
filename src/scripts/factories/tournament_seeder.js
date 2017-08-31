@@ -39,6 +39,7 @@ angular.module('tournamentModule').factory('tournament_seeder',
                                              format.bracket_a_clasified,                    // cuantos de cada grupo clasifican a llave a
                                              format.bracket_b,                              // si existe llave b
                                              format.sets_by_instance.brackets);             // Sets por instancia
+        tournament.bracket_b = format.bracket_b;
         tournament.brackets.forEach(create_matches_id);
     }
                

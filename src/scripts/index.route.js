@@ -41,9 +41,9 @@
               })
 
           .state('torneo.llave', {
-            url: '/llave',
+            url: '/llave/:llave_id/ronda/:round',
             templateUrl: 'scripts/vistas/realizacion_torneo/tabs/brackets.tmpl.html',
-            controller: 'TournamentController'
+            controller: 'BracketsController'
           })
           .state('torneo.modo_rapido', {
             url: '/rapido',
