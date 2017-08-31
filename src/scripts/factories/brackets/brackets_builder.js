@@ -5,16 +5,15 @@ angular.module('tournamentModule').factory('brackets_builder',
                         
                         
     function build_brackets(groups, bracket_a_clasified, bracket_b, sets_per_round){
-        var res = [build_bracket_matches(seed_bracket(bracket_a_references(groups, bracket_a_clasified)),
-                                          sets_per_round.bracket_a,
-                                          0,
-                                          groups)];
+        var res = [build_bracket_matches(seed_bracket(                                              // Siembra la llave
+                                                    bracket_a_references(groups, bracket_a_clasified)),         // referencias a los grupos
+                                          sets_per_round.bracket_a,                                 // sets por instancia
+                                          0)];                                                      // Ronda 0 => Final (sortea toda la llave)
         
         if(bracket_b){
             res.push(build_bracket_matches(seed_bracket(bracket_b_references(groups, bracket_a_clasified)),
                                             sets_per_round.bracket_b,
-                                            0,
-                                            groups));
+                                            0));
         }
         
         return res;

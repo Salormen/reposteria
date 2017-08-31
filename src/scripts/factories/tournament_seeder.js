@@ -34,7 +34,8 @@ angular.module('tournamentModule').factory('tournament_seeder',
     }
                         
     function create_brackets(tournament, format){
-        tournament.brackets = build_brackets(tournament.groups,                             // Grupos desde los que van a clasificar a la llave
+        tournament.brackets = build_brackets(tournament.groups,                            // Grupos desde los que van a clasificar a la llave
+                                             
                                              format.bracket_a_clasified,                    // cuantos de cada grupo clasifican a llave a
                                              format.bracket_b,                              // si existe llave b
                                              format.sets_by_instance.brackets);             // Sets por instancia
@@ -52,7 +53,7 @@ angular.module('tournamentModule').factory('tournament_seeder',
         var format = format_builders.getFormat(tournament.type.format).format_for_n_players(tournament.players.length);
         sort_players(tournament);
         create_groups(tournament, format);
-        //create_brackets(tournament, format);        
+        create_brackets(tournament, format);        
         console.log(tournament);
         return tournament;
     }

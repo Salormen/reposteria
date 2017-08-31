@@ -9,7 +9,7 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
         function bye_c(){
             return {
                         is_bye: true,
-                        is_player: false,
+                        is_player: false/*,
                         get winner () {
                             return this;
                         },
@@ -18,16 +18,16 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
                         },
                         get finished(){
                             return false
-                        }
+                        }*/
             };
         }
         
-        function player_c(group, position){
+        function player_c(group_id, position){
             return {    
                         is_bye: false,
                         is_player: true,
-                        from_group: group,
-                        group_position: position,
+                        from_group: group_id,
+                        group_position: position/*,
                         get winner () {
                             return groups_functions.get_player_in_position(group, position);                                
                         },
@@ -36,7 +36,7 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
                         },
                         get finished(){
                             return this.from_group.finished
-                        }
+                        }*/
                     };
         }
 
@@ -45,11 +45,24 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
                         is_bye: false,
                         is_player: false,
                         prevs_matches: [prev_match_1, prev_match_2],
+                        sets: crearSets(sets_count),
+                        final: [0,0]/*,
                         get players () {
                             return this.prevs_matches.map(p => {return p.winner});
                         },
-                        sets: crearSets(sets_count),
-                        final: [0,0],
+                        player: function(id){
+                            if (this.prevs_matches[id].finished){
+                                return this.players[id]
+                            }else{
+                                return {nombre: this.prevs_matches[id].getWinnerDescription()}
+                            }
+                        },
+                        get is_bye_match () {
+                            return this.prevs_matches.reduce((r,p) => r || p.is_bye, false);
+                        },
+                        get readyToPlay () {
+                            return this.prevs_matches.reduce((r,m) => r && m.finished, true);
+                        }*//*,
                         get winner () {
                             if(any(this.players, p => {return p == null})){
                                 return null;
@@ -61,26 +74,13 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
                                 return this.players[1];
                             }                          
                         },
-                        player: function(id){
-                            if (this.prevs_matches[id].finished){
-                                return this.players[id]
-                            }else{
-                                return {nombre: this.prevs_matches[id].getWinnerDescription()}
-                            }
-                        },
                         getWinnerDescription: function(){
                             return "Ganador partido " + this.id;
-                        },
-                        get is_bye_match () {
-                            return this.prevs_matches.reduce((r,p) => r || p.is_bye, false);
                         },
                         get finished(){
                             return  (this.is_bye_match && any(this.prevs_matches, m => m.finished)) ||
                                     (!this.is_bye_match && this.winner != null);
-                        },
-                        get readyToPlay () {
-                            return this.prevs_matches.reduce((r,m) => r && m.finished, true);
-                        }
+                        }*/
                     };
         }
 
@@ -108,15 +108,15 @@ angular.module('tournamentModule').factory('bracket_matches_builder', [
     
     ////////////////////////////////////////////////////
 
-    function build_bracket_matches(bracket, sets_per_round, round, groups){
+    function build_bracket_matches(bracket, sets_per_round, round){
         if(bracket.is_bye){
             return bye_c();
         }
         if(bracket.is_player){
-            return player_c(groups[bracket.reference.group_id], bracket.reference.player_pos);
+            return player_c(bracket.reference.group_id, bracket.reference.player_pos);
         }else{
-            var match_1 = build_bracket_matches(bracket.branch_1, sets_per_round, round+1, groups);
-            var match_2 = build_bracket_matches(bracket.branch_2, sets_per_round, round+1, groups);
+            var match_1 = build_bracket_matches(bracket.branch_1, sets_per_round, round+1);
+            var match_2 = build_bracket_matches(bracket.branch_2, sets_per_round, round+1);
             return match_c(match_1, match_2, sets_per_round(round));
         }
     }

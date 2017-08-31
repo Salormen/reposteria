@@ -119,7 +119,6 @@ angular.module('tournamentModule').factory('bracket_seeder', [function(){
         Ret:        balanced bracket with decoy seed
     */
     function place_in_lighter_branch(bracket, decoy){
-        // If both branch have the same number of players, then choose one at random.
         if (is_lighter(bracket.branch_1, bracket.branch_2)){
             bracket.branch_1 = place_decoy_in_bracket(bracket.branch_1, decoy);
             return bracket;
@@ -128,6 +127,7 @@ angular.module('tournamentModule').factory('bracket_seeder', [function(){
             bracket.branch_2 = place_decoy_in_bracket(bracket.branch_2, decoy);
             return bracket;
         }
+        // If both branch have the same number of players, then choose one at random.
         if(random(0,1) == 0){
             bracket.branch_1 = place_decoy_in_bracket(bracket.branch_1, decoy);
             return bracket;
