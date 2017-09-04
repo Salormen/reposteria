@@ -9,16 +9,18 @@
         function($scope, $state, $stateParams, tournament_dao, bracket_functions){
 
         /******************************************/
+        
+        var context = {};
 
         //Configuracion
             
         $scope.torneo = tournament_dao.get_by_id($stateParams.id);
+        context.torneo = $scope.torneo;
             
         $scope.round_matches = bracket_functions.round_n($scope.torneo.brackets[$stateParams.llave_id], $stateParams.round);
             
         console.log("Torneo recibido: ", $scope.torneo);
         console.log("Partidos de ronda: ", $scope.round_matches);
-        
             
          
         //////////////////////////
@@ -26,19 +28,9 @@
         //////////////////////////
 
             
-        $scope.is_bye_match = bracket_functions.is_bye_match;
+        context.is_bye_match = bracket_functions.is_bye_match;
             
-        $scope.getPlayerName = bracket_functions.getPlayerName;
-            
-            
-        $scope.is_playable = function(match){
-            return match.is_playable;
-        }
-
-        
-        
-        
-        
+        context.getPlayerName = bracket_functions.getPlayerName;
         
         
         // Print matches
@@ -61,5 +53,5 @@
         }
 
 
-
+        $scope.context = context;
 }])})()

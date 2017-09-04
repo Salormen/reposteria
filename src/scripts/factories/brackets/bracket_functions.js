@@ -68,17 +68,17 @@ angular.module('tournamentModule').factory('bracketFunctions', [
     
     function instanceFinished(instance, tournament){
         return bracketDispatch(instance, 
-                    true,
-                    (instance.is_player)?tournament.groups[instance.group_id].finished:false,
-                    (!instance.is_bye && !instance.is_player)?all(instance.prevs_matches, m => instanceFinished(m, tournament)):false 
+                    () => true,
+                    () => tournament.groups[instance.group_id].finished,
+                    () => all(instance.prevs_matches, m => instanceFinished(m, tournament))
                     );
     }
     
     function getWinnerDescription(instance){
         return bracketDispatch(instance, 
-                    " - Bye - ",
-                    "Jugador en la posición " + instance.group_position + " del grupo " + other_functions.format_group_id(instance.group_id),
-                    "Ganador partido " + instance.id           
+                    () => " - Bye - ",
+                    () => "Jugador en la posición " + instance.group_position + " del grupo " + other_functions.format_group_id(instance.group_id),
+                    () => "Ganador partido " + instance.id           
                     );
     }
             
@@ -90,13 +90,13 @@ angular.module('tournamentModule').factory('bracketFunctions', [
             
     function bracketDispatch(bracket, case_bye, case_player, case_match){
         if(bracket.is_bye){
-            return case_bye;
+            return case_bye();
         }
         if(bracket.is_player){
-            return case_player;
+            return case_player();
         }else{
             // es un match
-            return case_match;
+            return case_match();
         }
     }
             

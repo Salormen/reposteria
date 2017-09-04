@@ -4,50 +4,11 @@
             <div>
                 <a class="btn menu" ng-click="print_matches()"> Imprimir partidos ({{matches_for_print.length}}/4) </a> 
             </div>
-            <div data-ng-repeat="match in round_matches">
-                Partido {{match.id}}
-                <div ng-show="!is_bye_match(match)">
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th> Jugadores </th>
-                                <th ng-repeat="set in match.sets"> Set {{match.sets.indexOf(set) + 1}} </th>
-                                <th> Resultado final </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> {{getPlayerName(match, 0, torneo)}} </td>
-                                <td ng-repeat="set in match.sets"> <input ng-model="set[0]" placeholder="0" size="4"> </td>
-                                <td> <input ng-model="match.final[0]" placeholder="0" size="4"></td>
-                            </tr>
-                            <tr>
-                                <td> {{getPlayerName(match, 1, torneo)}} </td>
-                                <td ng-repeat="set in match.sets"> <input ng-model="set[1]" placeholder="0" size="4"> </td>
-                                <td> <input ng-model="match.final[1]" placeholder="0" size="4"></td>
-                            </tr>
-                        </tbody>
-                    </table> 
-                </div>
-                <div ng-show="is_bye_match(match)">
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th> Jugadores </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> {{getPlayerName(match, 0, torneo)}} </td>
-                            </tr>
-                            <tr>
-                                <td> {{getPlayerName(match, 1, torneo)}} </td>
-                            </tr>
-                        </tbody>
-                    </table> 
-                </div>
-                <a class="btn" ng-click="print_match(match)"> Agregar a impresión </a>  
-            </div>  
+            
+            <div data-ng-repeat="match in round_matches"> 
+                <match current-match="match" current-context="context"></match>
+                <a class="btn menu" ng-click="context.print_match(match)"> Agregar a impresión </a>  
+            </div>
         </div>
     </div>
 </div>

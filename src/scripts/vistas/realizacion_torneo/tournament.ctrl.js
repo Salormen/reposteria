@@ -172,19 +172,13 @@
         $scope.mostrar_todos_grupos = function(){
             reset_grupos_mostrados();
             $scope.seSelecciono_todosLosGrupos = true;
-            collapse('groups_menu');
         };
 
         $scope.mostrar_grupo = function(id){
             $scope.seSelecciono_todosLosGrupos = false;
             reset_grupos_mostrados();
             $scope.grupos_mostrados[id].mostrar = true;
-            collapse('groups_menu');
         };
-
-        function collapse(id){
-            document.getElementById(id).classList.remove("in");        
-        }
 
         function reset_grupos_mostrados(){
             $scope.grupos_mostrados = $scope.torneo.groups.map(g => {return {mostrar:false, editar: false}});

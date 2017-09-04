@@ -11,11 +11,14 @@
         /******************************************/
 
         //Configuracion
-
+        var context = {};
         
         $scope.other_functions = other_functions;
         $scope.torneo = tournament_dao.get_by_id($stateParams.id);
         $scope.group = $scope.torneo.groups[$stateParams.group_id];
+        console.log("Grupo: ", $scope.group);
+            
+
         $scope.grupos_mostrados = $scope.torneo.groups;
 
         /////////////////////////////////////////////
@@ -47,8 +50,10 @@
         }
 
         $scope.resultadoEnGrupoDeContra = function(grupo, jugador, jOp){
-            if (jugador.nombre === jOp.nombre){return "- X -";}
-            var partido = groups_functions.partidosJugadosEnGrupoPor(grupo, jugador).filter(p => {return groups_functions.jugadorParticipoDePartido(p, jOp)})[0];
+            if (jugador == jOp){return "- X -";}
+            var partido = groups_functions.partidosJugadosEnGrupoPor(grupo, jugador)
+                                .filter(p => {return groups_functions.jugadorParticipoDePartido(p, jOp)})[0];
+            
             return groups_functions.setsGanadosEnPartidoPor(partido, jugador) + " - " + groups_functions.setsGanadosEnPartidoPor(partido, jOp);
         }
 
@@ -92,5 +97,13 @@
 
 
 
+        context.is_bye_match = groups_functions.isByeMatch;
+            
+        context.getPlayerName = groups_functions.getPlayerName;
+        context.torneo = $scope.torneo;
+           
+        $scope.context = context;
+        
+        
       }])
 })()

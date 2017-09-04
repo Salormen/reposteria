@@ -14,7 +14,7 @@ angular.module('tournamentModule').factory('groups_builder',
                 
                 
     function build_groups(count_groups, sets, players){
-        return build_groups_matches(adapt(seed_players(count_groups, players), sets));
+        return build_groups_matches(adapt(seed_players(count_groups, players)), sets);
     }
     
     return build_groups;

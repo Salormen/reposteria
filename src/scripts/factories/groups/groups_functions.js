@@ -38,12 +38,12 @@ angular.module('tournamentModule').factory('groups_functions',
     // Funciones sobre partido
                 
     function jugadorParticipoDePartido(partido, jugador){
-        return (partido.jugador1.nombre === jugador.nombre) || 
-               (partido.jugador2.nombre === jugador.nombre)
+        return (partido.players[0] == jugador) || 
+               (partido.players[1] == jugador)
     }
     
     function seDisputoPartido(partido, sets_for_victory){
-        return (parseInt(partido.final[partido.jugador1.id]) + parseInt(partido.final[partido.jugador2.id])) >= sets_for_victory;
+        return (parseInt(partido.final.reduce((r,e) => r+e, 0) >= sets_for_victory));
     }
      
     function ganoPartido(partido, jugador, sets_for_victory){
@@ -55,34 +55,34 @@ angular.module('tournamentModule').factory('groups_functions',
     }
     
     function setsGanadosEnPartidoPor(partido, jugador){
-        if (partido.jugador1.nombre === jugador.nombre){
-            return parseInt(partido.final[partido.jugador1.id]);
+        if (partido.players[0] == jugador){
+            return parseInt(partido.final[0]);
         }else{
-            return parseInt(partido.final[partido.jugador2.id]);
+            return parseInt(partido.final[1]);
         }
     }
       
     function setsPerdidosEnPartidoPor(partido, jugador){
-        if (partido.jugador1.nombre === jugador.nombre){
-            return parseInt(partido.final[partido.jugador2.id]);
+        if (partido.players[0] == jugador){
+            return parseInt(partido.final[1]);
         }else{
-            return parseInt(partido.final[partido.jugador1.id]);
+            return parseInt(partido.final[0]);
         }
     }
       
     function puntosGanadosEnPartidoPor(partido, jugador){
-        if (partido.jugador1.nombre === jugador.nombre){
-            return partido.sets.reduce((r,s) => {return parseInt(s[partido.jugador1.id]) + r}, 0);
+        if (partido.players[0] == jugador){
+            return partido.sets.reduce((r,s) => {return parseInt(s[0]) + r}, 0);
         }else{
-            return partido.sets.reduce((r,s) => {return parseInt(s[partido.jugador2.id]) + r}, 0);
+            return partido.sets.reduce((r,s) => {return parseInt(s[1]) + r}, 0);
         }
     }
     
     function puntosPerdidosEnPartidoPor(partido, jugador){
-        if (partido.jugador1.nombre === jugador.nombre){
-            return partido.sets.reduce((r,s) => {return parseInt(s[partido.jugador2.id]) + r}, 0);
+        if (partido.players[0] == jugador){
+            return partido.sets.reduce((r,s) => {return parseInt(s[1]) + r}, 0);
         }else{
-            return partido.sets.reduce((r,s) => {return parseInt(s[partido.jugador1.id]) + r}, 0);
+            return partido.sets.reduce((r,s) => {return parseInt(s[0]) + r}, 0);
         }
     }
                 
@@ -143,6 +143,18 @@ angular.module('tournamentModule').factory('groups_functions',
                         {return coeficienteEnGrupoPara(group,j2) - coeficienteEnGrupoPara(group,j1)})
                             [position-1];
     }
+     
+                
+    // Interfaz match directive
+    
+    function is_bye_match(match){
+        return false;
+    }
+                
+    function getPlayerName(match, player_pos, tournament){
+        return tournament.groups[match.group_id].players[match.players[player_pos]].apellido;
+    }
+                
                 
     //////////////////////////////////////
                 
@@ -167,7 +179,11 @@ angular.module('tournamentModule').factory('groups_functions',
         
         posicionEnGrupo: posicionEnGrupo,
         coeficienteEnGrupoPara: coeficienteEnGrupoPara,
-        get_player_in_position: get_player_in_position
+        get_player_in_position: get_player_in_position,
+        
+        // Interfaz match directive
+        is_bye_match: is_bye_match,
+        getPlayerName: getPlayerName
     }
                 
 }]);    
