@@ -5,8 +5,13 @@
     angular
         .module('tournamentModule')
         .controller('GroupDirectiveController',  
-                ['groups_functions', '$scope',
-        function(groups_functions,    $scope){
+                ['groups_functions', '$scope', 'other_functions',
+        function(groups_functions,    $scope,   other_functions){
+            
+            
+        
+        
+        $scope.format_group_id = other_functions.format_group_id;
 
             
         $scope.resultadoEnGrupoDeContra = function(grupo, jugador, jOp){

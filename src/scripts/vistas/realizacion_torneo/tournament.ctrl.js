@@ -46,9 +46,6 @@
             
         }
         
-        
-        $scope.format_group_id = other_functions.format_group_id;
-        
             
         // Brackets submenu
             

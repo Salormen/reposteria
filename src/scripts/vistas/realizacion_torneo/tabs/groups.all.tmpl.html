@@ -1,4 +1,5 @@
 <div ng-repeat="group in torneo.groups | orderBy: 'id'">
-    <a class="btn menu" ui-sref=".grupo({group_id: group.id})"> Grupo {{other_functions.format_group_id(group.id)}} </a>
     <group current-group="group"></group>
 </div>
+
+
