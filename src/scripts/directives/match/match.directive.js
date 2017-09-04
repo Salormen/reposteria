@@ -9,7 +9,7 @@ angular.module('tournamentModule').directive('match', [
             currentMatch: '=currentMatch',
             context: '=currentContext'
         },
-        templateUrl: 'scripts/directives/match.directive.tmpl.html'
+        templateUrl: 'scripts/directives/match/match.directive.tmpl.html'
       };
         
 }]);

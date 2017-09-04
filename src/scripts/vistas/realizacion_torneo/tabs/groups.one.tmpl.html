@@ -1,32 +1,6 @@
 <div>
     <div>
-        Grupo {{other_functions.format_group_id(group.id)}}: <br>
-        <table class="table table-condensed">
-            <thead>
-                <tr>
-                    <th>Rating</th>
-                    <th>Jugador</th>
-                    <th>Club</th>
-                    <th ng-repeat="jugador in group.players | orderBy:'rating':true ">{{jugador.apellido}}</th>
-                    <th>Ptds G/P</th>
-                    <th>Sets G/P</th>
-                    <th>Pts G/P</th>
-                    <th>Pos</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="(j, jugador) in group.players | orderBy:'rating':true ">
-                    <td align="left">{{jugador.rating}}</td>
-                    <td align="left">{{jugador.apellido}}</td>
-                    <td align="left">{{jugador.club_corto}}</td>
-                    <td align="left" ng-repeat="(jO, jOp) in group.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(group, j, jO)}}</td>
-                    <td align="left">{{difPartidosGanadosPerdidosEnGrupo(group, j)}}</td>
-                    <td align="left">{{difSetsGanadosPerdidosEnGrupo(group, j)}}</td>
-                    <td align="left">{{difPuntosGanadosPerdidosEnGrupo(group, j)}}</td>
-                    <td align="left">{{posicionEnGrupo(group, j)}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <group current-group="group"></group>
         
         <button ng-click="editar_grupo(group.id)">
             Editar
@@ -34,7 +8,7 @@
         <button ng-click="print_group(group)">
             Imprimir
         </button>
-        <button ng-click="group.finished = true">
+        <button ng-click="close_group(group)">
             Cerrar grupo
         </button>
         <div ng-show="group.finished"> Grupo cerrado </div>

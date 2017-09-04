@@ -5,14 +5,17 @@ angular.module('tournamentModule').factory('groups_matches_builder',
                 
     function build_group_matches(sets){
         return (group) => {
+            var i = 1;
             group.matches = group.players.map((j,id) => {
                 var local_jds = copy(group.players);
                 return local_jds.splice(id+1, group.players.length-id+1).reduce((r, jo, idO)=>{
                     r.push({players: [id, idO+id+1],
                             sets: crearSets(sets),
                             final: [0,0],
-                            group_id: group.id
-                           });                
+                            group_id: group.id,
+                            id: i
+                           });    
+                    i++;
                     return r;
                 }, []);
             }).reduce((r,e) => {return r.concat(e)}, []);

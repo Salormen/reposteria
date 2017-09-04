@@ -42,12 +42,12 @@ angular.module('tournamentModule').factory('groups_functions',
                (partido.players[1] == jugador)
     }
     
-    function seDisputoPartido(partido, sets_for_victory){
-        return (parseInt(partido.final.reduce((r,e) => r+e, 0) >= sets_for_victory));
+    function seDisputoPartido(partido){
+        return (parseInt(partido.final.reduce((r,e) => r+e, 0) >= sets_for_victory(partido)));
     }
      
-    function ganoPartido(partido, jugador, sets_for_victory){
-        return setsGanadosEnPartidoPor(partido, jugador) === sets_for_victory;
+    function ganoPartido(partido, jugador){
+        return setsGanadosEnPartidoPor(partido, jugador) === sets_for_victory(partido);
     }
       
     function perdioPartido(partido, jugador){
@@ -89,18 +89,21 @@ angular.module('tournamentModule').factory('groups_functions',
     // posicionEnGrupo
                 
     function posicionEnGrupo(grupo, jugador){
-        return grupo.players.sort((j1,j2) => {return coeficienteEnGrupoPara(grupo,j2) - coeficienteEnGrupoPara(grupo,j1)})
-                    .indexOf(jugador) + 1;
+        var players_copy = copy(grupo.players);
+        var res = players_copy.sort((j1,j2) => {return coeficienteEnGrupoPara(grupo,j2) - coeficienteEnGrupoPara(grupo,j1)})
+                    .indexOf(grupo.players[jugador]) + 1;
+        return res;
     }
       
     function coeficienteEnGrupoPara(grupo, jugador){
-        if (otrosJugadoresGanaronLaMismaCantidadDePartidosEnGrupo(grupo, jugador)){
-            var jugadores = jugadoresConMismaCantidadDePartidosGanadosEnGrupo(grupo, jugador);
+        var player_id = playerId(grupo, jugador);
+        if (otrosJugadoresGanaronLaMismaCantidadDePartidosEnGrupo(grupo, player_id)){
+            var jugadores = jugadoresConMismaCantidadDePartidosGanadosEnGrupo(grupo, player_id).map(p => playerId(grupo, p));
             var subgrupo = {matches: partidosDeJugadores(grupo, jugadores),
                             players: jugadores};
-            return partidosGanadosEnGrupo(grupo, jugador) + 1 - posicionEnSubgrupo(subgrupo, jugador)/10;
+            return partidosGanadosEnGrupo(grupo, player_id) + 1 - posicionEnSubgrupo(subgrupo, player_id)/10;
         }else{
-            return partidosGanadosEnGrupo(grupo, jugador);
+            return partidosGanadosEnGrupo(grupo, player_id);
         }
     }
       
@@ -109,12 +112,14 @@ angular.module('tournamentModule').factory('groups_functions',
     }
       
     function jugadoresConMismaCantidadDePartidosGanadosEnGrupo(grupo, jugador){
-        return grupo.players.filter(j => {return partidosGanadosEnGrupo(grupo, jugador) == 
-                                                   partidosGanadosEnGrupo(grupo, j)});
+        var partidos_ganados_en_grupo = partidosGanadosEnGrupo(grupo, jugador);
+        return grupo.players.filter(j => {return partidos_ganados_en_grupo == 
+                                                 partidosGanadosEnGrupo(grupo, playerId(grupo, j))});
     }
     
     function posicionEnSubgrupo(subgrupo, jugador){
-        return subgrupo.players.sort
+        var players_copy = copy(subgrupo.players);
+        return players_copy.sort
                          ((j1,j2) => {return coeficienteEnSubgrupoPara(subgrupo, j2) - 
                                              coeficienteEnSubgrupoPara(subgrupo, j1)})
                         .indexOf(jugador) + 1;
@@ -133,7 +138,7 @@ angular.module('tournamentModule').factory('groups_functions',
     function partidosDeJugadores(grupo, jugadores){
         return grupo.matches.filter(
             p => {return jugadores.reduce(
-                            (r,j) => {return r || jugadorParticipoDePartido(p,j)}, false)
+                            (r,j) => {return r || jugadorParticipoDePartido(p,grupo.players.indexOf(j))}, false)
                  }
         );
     }
@@ -153,6 +158,22 @@ angular.module('tournamentModule').factory('groups_functions',
                 
     function getPlayerName(match, player_pos, tournament){
         return tournament.groups[match.group_id].players[match.players[player_pos]].apellido;
+    }
+                
+                
+    // Auxiliares
+          
+    function sets_for_victory(match){
+        return Math.ceil(match.sets.length / 2);
+    }            
+                
+    function playerId(group, player){
+        return group.players.indexOf(player);
+    }
+    
+                  
+    function copy(arr){
+        return arr.reduce((r,e) => {r.push(e); return r}, []); 
     }
                 
                 

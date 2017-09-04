@@ -1,7 +1,11 @@
-<div>
-    Partido {{currentMatch.id}}
-    <div ng-show="!context.is_bye_match(currentMatch)">
-        <table class="table table-condensed">
+<md-card md-theme="dark-blue">
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">  Partido {{currentMatch.id}} </span>
+        </md-card-title-text>
+    </md-card-title>
+    <md-card-content layout="row" layout-align="space-between">
+        <table class="table table-condensed" ng-show="!context.is_bye_match(currentMatch)">
             <thead>
                 <tr>
                     <th> Jugadores </th>
@@ -22,9 +26,7 @@
                 </tr>
             </tbody>
         </table> 
-    </div>
-    <div ng-show="context.is_bye_match(currentMatch)">
-        <table class="table table-condensed">
+        <table class="table table-condensed" ng-show="context.is_bye_match(currentMatch)">
             <thead>
                 <tr>
                     <th> Jugadores </th>
@@ -39,5 +41,5 @@
                 </tr>
             </tbody>
         </table> 
-    </div>
-</div> 
+    </md-card-content>
+</md-card>    

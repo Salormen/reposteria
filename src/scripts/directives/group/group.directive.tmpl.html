@@ -1,0 +1,28 @@
+
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>Rating</th>
+            <th>Jugador</th>
+            <th>Club</th>
+            <th ng-repeat="jugador in currentGroup.players | orderBy:'rating':true ">{{jugador.apellido}}</th>
+            <th>Ptds G/P</th>
+            <th>Sets G/P</th>
+            <th>Pts G/P</th>
+            <th>Pos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(j, jugador) in currentGroup.players | orderBy:'rating':true ">
+            <td align="left">{{jugador.rating}}</td>
+            <td align="left">{{jugador.apellido}}</td>
+            <td align="left">{{jugador.club_corto}}</td>
+            <td align="left" ng-repeat="(jO, jOp) in currentGroup.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(currentGroup, j, jO)}}</td>
+            <td align="left">{{difPartidosGanadosPerdidosEnGrupo(currentGroup, j)}}</td>
+            <td align="left">{{difSetsGanadosPerdidosEnGrupo(currentGroup, j)}}</td>
+            <td align="left">{{difPuntosGanadosPerdidosEnGrupo(currentGroup, j)}}</td>
+            <td align="left">{{posicionEnGrupo(currentGroup, j)}}</td>
+        </tr>
+    </tbody>
+</table>
