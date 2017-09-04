@@ -1,0 +1,43 @@
+<div>
+    Partido {{currentMatch.id}}
+    <div ng-show="!context.is_bye_match(currentMatch)">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th> Jugadores </th>
+                    <th ng-repeat="set in currentMatch.sets"> Set {{currentMatch.sets.indexOf(set) + 1}} </th>
+                    <th> Resultado final </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
+                    <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[0]" placeholder="0" size="4"/> </td>
+                    <td> <input ng-model="currentMatch.final[0]" placeholder="0" size="4"></td>
+                </tr>
+                <tr>
+                    <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
+                    <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[1]" placeholder="0" size="4"/> </td>
+                    <td> <input ng-model="currentMatch.final[1]" placeholder="0" size="4"></td>
+                </tr>
+            </tbody>
+        </table> 
+    </div>
+    <div ng-show="context.is_bye_match(currentMatch)">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th> Jugadores </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
+                </tr>
+                <tr>
+                    <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
+                </tr>
+            </tbody>
+        </table> 
+    </div>
+</div> 
