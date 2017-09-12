@@ -50,7 +50,7 @@
                                         <td> {{jugador.apellido}}</td>
                                         <td> {{jugador.nombre}}</td>
                                         <td> {{jugador.club_corto}}</td>
-                                        <td> <button type="button" ng-click="inscribirJugador(jugador)">+</button> </td>
+                                        <td><i class="material-icons" ng-click="inscribirJugador(jugador)" title="Agregar jugador">add_box</i> </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -107,7 +107,7 @@
                                         <td> {{jugador.apellido}}</td>
                                         <td> {{jugador.nombre}}</td>
                                         <td> {{jugador.club_corto}}</td>
-                                        <td> <button type="button" ng-click="eliminarJugador(jugador, torneo.players)"> X </button> </td>
+                                        <td> <i class="material-icons" ng-click="eliminarJugador(jugador, torneo.players)" title="Quitar jugador">clear</i> </td>
                                     </tr>
                                 </tbody>
                             </table>

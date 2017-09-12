@@ -1,5 +1,21 @@
-<div id="detalle_grupos" class="col-md-10">
-    <!-- Todos -->
-    <!-- Grupo X -->
-    <div ui-view> </div>                          
+<div id="detalle_grupos">
+    <span class="titulo_tab"> Grupos </span>
+    
+    <div class="col-md-1"> 
+        <md-grid-list md-cols="1"  md-row-height="{{500/(torneo.groups.length + 1)}}px" class="submenu">
+            <md-grid-tile md-colspan="1" md-rowspan="1">
+                <a class="btn submenu_item" ui-sref="torneo.grupos.all" title="Todos los grupos"> Todos </a> 
+            </md-grid-tile>
+            <md-grid-tile md-colspan="1" md-rowspan="1" ng-repeat="group in torneo.groups | orderBy: 'id'">
+                <a class="btn submenu_item" ui-sref="torneo.grupos.grupo({group_id: group.id})">
+                    {{format_group_id(group.id)}}
+                </a> 
+            </md-grid-tile>
+        </md-grid-list>
+    </div>
+    <div class="col-md-11">
+        <!-- Todos -->
+        <!-- Grupo X -->
+        <div ui-view> </div>   
+    </div>                       
 </div>  

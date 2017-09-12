@@ -4,10 +4,10 @@
             <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".inscripcion"> Inscripción </a>  
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="showSubmenu(submenus, 'groups')"> Grupos </a>
+            <a class="btn" ui-sref=".grupos.all"> Grupos </a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="showSubmenu(submenus, 'brackets')"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
+            <a class="btn" ui-sref=".llaves.llave({llave_id: 0})"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
             <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".modo_rapido"> Modo rápido </a>
@@ -21,62 +21,8 @@
     </md-grid-list>
     
     
-    <div ng-show="submenus.groups.show">
-        <md-grid-list md-cols="{{torneo.groups.length + 1}}"  md-row-height="34px">
-            <md-grid-tile md-colspan="1" md-rowspan="1">
-                <a class="btn" ui-sref=".grupos.all"> Todos los grupos </a> 
-            </md-grid-tile>
-            <md-grid-tile md-colspan="1" md-rowspan="1" ng-repeat="group in torneo.groups | orderBy: 'id'">
-                <a class="btn" ui-sref=".grupos.grupo({group_id: group.id})">
-                    Grupo {{format_group_id(group.id)}}
-                </a> 
-            </md-grid-tile>
-        </md-grid-list>
-    </div>
     
-    <div ng-show="submenus.brackets.show">
-        <div ng-show="!torneo.bracket_b">
-            <md-grid-list md-cols="2"  md-row-height="34px">
-                <md-grid-tile md-colspan="1" md-rowspan="1">
-                    <a class="btn" ng-click="showSubmenu(submenus.brackets.submenus, 'bracket_a')">
-                        Llave A {{matchesReadyToPlayBracketA()}}
-                    </a> 
-                </md-grid-tile>
-                <md-grid-tile md-colspan="1" md-rowspan="1">
-                    <a class="btn" ng-click="showSubmenu(submenus.brackets.submenus, 'bracket_b')">
-                        Llave B {{matchesReadyToPlayBracketB()}}
-                    </a> 
-                </md-grid-tile>
-            </md-grid-list>
-            <div ng-show="submenus.brackets.submenus.bracket_a.show">
-                <md-grid-list md-cols="{{tournament_rounds(0)}}"  md-row-height="34px">
-                    <md-grid-tile md-colspan="1" md-rowspan="1" ng-repeat="n in rounds_numbers(tournament_rounds(0))">
-                        <a class="btn" ui-sref=".llave({llave_id: 0, round: n})">
-                            {{round_name(n)}} {{matchesReadyToPlayRound(0, n)}}
-                        </a> 
-                    </md-grid-tile>
-                </md-grid-list>
-            </div>
-            <div ng-show="submenus.brackets.submenus.bracket_b.show">
-                <!--md-grid-list md-cols="{{tournament_rounds(1)}}"  md-row-height="34px">
-                    <md-grid-tile md-colspan="1" md-rowspan="1" ng-repeat="n in rounds_numbers(tournament_rounds(1))">
-                        <a class="btn" ui-sref=".llave({llave_id: 1, round: n})">
-                            {{round_name(n)}} {{matchesReadyToPlayRound(1, n)}}
-                        </a> 
-                    </md-grid-tile>
-                </md-grid-list -->
-            </div>
-        </div>
-        <div ng-show="torneo.bracket_b">
-            <md-grid-list md-cols="{{tournament_rounds(0)}}"  md-row-height="34px">
-                <md-grid-tile md-colspan="1" md-rowspan="1" ng-repeat="n in rounds_numbers(tournament_rounds(0))">
-                    <a class="btn" ui-sref=".llave({llave_id: 0, round: n})">
-                        {{round_name(n)}} {{matchesReadyToPlayRound(0, n)}}
-                    </a> 
-                </md-grid-tile>
-            </md-grid-list>
-        </div>        
-    </div>
+    
     
     
     <div id="menu_resultados" class="collapse" ng-show="seSeleccionoFrame('resultados', frames)">

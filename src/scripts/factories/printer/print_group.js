@@ -6,7 +6,7 @@ angular.module('tournamentModule').factory('print_group',
               
     function print_group(tournament, group){
         var pdf = group_to_pdf(tournament, group);
-        //pdf.autoPrint();        
+        pdf.autoPrint();        
         window.open(pdf.output('bloburl'), '_blank');
     }
                         
@@ -125,7 +125,8 @@ angular.module('tournamentModule').factory('print_group',
         
         doc.setFont('helvetica', 'italic');
         doc.setFontSize(15);
-        doc.text(mts.lat_margin + 10, mts.alt_titulo + 17, of.format_date(tournament.date));
+//        console.log(tournament.date);
+//        doc.text(mts.lat_margin + 10, mts.alt_titulo + 17, of.format_date(tournament.date));
 
         doc.setFontSize(25);
         doc.text(mts.lat_info_1 + 2, mts.alt_info + 17, tournament.category.str_s);
@@ -134,7 +135,7 @@ angular.module('tournamentModule').factory('print_group',
         doc.text(mts.lat_info_2 + 23, mts.alt_info + 17, of.format_group_id(group.id));
 
         doc.setFontSize(25);
-        doc.text(mts.lat_info_3 + 23, mts.alt_info + 17, tournament.format.bracket_a_clasified.toString());
+        doc.text(mts.lat_info_3 + 23, mts.alt_info + 17, group.clasified.toString());
         
         return doc;
     }    
@@ -142,12 +143,12 @@ angular.module('tournamentModule').factory('print_group',
     function load_players_info(doc, mts, tournament, group){
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(20);
-        doc.text(mts.lat_margin + 60, mts.alt_jugadores, "Jugadores:");
+        doc.text(mts.lat_margin + 30, mts.alt_jugadores, "Jugadores:");
         
         doc.setFont('helvetica', 'italic');
         return group.players.reduce((r,p,i) => {
-            r.text(mts.lat_margin + 50, mts.alt_jugadores+10*(i+1), 
-                (i+1) + ". " + p.nombre + " - " + p.rating + " - " + p.club); return r;}, doc);
+            r.text(mts.lat_margin + 20, mts.alt_jugadores+10*(i+1), 
+                (i+1) + ". " + p.apellido + ", " + p.nombre + " - " + p.rating + " - " + p.club_corto); return r;}, doc);
     }
     
     function load_matches(doc, mts, tournament, group){
@@ -159,7 +160,7 @@ angular.module('tournamentModule').factory('print_group',
     }
                         
     function create_matches_title_bar(doc, mts, tournament, group){
-        var sets = tournament.format.sets_by_instance.groups;        
+        var sets = group.matches[0].sets.length;        
         var end_sets = mts.lat_margin + mts.width_player_name + mts.width_set * (sets + 1);        
         
         doc.setLineWidth(0.4);
@@ -194,7 +195,7 @@ angular.module('tournamentModule').factory('print_group',
     }
                         
     function create_matches(doc, mts, tournament, group){
-        var sets = tournament.format.sets_by_instance.groups;        
+        var sets = group.matches[0].sets.length;    
         var end_sets = mts.lat_margin + mts.width_player_name + mts.width_set * (sets + 1); 
         
         for(var i = 0; i < group.players.length * (group.players.length - 1) / 2; i++){
@@ -228,8 +229,8 @@ angular.module('tournamentModule').factory('print_group',
     }
                         
     function fill_matches_with_players(doc, mts, tournament, group){
-        var sets = tournament.format.sets_by_instance.groups;        
-        var players = of.nList(1,group.players.length).map(i => groups_functions.get_player_in_position(group, i));
+        var sets = group.matches[0].sets.length;    
+        var players = group.players;
         
         var end_sets = mts.lat_margin + mts.width_player_name + mts.width_set * (sets + 1); 
         
@@ -242,12 +243,12 @@ angular.module('tournamentModule').factory('print_group',
         var y_dis_player_c = (y)=>{return y+11};
         
         
-        return tournament.format.matches_in_groups(group.players.length).reduce( (r, m, i) => {
+        return group.matches.reduce( (r, m, i) => {
             var alt_init_match = mts.alt_partidos + mts.match_height * i;
             
-            r.text(x_dis_player_a, y_dis_player_a(alt_init_match), m[0] + ". " + players[m[0]-1].nombre);
-            r.text(x_dis_player_b, y_dis_player_b(alt_init_match), m[1] + ". " + players[m[1]-1].nombre);
-            r.text(x_dis_player_c, y_dis_player_c(alt_init_match), players[m[2]-1].nombre);
+            r.text(x_dis_player_a, y_dis_player_a(alt_init_match), (m.players[0] + 1) + ". " + group.players[m.players[0]].apellido);
+            r.text(x_dis_player_b, y_dis_player_b(alt_init_match), (m.players[1] + 1) + ". " + group.players[m.players[1]].apellido);
+            //r.text(x_dis_player_c, y_dis_player_c(alt_init_match), players[m[2]-1].nombre);
                 
             return r;
         }, doc);

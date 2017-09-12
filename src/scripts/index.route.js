@@ -40,12 +40,19 @@
                 controller: 'GroupsController'
               })
 
-          .state('torneo.llave', {
-            url: '/llave/:llave_id/ronda/:round',
+      
+          .state('torneo.llaves', {
+            url: '/llave',
             templateUrl: 'scripts/vistas/realizacion_torneo/tabs/brackets.tmpl.html',
-            controller: 'BracketsController',
-            controllerAs: 'ctrl'
+            controller: 'BracketsController'
           })
+              .state('torneo.llaves.llave', {
+                url: '/:llave_id',
+                templateUrl: 'scripts/vistas/realizacion_torneo/tabs/brackets.one.tmpl.html',
+                controller: 'BracketController'
+              })
+      
+      
           .state('torneo.modo_rapido', {
             url: '/rapido',
             templateUrl: 'scripts/vistas/realizacion_torneo/tabs/fast_mode.tmpl.html',
@@ -58,8 +65,8 @@
           })
           .state('torneo.descargas', {
             url: '/descargas',
-            templateUrl: 'scripts/vistas/realizacion_torneo/downloads.tmpl.html',
-            controller: 'TournamentController'
+            templateUrl: 'scripts/vistas/realizacion_torneo/tabs/downloads.tmpl.html',
+            controller: 'DownloadsController'
           })
       ;
 

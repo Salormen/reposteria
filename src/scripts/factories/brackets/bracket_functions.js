@@ -1,6 +1,6 @@
 angular.module('tournamentModule').factory('bracketFunctions', [
-                'other_functions',    
-        function(other_functions){
+                'other_functions', 'groups_functions',   
+        function(other_functions,   groups_functions){
     
 
     
@@ -61,7 +61,7 @@ angular.module('tournamentModule').factory('bracketFunctions', [
         if(!instanceFinished(match.prevs_matches[player_pos], tournament) || match.prevs_matches[player_pos].is_bye){
             return getWinnerDescription(match.prevs_matches[player_pos]);
         }else{
-            return getWinner(match.prevs_matches[player_pos]).name;
+            return getWinner(match.prevs_matches[player_pos], tournament).apellido;
         }
     }
     
@@ -82,7 +82,14 @@ angular.module('tournamentModule').factory('bracketFunctions', [
                     );
     }
             
-            
+    
+    function getWinner(instance, tournament){
+        return bracketDispatch(instance, 
+                    () => "",
+                    () => groups_functions.get_player_in_position(tournament.groups[instance.group_id], instance.group_position),
+                    () => getWinner(instance.prevs_matches[0], tournament)
+                    );
+    }
             
             
             

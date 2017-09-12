@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('GroupDirectiveController',  
-                ['groups_functions', '$scope', 'other_functions',
-        function(groups_functions,    $scope,   other_functions){
+                ['groups_functions', '$scope', 'other_functions', 'printer', 'tournament_dao',
+        function(groups_functions,    $scope,   other_functions,   printer,   tournament_dao){
             
             
         
@@ -53,6 +53,20 @@
 
 
         $scope.posicionEnGrupo = groups_functions.posicionEnGrupo;
+            
+        /////////////////////////////////////////////////////
+            
+            
+        $scope.close_group = function(group, context){
+            group.finished = !group.finished;
+            tournament_dao.save(context.torneo);
+        };
+
+        
+        $scope.print_group = function(group, context){
+            printer.print_group(context.torneo, group);
+        }
+
     
 
 }])})()

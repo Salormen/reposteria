@@ -1,23 +1,16 @@
 <div>
-    <div>
-        <group current-group="group"></group>
-        
-        <button ng-click="editar_grupo(group.id)">
-            Editar
-        </button> 
-        <button ng-click="print_group(group)">
-            Imprimir
-        </button>
-        <button ng-click="close_group(group)">
-            Cerrar grupo
-        </button>
-        <div ng-show="group.finished"> Grupo cerrado </div>
-        <!--div data-ng-show="editando_grupo(group.id)"-->
-        <div>
-            
-            <div data-ng-repeat="match in group.matches"> 
-                <match current-match="match" current-context="context"></match>
-            </div>
-        </div>
-    </div>
+    <md-tabs md-border-bottom md-dynamic-height>
+        <md-tab label="Resumen">
+            <md-content class="md-padding">
+                <group current-group="group" current-context="context"></group>
+            </md-content>
+        </md-tab>
+        <md-tab label="Partidos">
+            <md-content class="md-padding">
+                <div data-ng-repeat="match in group.matches"> 
+                    <match current-match="match" current-context="context"></match>
+                </div>
+            </md-content>
+        </md-tab>
+    </md-tabs>
 </div>   

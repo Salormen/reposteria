@@ -30,7 +30,8 @@ angular.module('tournamentModule').factory('tournament_seeder',
     function create_groups(tournament, format){
         tournament.groups = build_groups(format.count_groups(tournament.players.length),    // Cantidad de grupos
                                          format.sets_by_instance.groups,                    // Cantidad de sets para cada partido de grupo
-                                         tournament.players);                               // Jugadores que disputaran los grupos en cuestion
+                                         tournament.players,                                // Jugadores que disputaran los grupos en cuestion
+                                         format.bracket_a_clasified,);                              
     }
                         
     function create_brackets(tournament, format){

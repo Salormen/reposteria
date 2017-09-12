@@ -49,32 +49,7 @@
             
         // Brackets submenu
             
-        $scope.tournament_rounds = function(bracket_id){
-            return bracketFunctions.count_rounds($scope.torneo.brackets[bracket_id]);
-        }
         
-        $scope.rounds_numbers = function(rounds){
-            return other_functions.nList(0, rounds - 1).reverse();
-        }
-        
-        $scope.round_name = round_number => {
-            switch(round_number){
-                case 0: return "Final";
-                case 1: return "Semifinales";
-                case 2: return "4tos de final";
-                case 3: return "8vos de final";
-                case 4: return "16vos de final ";
-                case 5: return "32vos de final ";
-                case 6: return "64vos de final ";
-            }
-        }
-
-        $scope.bracket_name = bracket_n => {
-            switch(bracket_n){
-                case 0: return "Llave A";
-                case 1: return "Llave B";
-            }   
-        }
                 
         $scope.matchesReadyToPlayAllBrackets = function(){
             if($scope.seeded){
