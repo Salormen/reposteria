@@ -4,42 +4,53 @@
             <span class="md-headline card_title">  Partido {{currentMatch.id}} </span>
         </md-card-title-text>
     </md-card-title>
-    <md-card-content layout="row" layout-align="space-between">
-        <table class="table table-condensed" ng-show="!context.is_bye_match(currentMatch)">
-            <thead>
-                <tr>
-                    <th> Jugadores </th>
-                    <th ng-repeat="set in currentMatch.sets"> Set {{currentMatch.sets.indexOf(set) + 1}} </th>
-                    <th> Resultado final </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
-                    <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[0]" placeholder="0" size="4"/> </td>
-                    <td> <input ng-model="currentMatch.final[0]" placeholder="0" size="4"></td>
-                </tr>
-                <tr>
-                    <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
-                    <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[1]" placeholder="0" size="4"/> </td>
-                    <td> <input ng-model="currentMatch.final[1]" placeholder="0" size="4"></td>
-                </tr>
-            </tbody>
-        </table> 
-        <table class="table table-condensed" ng-show="context.is_bye_match(currentMatch)">
-            <thead>
-                <tr>
-                    <th> Jugadores </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
-                </tr>
-                <tr>
-                    <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
-                </tr>
-            </tbody>
-        </table> 
-    </md-card-content>
+    <div ng-show="!context.is_bye_match(currentMatch)">
+        <md-card-content layout="row" layout-align="space-between">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th> Jugadores </th>
+                        <th ng-repeat="set in currentMatch.sets"> Set {{currentMatch.sets.indexOf(set) + 1}} </th>
+                        <th> Resultado final </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
+                        <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[0]" placeholder="0" size="4" ng-disabled="!editting"/> </td>
+                        <td> <input ng-model="currentMatch.final[0]" placeholder="0" size="4" ng-disabled="!editting"></td>
+                    </tr>
+                    <tr>
+                        <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
+                        <td ng-repeat="set in currentMatch.sets"> <input ng-model="set[1]" placeholder="0" size="4" ng-disabled="!editting"/> </td>
+                        <td> <input ng-model="currentMatch.final[1]" placeholder="0" size="4" ng-disabled="!editting"></td>
+                    </tr>
+                </tbody>
+            </table> 
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="editMatch()" ng-show="!editting">Editar</md-button>
+            <md-button md-no-ink class="md-primary" ng-click="saveMatch(context, currentMatch)" ng-show="editting">Guardar</md-button>
+        </md-card-actions>
+    </div>
+    
+    <div ng-show="context.is_bye_match(currentMatch)">
+        <md-card-content layout="row" layout-align="space-between">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th> Jugadores </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> {{context.getPlayerName(currentMatch, 0, context.torneo)}} </td>
+                    </tr>
+                    <tr>
+                        <td> {{context.getPlayerName(currentMatch, 1, context.torneo)}} </td>
+                    </tr>
+                </tbody>
+            </table> 
+        </md-card-content>
+    </div>
 </md-card>    

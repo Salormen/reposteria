@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('BracketController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'bracketFunctions', 'other_functions',
-        function($scope, $state, $stateParams, tournament_dao, bracket_functions, other_functions){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'bracketFunctions', 'matchesFunctions', 'other_functions',
+        function($scope, $state, $stateParams, tournament_dao, bracket_functions, matches_functions, other_functions){
 
         /******************************************/
         
@@ -20,7 +20,6 @@
         $scope.llave = parseInt($stateParams.llave_id);
             
         $scope.round_matches = function(round){
-            console.log("round: ", bracket_functions.round_n($scope.torneo.brackets[$stateParams.llave_id], round));
             return bracket_functions.round_n($scope.torneo.brackets[$stateParams.llave_id], round);
         }
             
@@ -32,10 +31,23 @@
         //////////////////////////
 
             
-        context.is_bye_match = bracket_functions.is_bye_match;
+        context.is_bye_match = matches_functions.is_bye_match;
             
-        context.getPlayerName = bracket_functions.getPlayerName;
+        context.getPlayerName = matches_functions.getPlayerName;
         
+        context.saveMatch = function(match, callback){
+            if(isValidMatch(match)){
+                tournament_dao.save($scope.torneo);
+                callback();
+            }else{
+                alert('El partido ');   
+            }
+            console.log($scope.torneo.brackets[0]);
+        }
+        
+        function isValidMatch(match){
+            return true; // TODO
+        }
         
         // Print matches
         

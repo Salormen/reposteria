@@ -1,7 +1,7 @@
 <div id="llave_frame">
     
     <div class="col-md-1"> 
-        <md-grid-list md-cols="1"  md-row-height="{{500/2}}px" class="submenu" ng-show="!torneo.bracket_b">
+        <md-grid-list md-cols="1"  md-row-height="{{500/2}}px" class="submenu" ng-show="torneo.bracket_b">
             <md-grid-tile md-colspan="1" md-rowspan="1">
                 <a class="btn" ui-sref="torneo.llaves.llave({llave_id: 0})">
                     Llave A {{matchesReadyToPlayBracketA()}}

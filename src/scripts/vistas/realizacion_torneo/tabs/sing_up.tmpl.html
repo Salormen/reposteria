@@ -81,18 +81,15 @@
                             </md-card-title-text>
                         </md-card-title>
                         <md-card-content layout="row">
+                            <label>Cantidad: {{torneo.players.length}}</label>
                             <div>
                                 <md-input-container>
                                     <label> Código </label>
                                     <input ng-model="jugadorBuscado.id">
                                 </md-input-container>
                                 <md-input-container>
-                                    <label> Apellido y/o nombre </label>
+                                    <label> Apellido </label>
                                     <input ng-model="jugadorBuscado.nombre">
-                                </md-input-container>
-                                <md-input-container>
-                                    <label> Club </label>
-                                    <input ng-model="jugadorBuscado.club">
                                 </md-input-container>
                             </div>
                         </md-card-content>

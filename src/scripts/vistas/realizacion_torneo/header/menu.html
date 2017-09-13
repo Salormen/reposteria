@@ -7,7 +7,7 @@
             <a class="btn" ui-sref=".grupos.all"> Grupos </a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ui-sref=".llaves.llave({llave_id: 0})"> Llave {{matchesReadyToPlayAllBrackets()}}</a>
+            <a class="btn" ui-sref=".llaves.llave({llave_id: 0})"> Llave {{countMatchesReadyToPlayAllBrackets()}}</a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
             <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".modo_rapido"> Modo rápido </a>

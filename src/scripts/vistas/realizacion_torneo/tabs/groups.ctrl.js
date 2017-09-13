@@ -34,7 +34,23 @@
             
         context.getPlayerName = groups_functions.getPlayerName;
         context.torneo = $scope.torneo;
-           
+        
+        context.saveMatch = function(match, callback){
+            if(isValidMatch(match)){
+                tournament_dao.save($scope.torneo);
+                $scope.$emit('tournamentSaved', "");
+                callback();
+            }else{
+                alert('El partido ');   
+            }
+            console.log($scope.torneo.brackets[0]);
+        }
+        
+        function isValidMatch(match){
+            return true; // TODO
+        }
+            
+            
         $scope.context = context;
         
         
