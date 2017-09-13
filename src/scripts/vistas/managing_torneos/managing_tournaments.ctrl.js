@@ -3,10 +3,10 @@
 
     angular
         .module('tournamentModule')
-        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'tournament_dao', 'tmt_parser', SeleccionTorneoController]);
+        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'tournament_dao', 'tmt_parser', 'list_players_dao', SeleccionTorneoController]);
 
     /** @ngInject */
-    function SeleccionTorneoController($scope, $modal, $state, build_tournament, tournament_dao, tmt_parser){
+    function SeleccionTorneoController($scope, $modal, $state, build_tournament, tournament_dao, tmt_parser, list_players_dao){
         
         
         $scope.load = function(){
@@ -35,7 +35,6 @@
 
         $scope.load_previous_players = function(){
             list_players_dao.save(tmt_parser.getValue());
-            init_previous_players();
         }
 
         

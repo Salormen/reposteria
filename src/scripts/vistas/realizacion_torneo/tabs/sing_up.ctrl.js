@@ -55,10 +55,23 @@
             jugadores.splice(jugadores.indexOf(jugador), 1);    
             tournament_dao.save($scope.torneo);
         };
-
+            
+            
+        $scope.searchPlayer = function(searchedPlayer){
+            init_previous_players();
+            console.log(searchedPlayer);
+            $scope.jugadores_previos = $scope.jugadores_previos.filter(p => 
+                        (p.tmt_id.includes(searchedPlayer.id.toString()) && searchedPlayer.id != "") ||
+                        (p.club_largo.toLowerCase().includes(searchedPlayer.club.toLowerCase()) && searchedPlayer.club != "") ||
+                        (p.apellido.toLowerCase().includes(searchedPlayer.apellido.toLowerCase()) && searchedPlayer.apellido != "")
+                                                                       );
+        }
+        
+        
         $scope.searchedPlayer = {
-            nombre: "",
-            club: ""
+            apellido: "",
+            club: "",
+            id: ""
         }
 
         $scope.searchedInscriptedPlayer = {
@@ -86,6 +99,8 @@
             $scope.reset_nuevo_jugador();
         };    
 
+            
+        // Sortear jugador
 
         $scope.seed_tournament = function(){
             $scope.torneo = tournament_seeder.seed($scope.torneo);

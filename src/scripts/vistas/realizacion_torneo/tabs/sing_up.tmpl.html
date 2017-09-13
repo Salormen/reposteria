@@ -1,7 +1,7 @@
 <div id="inscripcion_frame">
     
-    <md-grid-list md-cols="7"  md-row-height="90px">
-        <md-grid-tile md-colspan="3" md-rowspan="8">
+    <div>
+        <div class="col-md-5">
             <md-content class="md-padding" layout="column">
                 <div flex-gt-xs="50" layout="column" flex-xs>
                     
@@ -18,20 +18,17 @@
                                 <span class="md-headline"> Buscar jugadores </span>
                             </md-card-title-text>
                         </md-card-title>
-                        <md-card-content layout="row">
+                        <md-card-content layout="row" layout-align="space-between">
                             <div>
                                 <md-input-container>
                                     <label> Código </label>
-                                    <input ng-model="jugadorBuscado.id">
+                                    <input ng-model="searchedPlayer.id">
                                 </md-input-container>
                                 <md-input-container>
-                                    <label> Apellido y/o nombre </label>
-                                    <input ng-model="jugadorBuscado.nombre">
+                                    <label> Apellido</label>
+                                    <input ng-model="searchedPlayer.apellido">
                                 </md-input-container>
-                                <md-input-container>
-                                    <label> Club </label>
-                                    <input ng-model="jugadorBuscado.club">
-                                </md-input-container>
+                                <md-button ng-click="searchPlayer(searchedPlayer)">Buscar</md-button>
                             </div>
                         </md-card-content>
                         <md-card-content layout="row" layout-align="space-between">
@@ -39,14 +36,16 @@
                                 <thead>
                                     <tr>
                                         <th> Rating </th>
+                                        <th> Id </th>
                                         <th> Apellido </th>
                                         <th> Nombre </th>
                                         <th> Club </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="jugador in jugadores_previos | orderBy:'-rating' | limitTo:10:0" >
+                                    <tr ng-repeat="jugador in jugadores_previos | orderBy:'-rating' | limitTo:30" >
                                         <td> {{jugador.rating}}</td>
+                                        <td> {{jugador.tmt_id}}</td>
                                         <td> {{jugador.apellido}}</td>
                                         <td> {{jugador.nombre}}</td>
                                         <td> {{jugador.club_corto}}</td>
@@ -58,15 +57,21 @@
                     </md-card>    
                 </div>
             </md-content>
-        </md-grid-tile>
+        </div>
         
-        <md-grid-tile md-colspan="1" md-rowspan="1">
-            <button type="button" ng-click="seed_tournament()">
-                  Sortear!
-            </button> 
-        </md-grid-tile>
+        <div class="col-md-2">
+            <md-content class="md-padding" layout="column">
+                <div flex-gt-xs="50" layout="column" flex-xs>
+                    <md-card md-theme="dark-blue">
+                        <md-card-contents>
+                            <md-button ng-click="seed_tournament()">Sortear!</md-button>
+                        </md-card-contents>
+                    </md-card>
+                </div>
+            </md-content>
+        </div>
         
-        <md-grid-tile md-colspan="3" md-rowspan="4">
+        <div class="col-md-5">
             <md-content class="md-padding" layout="column">
                 
                     <md-card md-theme="dark-blue">
@@ -114,7 +119,7 @@
                         </md-card-content>
                     </md-card>    
             </md-content>
-        </md-grid-tile>
-    </md-grid-list>
+        </div>
+    </div>
         
 </div>                    
