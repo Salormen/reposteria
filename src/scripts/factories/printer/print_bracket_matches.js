@@ -1,8 +1,10 @@
 angular.module('tournamentModule').factory('print_bracket_matches', 
-                            ['print_group',
-                    function(print_group){
+                            ['print_group', 'matchesFunctions',
+                    function( print_group,   matches_functions){
                             
-    return print_bracket_matches;
+    return {
+        print_bracket_matches: print_bracket_matches
+    };
                         
                         
     // Max n matches -> find n :P
@@ -116,8 +118,8 @@ angular.module('tournamentModule').factory('print_bracket_matches',
             }
             r.text(mts.x_res(mts.lat_margin + mts.width), y_dis(y_init + mts.rel_alt_match), "Res.");
             
-            r.text(mts.x_player_name, y_dis(y_init + mts.rel_alt_match + mts.bars_height),     m.players[0].nombre);
-            r.text(mts.x_player_name, y_dis(y_init + mts.rel_alt_match + mts.bars_height * 2), m.players[1].nombre);
+            r.text(mts.x_player_name, y_dis(y_init + mts.rel_alt_match + mts.bars_height), matches_functions.getPlayerName(m, 0, tournament));
+            r.text(mts.x_player_name, y_dis(y_init + mts.rel_alt_match + mts.bars_height * 2), matches_functions.getPlayerName(m, 1, tournament));
             
             
             // Umpire

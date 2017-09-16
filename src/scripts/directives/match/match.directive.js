@@ -7,7 +7,8 @@ angular.module('tournamentModule').directive('match', [
         controller: 'MatchDirectiveController',
         scope: {
             currentMatch: '=currentMatch',
-            context: '=currentContext'
+            context: '=currentContext',
+            round: '=round'
         },
         templateUrl: 'scripts/directives/match/match.directive.tmpl.html'
       };

@@ -97,6 +97,9 @@ angular.module('tournamentModule').factory('groups_functions',
       
     function coeficienteEnGrupoPara(grupo, jugador){
         var player_id = playerId(grupo, jugador);
+        /*Pequeño fix para muestra FATEMA*/
+        return partidosGanadosEnGrupo(grupo, player_id);
+        
         if (otrosJugadoresGanaronLaMismaCantidadDePartidosEnGrupo(grupo, player_id)){
             var jugadores = jugadoresConMismaCantidadDePartidosGanadosEnGrupo(grupo, player_id).map(p => playerId(grupo, p));
             var subgrupo = {matches: partidosDeJugadores(grupo, jugadores),
@@ -144,7 +147,7 @@ angular.module('tournamentModule').factory('groups_functions',
     }
               
     function get_player_in_position(group, position){
-        var players_copy = copy(subgrupo.players);
+        var players_copy = copy(group.players);
         return players_copy.sort((j1,j2) => 
                         {return coeficienteEnGrupoPara(group,j2) - coeficienteEnGrupoPara(group,j1)})
                             [position-1];

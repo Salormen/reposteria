@@ -7,6 +7,7 @@ angular.module('tournamentModule').factory('format_builders',
                 -max jugadores (limite)
                 -Formato:
                     -count_groups:                  \jugadores.length -> count_zonas
+                    -matches_in_groups:             Lista de partidos de la zona
                     -bracket_a_clasified:           cantidad de clasificados a llave A por zona
                     -bracket_b:                     bool. llave B?
                     -sets_by_instance: cantidad de sets por instancia (o inicio del aumento de la cantidad de sets):

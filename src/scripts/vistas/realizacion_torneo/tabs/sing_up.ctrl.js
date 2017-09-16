@@ -61,7 +61,7 @@
             init_previous_players();
             console.log(searchedPlayer);
             $scope.jugadores_previos = $scope.jugadores_previos.filter(p => 
-                        (p.tmt_id.includes(searchedPlayer.id.toString()) && searchedPlayer.id != "") ||
+                        (p.id.includes(searchedPlayer.id.toString()) && searchedPlayer.id != "") ||
                         (p.club_largo.toLowerCase().includes(searchedPlayer.club.toLowerCase()) && searchedPlayer.club != "") ||
                         (p.apellido.toLowerCase().includes(searchedPlayer.apellido.toLowerCase()) && searchedPlayer.apellido != "")
                                                                        );

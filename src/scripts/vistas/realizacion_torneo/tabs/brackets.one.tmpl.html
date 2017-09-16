@@ -1,10 +1,14 @@
 <div>
-    <span class="titulo_tab"> {{bracket_name(llave)}}</span>
     <div>
-        <a class="btn menu" ng-click="print_matches()"> Imprimir partidos ({{matches_for_print.length}}/4) </a> 
+        <div class="col-md-10">
+            <span class="titulo_tab"> {{bracket_name(llave)}}</span>
+        </div>
+        <div class="col-md-2">
+            <md-button class="md-raised md-warn" ng-click="print_matches()"> Imprimir partidos ({{matches_for_print.length}}/4) </md-button> 
+        </div>
     </div>
     
-    <md-tabs md-border-bottom md-dynamic-height>
+    <md-tabs md-border-bottom md-dynamic-height class="col-md-12">
         <md-tab ng-repeat="n in rounds_numbers(tournament_rounds(llave))">
             <md-tab-label>
                 {{round_name(n)}}
@@ -12,8 +16,7 @@
             <md-tab-body>
                 <div>
                     <div ng-repeat="match in round_matches(n)"> 
-                        <match current-match="match" current-context="context"></match>
-                        <a class="btn menu" ng-click="context.print_match(match)"> Agregar a impresión </a>  
+                        <match current-match="match" current-context="context" round="n"></match>
                     </div>
                 </div>
             </md-tab-body>

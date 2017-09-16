@@ -1,7 +1,7 @@
 <div id="menu" class="menu"> 
     <md-grid-list md-cols="6"  md-row-height="34px" id="tabs">
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".inscripcion"> Inscripción </a>  
+            <a class="btn" ui-sref=".inscripcion"> Inscripción </a>  
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
             <a class="btn" ui-sref=".grupos.all"> Grupos </a>
@@ -10,34 +10,14 @@
             <a class="btn" ui-sref=".llaves.llave({llave_id: 0})"> Llave {{countMatchesReadyToPlayAllBrackets()}}</a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".modo_rapido"> Modo rápido </a>
+            <a class="btn" ui-sref=".modo_rapido"> Modo rápido </a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".impresiones"> Impresiones </a>
+            <a class="btn" ui-sref=".impresiones"> Impresiones </a>
         </md-grid-tile>
         <md-grid-tile md-colspan="1" md-rowspan="1">
-            <a class="btn" ng-click="hideSubmenus(submenus)" ui-sref=".descargas"> Descargas </a>
+            <a class="btn" ui-sref=".descargas"> Descargas </a>
         </md-grid-tile>
     </md-grid-list>
     
-    
-    
-    
-    
-    
-    <div id="menu_resultados" class="collapse" ng-show="seSeleccionoFrame('resultados', frames)">
-        <div id="results_menu_brackets" ng-show="torneo.format.bracket_a_clasified != 0">
-            <div id="results_menu_bracket_b" ng-show="torneo.format.bracket_b">
-                <a class="btn col-md-3" ng-click="showResults('groups')"> Grupos </a> 
-                <a class="btn col-md-3" ng-click="showResults('bracket_a')"> Llave A </a> 
-                <a class="btn col-md-3" ng-click="showResults('bracket_b')"> Llave B </a> 
-                <a class="btn col-md-3" ng-click="showResults('export')"> Exportar </a> 
-            </div>
-            <div id="results_menu_bracket_b" ng-show="!torneo.format.bracket_b">
-                <a class="btn col-md-4" ng-click="showResults('groups')"> Grupos </a> 
-                <a class="btn col-md-4" ng-click="showResults('bracket_a')"> Llave </a> 
-                <a class="btn col-md-4" ng-click="showResults('export')"> Exportar </a> 
-            </div>
-        </div>
-    </div> <!-- fin menu_resultados-->
 </div>

@@ -3,17 +3,17 @@
 
     angular
         .module('tournamentModule')
-        .controller('SeleccionTorneoController',  ['$scope', '$modal', '$state', 'build_tournament', 'tournament_dao', 'tmt_parser', 'list_players_dao', SeleccionTorneoController]);
+        .controller('SeleccionTorneoController',  ['$scope', '$rootScope', '$modal', '$state', 'build_tournament', 'tournament_dao', 'tmt_parser', 'list_players_dao', SeleccionTorneoController]);
 
     /** @ngInject */
-    function SeleccionTorneoController($scope, $modal, $state, build_tournament, tournament_dao, tmt_parser, list_players_dao){
+    function SeleccionTorneoController($scope, $rootScope, $modal, $state, build_tournament, tournament_dao, tmt_parser, list_players_dao){
         
         
         $scope.load = function(){
             var id = tournament_dao.save_new(build_tournament("Torneo de muestra ", new Date(2017, 9, 29, 0, 0, 0, 0), {
-                    name: "dam_sub15",
-                    str_l: "Damas sub 15",
-                    str_s: "Dam. sub 15"
+                    name: "cab_sub15",
+                    str_l: "Caballeros sub 15",
+                    str_s: "Cab. sub 15"
                 }, {
                     format: "interescuelas",
                     label: "Interescuelas"
@@ -27,8 +27,17 @@
             $scope.tournaments = tournament_dao.all();    
         }
         
+        function load_tournaments(){
+            $scope.tournaments = tournament_dao.all();    
+        }
+                    
+        load_tournaments();
+            
+        $rootScope.$on('tournamentCreated', function(event, message) {
+            console.log("actualizando controller");
+            load_tournaments();
+        });
         
-        $scope.tournaments = tournament_dao.all();    
         
                 
         tmt_parser.createListener('input_file');      
@@ -69,18 +78,18 @@
         
     }
     
-    var ModalInstanceCtrl = function ($scope, $modalInstance, userForm, build_tournament, format_builders) {
+    var ModalInstanceCtrl = function ($scope, $modalInstance, userForm, build_tournament, tournament_dao) {
         console.log("ModalInstanceCtrl");
         $scope.form = {}
         
         $scope.tiposDeTorneos = [{
-                value: format_builders.getFormat("interescuelas"),
+                format: "interescuelas",
                 label: "Interescuelas"
             },{
-                value: "TMT",
+                format: "TMT",
                 label: "TMT"
             },{
-                value: "SS",
+                format: "SS",
                 label: "Super Serie"
             }            
         ];
@@ -145,11 +154,13 @@
         $scope.submitForm = function () {
             if ($scope.form.userForm.$valid) {
                 if($scope.form.category == "TodoCompetidor") $scope.tournament.category = $scope.todoCompetidor;
-                   
-                console.log("Torneo: ", $scope.tournament);
                 
                 var newTournament = build_tournament($scope.tournament.name, new Date(), $scope.tournament.category, $scope.tournament.type);
-                $scope.tournaments.push(newTournament);
+                console.log("Torneo: ", newTournament);
+                
+                tournament_dao.save_new(newTournament);
+                $scope.$emit('tournamentCreated', "");
+                
                 $modalInstance.close('');
             } else {
                 console.log('userform is not in scope');

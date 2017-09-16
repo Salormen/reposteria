@@ -45,7 +45,7 @@
                                 <tbody>
                                     <tr ng-repeat="jugador in jugadores_previos | orderBy:'-rating' | limitTo:30" >
                                         <td> {{jugador.rating}}</td>
-                                        <td> {{jugador.tmt_id}}</td>
+                                        <td> {{jugador.id}}</td>
                                         <td> {{jugador.apellido}}</td>
                                         <td> {{jugador.nombre}}</td>
                                         <td> {{jugador.club_corto}}</td>
@@ -82,16 +82,6 @@
                         </md-card-title>
                         <md-card-content layout="row">
                             <label>Cantidad: {{torneo.players.length}}</label>
-                            <div>
-                                <md-input-container>
-                                    <label> Código </label>
-                                    <input ng-model="jugadorBuscado.id">
-                                </md-input-container>
-                                <md-input-container>
-                                    <label> Apellido </label>
-                                    <input ng-model="jugadorBuscado.nombre">
-                                </md-input-container>
-                            </div>
                         </md-card-content>
                         <md-card-content layout="row" layout-align="space-between">
                             <table class="table table-condensed">

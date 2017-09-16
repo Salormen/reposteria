@@ -30,7 +30,7 @@ angular.module('tournamentModule').factory('matchesFunctions', [
         return bracketDispatch(instance, 
                     () => true,
                     () => tournament.groups[instance.group_id].finished,
-                    () => all(instance.prevs_matches, m => instanceFinished(m, tournament))
+                    () => all(instance.prevs_matches, m => instanceFinished(m, tournament)) && (instance.final[0] + instance.final[1] > 2)
                     );
     }
     

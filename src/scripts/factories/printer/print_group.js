@@ -246,9 +246,17 @@ angular.module('tournamentModule').factory('print_group',
         return group.matches.reduce( (r, m, i) => {
             var alt_init_match = mts.alt_partidos + mts.match_height * i;
             
+            var arbitro = 0;
+            // arbitro:
+            if((m.players[0] == 0 && m.players[1] == 1) || (m.players[1] == 0 && m.players[0] == 1)) arbitro = 2;
+            if((m.players[0] == 0 && m.players[1] == 2) || (m.players[1] == 0 && m.players[0] == 2)) arbitro = 1;
+            if((m.players[0] == 1 && m.players[1] == 2) || (m.players[1] == 1 && m.players[0] == 2)) arbitro = 0;
+            
+            
+            
             r.text(x_dis_player_a, y_dis_player_a(alt_init_match), (m.players[0] + 1) + ". " + group.players[m.players[0]].apellido);
             r.text(x_dis_player_b, y_dis_player_b(alt_init_match), (m.players[1] + 1) + ". " + group.players[m.players[1]].apellido);
-            //r.text(x_dis_player_c, y_dis_player_c(alt_init_match), players[m[2]-1].nombre);
+            r.text(x_dis_player_c, y_dis_player_c(alt_init_match), group.players[arbitro].apellido);
                 
             return r;
         }, doc);
