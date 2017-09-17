@@ -30,7 +30,7 @@
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
             <md-button class="md-raised md-warn" ng-click="context.print_match(currentMatch, round)" ng-show="context.imprimible">Agregar a impresión</md-button>
-            <md-button ng-click="editMatch()" ng-show="!editting">Editar</md-button>
+            <md-button ng-click="editMatch()" ng-show="context.canEdit() && !editting">Editar</md-button>
             <md-button md-no-ink class="md-raised md-primary" ng-click="saveMatch(context, currentMatch)" ng-show="editting">Guardar</md-button>
         </md-card-actions>
     </div>

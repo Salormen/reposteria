@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('GroupDirectiveController',  
-                ['groups_functions', '$scope', 'other_functions', 'printer', 'tournament_dao',
-        function(groups_functions,    $scope,   other_functions,   printer,   tournament_dao){
+                ['groups_functions', '$scope', 'other_functions', 'printer', 'tournament_dao', 'playerFormat', 
+        function(groups_functions,    $scope,   other_functions,   printer,   tournament_dao,   player_format){
             
             
         
@@ -58,7 +58,12 @@
             
             
         $scope.close_group = function(group, context){
-            group.finished = !group.finished;
+            group.finished = true;
+            tournament_dao.save(context.torneo);
+        };
+                
+        $scope.open_group = function(group, context){
+            group.finished = false;
             tournament_dao.save(context.torneo);
         };
 
@@ -66,6 +71,8 @@
         $scope.print_group = function(group, context){
             printer.print_group(context.torneo, group);
         }
+        
+        $scope.lastNameWithNamesInitial = player_format.lastNameWithNamesInitial;
 
     
 

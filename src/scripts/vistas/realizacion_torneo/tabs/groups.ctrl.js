@@ -35,6 +35,10 @@
         context.getPlayerName = groups_functions.getPlayerName;
         context.torneo = $scope.torneo;
         
+        context.canEdit = function(){
+            return !$scope.group.finished;
+        }
+            
         context.saveMatch = function(match, callback){
             if(isValidMatch(match)){
                 tournament_dao.save($scope.torneo);

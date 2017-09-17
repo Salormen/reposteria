@@ -24,7 +24,7 @@
             <tbody>
                 <tr ng-repeat="(j, jugador) in currentGroup.players | orderBy:'rating':true ">
                     <td align="left">{{jugador.rating}}</td>
-                    <td align="left">{{jugador.apellido}}</td>
+                    <td align="left">{{lastNameWithNamesInitial(jugador)}}</td>
                     <td align="left">{{jugador.club_corto}}</td>
                     <td align="left" ng-repeat="(jO, jOp) in currentGroup.players | orderBy:'rating':true ">{{resultadoEnGrupoDeContra(currentGroup, j, jO)}}</td>
                     <td align="left">{{difPartidosGanadosPerdidosEnGrupo(currentGroup, j)}}</td>
@@ -37,6 +37,7 @@
     </md-card-content>
     <md-card-actions layout="row" layout-align="end center">
         <md-button ng-click="print_group(currentGroup, currentContext)">Imprimir</md-button>
-        <md-button ng-click="close_group(currentGroup, currentContext)">Cerrar grupo</md-button>
+        <md-button ng-click="close_group(currentGroup, currentContext)" ng-show="!currentGroup.finished">Cerrar grupo</md-button>
+        <md-button ng-click="open_group(currentGroup, currentContext)" ng-show="currentGroup.finished">Abrir grupo</md-button>
     </md-card-actions>
 </md-card>

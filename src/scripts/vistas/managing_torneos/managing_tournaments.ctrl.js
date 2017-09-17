@@ -49,8 +49,6 @@
         
         
         $scope.newTournament = function(){
-
-
             var modalInstance = $modal.open({
                     templateUrl: 'scripts/vistas/managing_torneos/new_tournament.html',
                     controller: ModalInstanceCtrl,

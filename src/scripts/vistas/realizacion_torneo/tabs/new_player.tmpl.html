@@ -1,0 +1,26 @@
+<div class="modal_window">
+    <div class="modal-header">
+        <h3>Nuevo jugador</h3>
+    </div>
+    <form name="form.userForm" ng-submit="submitForm()" novalidate>
+        <div class="modal-body">
+            <!-- Nombre -->
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" name="name" class="form-control" ng-model="new_player.nombre" required>
+                <p ng-show="form.userForm.name.$invalid && !form.userForm.name.$pristine" class="help-block">Es necesario un nombre de jugador</p>
+            </div>
+            <!-- Apellido -->
+            <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" name="name" class="form-control" ng-model="new_player.apellido" required>
+                <p ng-show="form.userForm.name.$invalid && !form.userForm.name.$pristine" class="help-block">Es necesario un apellido de jugador</p>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" ng-disabled="form.userForm.$invalid">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+        </div>
+    </form>
+</div>

@@ -35,6 +35,10 @@
             
         context.getPlayerName = matches_functions.getPlayerName;
         
+        context.canEdit = function(){
+            return true;
+        }
+        
         context.saveMatch = function(match, callback){
             if(isValidMatch(match)){
                 tournament_dao.save($scope.torneo);

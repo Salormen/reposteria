@@ -19,4 +19,5 @@
                     $scope.editting = !$scope.editting;    
                 });
             }
+            
 }])})()

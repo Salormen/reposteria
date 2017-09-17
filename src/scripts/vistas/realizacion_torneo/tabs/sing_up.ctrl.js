@@ -5,8 +5,8 @@
     angular
         .module('tournamentModule')
         .controller('SingUpController',  
-                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmt_parser', 'list_players_dao', 'tournament_seeder',
-        function($scope, $state, $stateParams, tournament_dao, tmt_parser, list_players_dao, tournament_seeder){
+                ['$scope', '$state', '$stateParams', 'tournament_dao', 'tmt_parser', 'list_players_dao', 'tournament_seeder', '$modal',
+        function($scope, $state, $stateParams, tournament_dao, tmt_parser, list_players_dao, tournament_seeder, $modal){
 
         /******************************************/
 
@@ -28,11 +28,11 @@
 
         // Frame Inscripcion
         
-        function init_previous_players(){
+        $scope.init_previous_players = function(){
             $scope.jugadores_previos = list_players_dao.get();   
         }
         
-        init_previous_players();
+        $scope.init_previous_players();
 
         function noEstaInscriptoATorneo(torneo, jugador){
             var inscripto = torneo.players.reduce((r,p) => r || (p.rating == jugador.rating 
@@ -58,13 +58,14 @@
             
             
         $scope.searchPlayer = function(searchedPlayer){
-            init_previous_players();
+            $scope.init_previous_players();
             console.log(searchedPlayer);
             $scope.jugadores_previos = $scope.jugadores_previos.filter(p => 
                         (p.id.includes(searchedPlayer.id.toString()) && searchedPlayer.id != "") ||
                         (p.club_largo.toLowerCase().includes(searchedPlayer.club.toLowerCase()) && searchedPlayer.club != "") ||
-                        (p.apellido.toLowerCase().includes(searchedPlayer.apellido.toLowerCase()) && searchedPlayer.apellido != "")
-                                                                       );
+                        (p.apellido.toLowerCase().includes(searchedPlayer.apellido.toLowerCase()) && searchedPlayer.apellido != "") ||
+                        (searchedPlayer.id == "" && searchedPlayer.club == "" && searchedPlayer.apellido == "")  
+                                                                      );
         }
         
         
@@ -73,32 +74,7 @@
             club: "",
             id: ""
         }
-
-        $scope.searchedInscriptedPlayer = {
-            nombre: "",
-            club: ""
-        }
-
-        $scope.nuevo_jugador = {
-            nombre: "",
-            club: "",
-            rating: 0
-        };
-
-
-        $scope.reset_nuevo_jugador = function(){
-            $scope.nuevo_jugador = {
-                nombre: "",
-                club: "",
-                rating: 0
-            }      
-        };
-
-        $scope.agregarNuevoJugador = function(){
-            $scope.torneo.players.push($scope.nuevo_jugador);
-            $scope.reset_nuevo_jugador();
-        };    
-
+            
             
         // Sortear jugador
 
@@ -108,5 +84,65 @@
             alert("Sorteo realizado!");
         };
 
+        
+        // Nuevo jugador
+            
+        $scope.newPlayer = function(){
+            var modalInstance = $modal.open({
+                    templateUrl: 'scripts/vistas/realizacion_torneo/tabs/new_player.tmpl.html',
+                    controller: ModalInstanceCtrl,
+                    scope: $scope,
+                    resolve: {
+                        userForm: function () {
+                            return $scope.userForm;
+                        }
+                    }
+            });
 
-}])})()
+            modalInstance.result.then(function (selectedItem) {
+                console.log(selectedItem);
+                $scope.selected = selectedItem;
+            }, function () {
+                console.log('Modal dismissed at: ', new Date());
+            });
+
+        }
+            
+            
+        var ModalInstanceCtrl = function ($scope, $modalInstance, userForm, build_tournament, tournament_dao) {
+            
+            console.log("Modal", $scope.torneo);
+            $scope.form = {};
+            
+            $scope.new_player = {
+                apellido: "",
+                nombre: "",
+                id: "999999",
+                rating: 0,
+                club_corto: "",
+                club_largo: ""
+            }
+            
+            $scope.submitForm = function () {
+                if ($scope.form.userForm.$valid) {
+                    
+                    $scope.torneo.players.push($scope.new_player);     
+                    tournament_dao.save($scope.torneo);
+                    console.log("Modal", $scope.torneo);
+                    
+                    $scope.init_previous_players();
+
+                    $modalInstance.close('');
+                } else {
+                    console.log('userform is not in scope');
+                }
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        }
+            
+    }])
+   
+})()

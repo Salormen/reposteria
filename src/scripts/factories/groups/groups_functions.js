@@ -1,6 +1,6 @@
 angular.module('tournamentModule').factory('groups_functions', 
-                    [ 
-            function(){
+                    [ 'playerFormat',
+            function(player_format){
         
     // Funciones sobre resultados en el grupo por cierto jugador
                 
@@ -161,7 +161,7 @@ angular.module('tournamentModule').factory('groups_functions',
     }
                 
     function getPlayerName(match, player_pos, tournament){
-        return tournament.groups[match.group_id].players[match.players[player_pos]].apellido;
+        return player_format.lastNameWithName(tournament.groups[match.group_id].players[match.players[player_pos]]);
     }
                 
                 

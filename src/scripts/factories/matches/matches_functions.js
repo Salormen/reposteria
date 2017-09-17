@@ -1,6 +1,6 @@
 angular.module('tournamentModule').factory('matchesFunctions', [
-                'groups_functions' , 'other_functions',
-        function(groups_functions, other_functions){
+                'groups_functions' , 'other_functions', 'playerFormat',
+        function(groups_functions, other_functions, player_format){
     
 
     
@@ -21,7 +21,7 @@ angular.module('tournamentModule').factory('matchesFunctions', [
         if(!instanceFinished(match.prevs_matches[player_pos], tournament) || match.prevs_matches[player_pos].is_bye){
             return getWinnerDescription(match.prevs_matches[player_pos]);
         }else{
-            return getWinner(match.prevs_matches[player_pos], tournament).apellido;
+            return player_format.lastNameWithName(getWinner(match.prevs_matches[player_pos], tournament));
         }
     }
     
@@ -30,7 +30,7 @@ angular.module('tournamentModule').factory('matchesFunctions', [
         return bracketDispatch(instance, 
                     () => true,
                     () => tournament.groups[instance.group_id].finished,
-                    () => all(instance.prevs_matches, m => instanceFinished(m, tournament)) && (instance.final[0] + instance.final[1] > 2)
+                    () => all(instance.prevs_matches, m => instanceFinished(m, tournament)) && matchHasBeenPlayed(instance)
                     );
     }
     
@@ -51,7 +51,9 @@ angular.module('tournamentModule').factory('matchesFunctions', [
                     );
     }
             
-            
+    function matchHasBeenPlayed(match){
+        return is_bye_match(match) || match.final[0] + match.final[1] >=2;
+    }  
             
     // Funciones accesorias
             
